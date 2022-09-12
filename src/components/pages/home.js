@@ -22,7 +22,7 @@ const home= () => (
         <div className='row'>
           <div className='col-lg-12'>
             <div className='text-center'>
-              <h2>Hot Collections</h2>
+              <h2>New Collections</h2>
               <div className="small-border"></div>
             </div>
           </div>
@@ -46,7 +46,7 @@ const home= () => (
         </div>
       </section>
 
-      <section className='container no-bottom'>
+      {/* <section className='container no-bottom'>
         <div className='row'>
           <div className='col-lg-12'>
             <div className='text-center'>
@@ -70,7 +70,7 @@ const home= () => (
           </div>
         </div>
         <Catgor/>
-      </section>
+      </section> */}
 
     <Footer />
 

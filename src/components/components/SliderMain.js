@@ -1,6 +1,7 @@
 import React from 'react';
 import Reveal from 'react-awesome-reveal';
 import { keyframes } from "@emotion/react";
+import { Link } from 'react-router-dom';
 
 const fadeInUp = keyframes`
   0% {
@@ -29,7 +30,7 @@ const slidermain= () => (
           <div className="col-md-6">
               <div className="spacer-single"></div>
               <Reveal className='onStep' keyframes={fadeInUp} delay={0} duration={600} triggerOnce>
-              <h6 className=""><span className="text-uppercase color">Gigaland Market</span></h6>
+              <h6 className=""><span className="text-uppercase color">Terra Mater Market</span></h6>
               </Reveal>
               <div className="spacer-10"></div>
               <Reveal className='onStep' keyframes={fadeInUp} delay={300} duration={600} triggerOnce>
@@ -42,13 +43,13 @@ const slidermain= () => (
               </Reveal>
               <div className="spacer-10"></div>
               <Reveal className='onStep' keyframes={fadeInUp} delay={800} duration={900} triggerOnce>
-              <span onClick={()=> window.open("/#", "_self")} className="btn-main lead">Explore</span>
+                <Link to="/explore2" className="btn-main lead">Explore</Link>
               <div className="mb-sm-30"></div>
               </Reveal>
           </div>
           <div className="col-md-6 xs-hide">
-            <Reveal className='onStep' keyframes={fadeIn} delay={900} duration={1500} triggerOnce>
-              <img src="./img/misc/nft.png" className="lazy img-fluid" alt=""/>
+            <Reveal className='onStep d-flex align-items-center justify-content-center' keyframes={fadeIn} delay={900} duration={1500} triggerOnce>
+              <img src="./img/misc/banner1.jpg" className="lazy img-fluid shadow-sm" alt="" />
             </Reveal>
           </div>
       </div>
