@@ -7,13 +7,13 @@ const CustomSlide = ({ index, avatar, banner, username, uniqueId, collectionId }
           <div className="nft_wrap">
               <span><img src={banner} className="lazy img-fluid" alt=""/></span>
           </div>
-          <div className="nft_coll_pp">
+          {/* <div className="nft_coll_pp">
               <span onClick={()=> window.open("/colection/" + collectionId, "_self")}><img className="lazy" src={avatar} alt=""/></span>
               <i className="fa fa-check"></i>
-          </div>
-          <div className="nft_coll_info">
+          </div> */}
+          <div className="nft_coll_info mt-3">
               <span onClick={()=> window.open("/colection/" + collectionId, "_self")}><h4>{ username }</h4></span>
-              <span>{ uniqueId }</span>
+              {/* <span>{ uniqueId }</span> */}
           </div>
       </div>
     </div>
