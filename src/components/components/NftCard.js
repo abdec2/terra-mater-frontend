@@ -19,6 +19,7 @@ const NftCard = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12
     const navigateTo = (link) => {
         navigate(link);
     }
+    console.log(nft)
 
     return (
         <div className={className}>

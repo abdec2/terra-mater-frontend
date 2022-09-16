@@ -9,6 +9,7 @@ import { carouselNew } from './constants';
 import * as selectors from '../../store/selectors';
 import { fetchNftsBreakdown } from "../../store/actions/thunks";
 import api from "../../core/api";
+import { useNavigate } from "react-router-dom";
 
 const Outer = styled.div`
   display: flex;
@@ -22,6 +23,10 @@ const CarouselNewRedux = () => {
     const dispatch = useDispatch();
     const nftsState = useSelector(selectors.nftBreakdownState);
     const nfts = nftsState.data ? nftsState.data : [];
+    const navigate = useNavigate()
+    const navigateTo = (link) => {
+        navigate(link)
+    }
 
     const [height, setHeight] = useState(0);
 
@@ -49,7 +54,7 @@ const CarouselNewRedux = () => {
                         </div>
                     }
                     <div className="author_list_pp">
-                        <span onClick={()=> window.open("/home1", "_self")}>
+                        <span onClick={()=> navigateTo(nft.author_link)}>
                             { nft.author.avatar && 
                                 <img className="lazy" src={api.baseUrl + nft.author.avatar.url} alt=""/>
                             }                                    
@@ -64,14 +69,14 @@ const CarouselNewRedux = () => {
                       </Outer>
                     </div>
                     <div className="nft__item_info">
-                        <span onClick={()=> window.open("/#", "_self")}>
+                        <span onClick={()=> navigateTo(`${nft.nft_link}/${nft.id}`)}>
                             <h4>{nft.title}</h4>
                         </span>
                         <div className="nft__item_price">
                             {nft.price} ETH<span>{nft.bid}/{nft.max_bid}</span>
                         </div>
                         <div className="nft__item_action">
-                            <span onClick={()=> window.open(nft.bid_link, "_self")}>Place a bid</span>
+                            <span onClick={()=> navigateTo(`${nft.nft_link}/${nft.id}`)}>Place a bid</span>
                         </div>
                         <div className="nft__item_like">
                             <i className="fa fa-heart"></i><span>{nft.likes}</span>
