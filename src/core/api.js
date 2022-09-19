@@ -1,5 +1,5 @@
 const api = {
-    baseUrl: 'http://localhost:1337',
+    baseUrl: 'http://localhost:5000',
     nfts: '/api/nfts',
     nftShowcases: '/api/nft_showcases',
     authors: '/api/authors',
