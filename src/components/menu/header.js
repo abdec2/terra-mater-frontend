@@ -176,7 +176,7 @@ const Header = function ({ className }) {
 
           <div className='mainside'>
             <div className='connect-wal'>
-              <NavLink to="/wallet">Connect Wallet</NavLink>
+              <NavLink to="/">Connect Wallet</NavLink>
             </div>
             <div className="logout">
               <NavLink to="/createOptions">Create</NavLink>
