@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Breakpoint, { BreakpointProvider, setDefaultBreakpoints } from "react-socks";
 import logo from './../../assets/logo.png'
+import {connectWallet} from './connectWallet'
 import {
   Link,
   useNavigate,
@@ -176,7 +177,7 @@ const Header = function ({ className }) {
 
           <div className='mainside'>
             <div className='connect-wal'>
-              <NavLink to="/">Connect Wallet</NavLink>
+              <a onClick={connectWallet}>Connect Wallet</a>
             </div>
             <div className="logout">
               <NavLink to="/createOptions">Create</NavLink>

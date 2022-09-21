@@ -14,9 +14,9 @@ const home= () => (
          <SliderMain/>
       </section>
 
-      <section className='container no-top no-bottom'>
+      {/* <section className='container no-top no-bottom'>
         <FeatureBox/>
-      </section>
+      </section> */}
 
       <section className='container no-bottom'>
         <div className='row'>
@@ -58,7 +58,7 @@ const home= () => (
             <AuthorListRedux/>
           </div>
         </div>
-      </section>
+    </section> */}
 
       <section className='container'>
         <div className='row'>
@@ -70,7 +70,7 @@ const home= () => (
           </div>
         </div>
         <Catgor/>
-      </section> */}
+      </section> 
 
     <Footer />
 
