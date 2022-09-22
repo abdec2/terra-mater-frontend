@@ -12,9 +12,11 @@ import api from "../../core/api";
 const CarouselCollectionRedux = () => {
 
   const dispatch = useDispatch();
+  const store = useSelector(state => state)
   const hotCollectionsState = useSelector(selectors.hotCollectionsState);
   const hotCollections = hotCollectionsState.data ? hotCollectionsState.data : [];
 
+  console.log("Store", store)
   useEffect(() => {
     dispatch(fetchHotCollections());
 }, [dispatch]);

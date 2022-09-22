@@ -15,7 +15,7 @@ export const fetchNftsBreakdown = (authorId, isMusic = false) => async (dispatch
       'preview_image',
     ];
     let populate = `populate=${relations}&`;
-
+    
     const { data } = await Axios.get(`${api.baseUrl}${api.nfts}?${populate}${filter}&${music}`, {
       cancelToken: Canceler.token,
       params: {}

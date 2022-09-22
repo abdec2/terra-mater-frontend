@@ -4783,7 +4783,7 @@ blockquote {
     display: block;
   }
   .logout{
-    display: none;
+    display: flex;
     a{
       display: inline-block;
       margin: 0 5px;

@@ -3,12 +3,13 @@ import Web3Modal from "web3modal";
 
 import axios from "axios"
 import api from "../../core/api"
+import * as actions from './../../store/actions';
 
 const providerOptions = {
     /* See Provider Options Section */
   };
   
-export const connectWallet = async () => {
+export const connectWallet = async (dispatch) => {    
     const web3Modal = new Web3Modal({
         providerOptions // required
       });
@@ -31,6 +32,8 @@ export const connectWallet = async () => {
     if(result.data.user){
         const userData = result.data;
         localStorage.setItem('user-data', JSON.stringify(userData));
+        console.log({web3, account})
+        dispatch(actions.addWeb3({web3, account}))
     } else {
         alert('something went wrong')
     }
