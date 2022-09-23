@@ -5,7 +5,6 @@ import {
 } from '../utils';
 
 export const defaultState = {
-  web3: initEntityState(null),
   account: initEntityState(null)
 };
 
@@ -13,11 +12,10 @@ const states = (state = defaultState, action) => {
   switch (action.type) {
     
     case getType(actions.addWeb3):
-        console.log(action)
-      return { ...state, web3: action.payload.web3, account: action.payload.account };
+      return { ...state, account: action.payload.account };
 
     case getType(actions.delWeb3):
-      return { ...state, web3: initEntityState(null), account: initEntityState(null) };
+      return { ...state, account: initEntityState(null) };
     
 
     default:

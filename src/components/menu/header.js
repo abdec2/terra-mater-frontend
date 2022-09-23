@@ -11,6 +11,11 @@ import {
 import useOnclickOutside from "react-cool-onclickoutside";
 import auth from '../../core/auth';
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import * as actions from './../../store/actions';
+import Web3 from "web3";
+import Web3Modal from "web3modal";
+import { providerOptions } from './../../config/config'
 
 setDefaultBreakpoints([
   { xs: 0 },
@@ -35,7 +40,9 @@ const NavLink = (props) => {
 const Header = function ({ className }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userData = localStorage.getItem('user-data');
+  const web3Store = useSelector(state => state.web3)
+  const userData = auth.getUserInfo();
+  console.log(userData)
   const [openMenu, setOpenMenu] = React.useState(false);
   const [openMenu1, setOpenMenu1] = React.useState(false);
   const [openMenu2, setOpenMenu2] = React.useState(false);
@@ -98,19 +105,31 @@ const Header = function ({ className }) {
 
   const handleLogout = () => {
     auth.clearAppStorage();
+    dispatch(actions.delWeb3())
     navigate('/')
+  }
+
+  const addLoginState = async (account) => {
+    const web3Modal = new Web3Modal({
+      providerOptions // required
+    });
+
+    const provider = await web3Modal.connect();
+
+    const web3 = new Web3(provider);
+    dispatch(actions.addWeb3({account}))
   }
 
   useEffect(() => {
     
-    console.log(JSON.parse(userData))
-    if (userData && JSON.parse(userData).jwt) {
+    if (userData && userData.address) {
       setIsLogin(true)
+      addLoginState(userData.address)
     } else {
       setIsLogin(false)
     }
-    console.log(islogin)
-  }, [userData.jwt]);
+    console.log(web3Store.account)
+  }, [web3Store.account]);
 
   useEffect(() => {
     const header = document.getElementById("myHeader");
@@ -205,81 +224,15 @@ const Header = function ({ className }) {
               islogin && (
                 <div className="logout">
                   <NavLink to="/createOptions">Create</NavLink>
-                  <div id="de-click-menu-notification" className="de-menu-notification" onClick={() => btn_icon_not(!shownot)} ref={refpopnot}>
-                    <div className="d-count">8</div>
-                    <i className="fa fa-bell"></i>
-                    {shownot &&
-                      <div className="popshow">
-                        <div className="de-flex">
-                          <h4>Notifications</h4>
-                          <span className="viewaall">Show all</span>
-                        </div>
-                        <ul>
-                          <li>
-                            <div className="mainnot">
-                              <img className="lazy" src="../../img/author/author-2.jpg" alt="" />
-                              <div className="d-desc">
-                                <span className="d-name"><b>Mamie Barnett</b> started following you</span>
-                                <span className="d-time">1 hour ago</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="mainnot">
-                              <img className="lazy" src="../../img/author/author-3.jpg" alt="" />
-                              <div className="d-desc">
-                                <span className="d-name"><b>Nicholas Daniels</b> liked your item</span>
-                                <span className="d-time">2 hours ago</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="mainnot">
-                              <img className="lazy" src="../../img/author/author-4.jpg" alt="" />
-                              <div className="d-desc">
-                                <span className="d-name"><b>Lori Hart</b> started following you</span>
-                                <span className="d-time">18 hours ago</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="mainnot">
-                              <img className="lazy" src="../../img/author/author-5.jpg" alt="" />
-                              <div className="d-desc">
-                                <span className="d-name"><b>Jimmy Wright</b> liked your item</span>
-                                <span className="d-time">1 day ago</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="mainnot">
-                              <img className="lazy" src="../../img/author/author-6.jpg" alt="" />
-                              <div className="d-desc">
-                                <span className="d-name"><b>Karla Sharp</b> started following you</span>
-                                <span className="d-time">3 days ago</span>
-                              </div>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    }
-                  </div>
+                  
                   <div id="de-click-menu-profile" className="de-menu-profile" onClick={() => btn_icon_pop(!showpop)} ref={refpop}>
                     <img src="../../img/author_single/author_thumbnail.jpg" alt="" />
                     {showpop &&
                       <div className="popshow">
-                        <div className="d-name">
-                          <h4>Monica Lucas</h4>
-                          <span className="name" onClick={() => window.open("", "_self")}>Set display name</span>
-                        </div>
-                        <div className="d-balance">
-                          <h4>Balance</h4>
-                          12.858 ETH
-                        </div>
                         <div className="d-wallet">
                           <h4>My Wallet</h4>
-                          <span id="wallet" className="d-wallet-address">DdzFFzCqrhshMSxb9oW3mRo4MJrQkusV3fGFSTwaiu4wPBqMryA9DYVJCkW9n7twCffG5f5wX2sSkoDXGiZB1HPa7K7f865Kk4LqnrME</span>
-                          <button id="btn_copy" title="Copy Text">Copy</button>
+                          <span id="wallet" className="d-wallet-address">{web3Store.account.slice(0,5)+'...'+web3Store.account.slice(37,42)}</span>
+                          {/* <button id="btn_copy" title="Copy Text">Copy</button> */}
                         </div>
                         <div className="d-line"></div>
                         <ul className="de-submenu-profile">
