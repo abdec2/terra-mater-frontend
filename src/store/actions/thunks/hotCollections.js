@@ -6,15 +6,16 @@ export const fetchHotCollections = (collectionId) => async (dispatch) => {
   dispatch(actions.getHotCollections.request(Canceler.cancel));
 
   try {
-    let filter = collectionId ? 'filters[id][$eq]='+collectionId : '';
-    const relations = [
-      'author',
-      'author.avatar',
-      'author.banner',
-      'banner',
-    ];
-    let populate = `populate=${relations}&`;
-    const { data } = await Axios.get(`${api.baseUrl + api.hotCollections}?${populate}${filter}`, {
+    // let filter = collectionId ? 'filters[id][$eq]='+collectionId : '';
+    // const relations = [
+    //   'author',
+    //   'author.avatar',
+    //   'author.banner',
+    //   'banner',
+    // ];
+    // let populate = `populate=${relations}&`; ${filter}
+    let populate = `populate=*`;
+    const { data } = await Axios.get(`${api.baseUrl + api.collections}?${populate}`, {
       cancelToken: Canceler.token,
       params: {}
     });

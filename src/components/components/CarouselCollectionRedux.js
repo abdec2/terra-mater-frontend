@@ -17,6 +17,7 @@ const CarouselCollectionRedux = () => {
   const hotCollections = hotCollectionsState.data ? hotCollectionsState.data : [];
 
   console.log("Store", store)
+  console.log(hotCollections)
   useEffect(() => {
     dispatch(fetchHotCollections());
 }, [dispatch]);
@@ -28,10 +29,10 @@ const CarouselCollectionRedux = () => {
             <CustomSlide
               key={index}
               index={index + 1}
-              avatar={api.baseUrl + item.author.avatar.url}
+              avatar={(item.feature_img.data !== null) ? api.baseUrl + item.feature_img.url : `https://via.placeholder.com/300?text=${item.name}`}
               banner={api.baseUrl + item.banner.url}
               username={item.name}
-              uniqueId={item.unique_id}
+              // uniqueId={item.unique_id}
               collectionId={item.id}
             />
           ))}

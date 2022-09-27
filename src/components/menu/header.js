@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breakpoint, { BreakpointProvider, setDefaultBreakpoints } from "react-socks";
-import logo from './../../assets/logo.png'
+// import logo from './../../assets/logo.png'
 import { connectWallet } from './connectWallet'
 import {
   Link,

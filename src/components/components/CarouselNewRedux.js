@@ -48,23 +48,23 @@ const CarouselNewRedux = () => {
             <div className='itm' index={index + 1} key={index}>
               <div className="d-item">
                 <div className="nft__item">
-                    { nft.deadline &&
+                    {/* { nft.deadline &&
                         <div className="de_countdown">
                             <Clock deadline={nft.deadline} />
                         </div>
-                    }
-                    <div className="author_list_pp">
+                    } */}
+                    {/* <div className="author_list_pp">
                         <span onClick={()=> navigateTo(nft.author_link)}>
                             { nft.author.avatar && 
                                 <img className="lazy" src={api.baseUrl + nft.author.avatar.url} alt=""/>
                             }                                    
                             <i className="fa fa-check"></i>
                         </span>
-                    </div>
+                    </div> */}
                     <div className="nft__item_wrap" style={{height: `${height}px`}}>
                       <Outer>
                         <span>
-                            <img src={api.baseUrl + nft.preview_image.url} className="lazy nft__item_preview" onLoad={onImgLoad} alt=""/>
+                            <img src={nft.img_url} className="lazy nft__item_preview" onLoad={onImgLoad} alt=""/>
                         </span>
                       </Outer>
                     </div>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const footer= () => (
   <footer className="footer-light">
-            <div className="container">
+            {/* <div className="container">
                 <div className="row">
                     <div className="col-md-3 col-sm-6 col-xs-1">
                         <div className="widget">
@@ -62,7 +62,7 @@ const footer= () => (
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
             <div className="subfooter">
                 <div className="container">
                     <div className="row">
