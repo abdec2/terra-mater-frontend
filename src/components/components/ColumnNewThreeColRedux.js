@@ -10,8 +10,9 @@ const ColumnNewThreeColRedux = () => {
     const dispatch = useDispatch();
 
     const nftItems = useSelector(selectors.nftItems);
-
+    console.log(nftItems)
     const [height, setHeight] = useState(0);
+    const [page, setPage] = useState(1);
 
     const onImgLoad = ({target:img}) => {
         let currentHeight = height;
@@ -21,7 +22,9 @@ const ColumnNewThreeColRedux = () => {
     }
     
     useEffect(() => {
-        dispatch(actions.fetchNftsBreakdown());
+        if(nftItems.length === 0) {
+            dispatch(actions.fetchNftsBreakdown());
+        }
     }, [dispatch]);
 
     //will run when component unmounted
@@ -33,7 +36,8 @@ const ColumnNewThreeColRedux = () => {
     },[dispatch]);
     
     const loadMore = () => {
-        dispatch(actions.fetchNftsBreakdown());
+        dispatch(actions.fetchNftsBreakdown(page + 1));
+        setPage(page + 1)
     }
     
   return (
@@ -41,12 +45,16 @@ const ColumnNewThreeColRedux = () => {
         {nftItems && nftItems.map( (nft, index) => (
                 <NftCard nft={nft} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4" />
             ))}
-        { nftItems.length <= 20 &&
             <div className='col-lg-12'>
                 <div className="spacer-single"></div>
                 <span onClick={loadMore} className="btn-main lead m-auto">Load More</span>
             </div>
-        }
+        {/* { nftItems.length <= 25 &&
+            <div className='col-lg-12'>
+                <div className="spacer-single"></div>
+                <span onClick={loadMore} className="btn-main lead m-auto">Load More</span>
+            </div>
+        } */}
     </div>              
     );
 }

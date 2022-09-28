@@ -2,21 +2,21 @@ import { Axios, Canceler } from '../../../core/axios';
 import * as actions from '../../actions';
 import api from '../../../core/api';
 
-export const fetchNftsBreakdown = (authorId, isMusic = false) => async (dispatch) => {
+export const fetchNftsBreakdown = (page=1, collectionId, isMusic = false) => async (dispatch) => {
 
   dispatch(actions.getNftBreakdown.request(Canceler.cancel));
 
   try {
-    let filter = authorId ? 'filters[author][id][$eq]='+authorId : '';
+    let filter = collectionId ? 'filters[collection][id][$eq]='+collectionId : '';
     let music = isMusic ? 'filters[category][$eq]=music' : '';
     const relations = [
-      'author',
-      'author.avatar',
-      'preview_image',
+      'collection',
+      'nft_status',
+      'collection.feature_img',
     ];
-    // let populate = `populate=${relations}&`;
-    let populate = `populate=*&`;
-    const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}?${populate}${filter}&${music}`, {
+    let populate = `populate=${relations}&`;
+    // let populate = `populate=*&`;
+    const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}?${populate}${filter}&${music}&pagination[page]=${page}`, {
       cancelToken: Canceler.token,
       params: {}
     });
@@ -48,7 +48,13 @@ export const fetchNftDetail = (nftId) => async (dispatch) => {
   dispatch(actions.getNftDetail.request(Canceler.cancel));
 
   try {
-    const { data } = await Axios.get(`${api.baseUrl}${api.nfts}/${nftId}`, {
+    const relations = [
+      'collection',
+      'nft_status',
+      'collection.feature_img',
+    ];
+    let populate = `populate=${relations}&`;
+    const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}/${nftId}?${populate}`, {
       cancelToken: Canceler.token,
       params: {}
     });
