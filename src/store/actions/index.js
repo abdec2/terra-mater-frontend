@@ -27,6 +27,18 @@ export const getHotCollections = asyncAction(
     'nft/GET_HOT_COLLECTIONS_FAIL'
 )();
 
+export const getCollections = asyncAction(
+    'nft/GET_COLLECTIONS',
+    'nft/GET_COLLECTIONS_SUCCESS',
+    'nft/GET_COLLECTIONS_FAIL'
+)();
+
+export const getCollectionNfts = asyncAction(
+    'nft/GET_COLLECTIONS_NFTS',
+    'nft/GET_COLLECTIONS_NFTS_SUCCESS',
+    'nft/GET_COLLECTIONS_NFTS_FAIL'
+)();
+
 export const getAuthorList = asyncAction(
     'nft/GET_AUTHOR_LIST',
     'nft/GET_AUTHOR_LIST_SUCCESS',

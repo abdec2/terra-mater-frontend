@@ -108,6 +108,7 @@ const ItemDetailRedux = () => {
                                 <div className="item_info_views"><i className="fa fa-eye"></i>{nft.views}</div>
                                 <div className="item_info_like"><i className="fa fa-heart"></i>{nft.likes}</div>
                             </div>
+                            <h3 className="text-uppercase color">{nft.token_name}</h3>
                             <p>{nft.description}</p>
 
                             <div className="d-flex flex-row">

@@ -8,6 +8,8 @@ export const nftDetailState = (state) => state.NFT.nftDetail;
 export const hotCollectionsState = (state) => state.hotCollection.hotCollections;
 export const authorsState = (state) => state.authors.authorList;
 export const authorRankingsState = (state) => state.authors.authorRanking;
+export const collectionState = (state) => state.collectionReducer.selectedCollection;
+export const collectionNft = (state) => state.collectionReducer.selectedNfts.data;
 
 //blogs
 export const blogsState = (state) => state.blogs.blogPosts;

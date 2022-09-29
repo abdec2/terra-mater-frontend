@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import nftReducer from './nfts';
 import hotCollectionsReducer from './hotCollections';
+import collectionReducer from './collections';
 import authorListReducer from './authorList';
 import filterReducer from './filters';
 import blogPostsReducer from './blogs';
@@ -9,6 +10,7 @@ import web3Reducer from './web3';
 export const rootReducer = combineReducers({
   NFT: nftReducer,
   hotCollection: hotCollectionsReducer,
+  collectionReducer,
   authors: authorListReducer,
   filters: filterReducer,
   blogs: blogPostsReducer,

@@ -4,8 +4,9 @@ import Footer from '../components/footer';
 import { createGlobalStyle } from 'styled-components';
 import ColumnNewRedux from "../components/ColumnNewRedux";
 import * as selectors from '../../store/selectors';
-import { fetchHotCollections } from "../../store/actions/thunks";
+import { fetchCollections } from "../../store/actions/thunks";
 import api from "../../core/api";
+import { useParams } from "react-router-dom";
 
 const GlobalStyles = createGlobalStyle`
   header#myHeader.navbar.white {
@@ -24,9 +25,11 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-const Colection = function({ collectionId = 1 }) {
+const Colection = function() {
 const [openMenu, setOpenMenu] = React.useState(true);
 const [openMenu1, setOpenMenu1] = React.useState(false);
+const {collectionId} = useParams();
+console.log(collectionId)
 const handleBtnClick = () => {
   setOpenMenu(!openMenu);
   setOpenMenu1(false);
@@ -41,18 +44,19 @@ const handleBtnClick1 = () => {
 };
 
 const dispatch = useDispatch();
-const hotCollectionsState = useSelector(selectors.hotCollectionsState);
-const hotCollections = hotCollectionsState.data ? hotCollectionsState.data[0] : {};
+const collectionState = useSelector(selectors.collectionState);
+const hotCollections = collectionState.data ? collectionState.data[0] : {};
+console.log(hotCollections)
 
 useEffect(() => {
-    dispatch(fetchHotCollections(collectionId));
+    dispatch(fetchCollections(collectionId));
 }, [dispatch, collectionId]);
 
 return (
   <div>
   <GlobalStyles/>
-    { hotCollections.author &&  hotCollections.author.banner &&
-      <section id='profile_banner' className='jumbotron breadcumb no-bg' style={{backgroundImage: `url(${api.baseUrl + hotCollections.author.banner.url})`}}>
+    { hotCollections.banner &&
+      <section id='profile_banner' className='jumbotron breadcumb no-bg' style={{backgroundImage: `url(${hotCollections.banner.url})`}}>
         <div className='mainbreadcumb'>
         </div>
       </section>
@@ -63,21 +67,17 @@ return (
         <div className="col-md-12">
           <div className="d_profile">
             <div className="profile_avatar">
-                { hotCollections.author &&  hotCollections.author.avatar &&
+                { hotCollections.feature_img &&
                   <div className="d_profile_img">
-                    <img src={api.baseUrl + hotCollections.author.avatar.url} alt=""/>
+                    <img src={hotCollections.feature_img.url} alt=""/>
                     <i className="fa fa-check"></i>
                   </div>
                 }
                 <div className="profile_name">
-                  <h4>
+                  <h2 className="text-uppercase color fw-bold">
                       { hotCollections.name }                                                
                       <div className="clearfix"></div>
-                      { hotCollections.author &&  hotCollections.author.wallet &&
-                        <span id="wallet" className="profile_wallet">{ hotCollections.author.wallet }</span>
-                      }
-                      <button id="btn_copy" title="Copy Text">Copy</button>
-                  </h4>
+                  </h2>
                 </div>
               </div>
             </div>
@@ -86,26 +86,11 @@ return (
     </section>
 
     <section className='container no-top'>
-          <div className='row'>
-            <div className='col-lg-12'>
-                <div className="items_filter">
-                  <ul className="de_nav">
-                      <li id='Mainbtn' className="active"><span onClick={handleBtnClick}>On Sale</span></li>
-                      <li id='Mainbtn1' className=""><span onClick={handleBtnClick1}>Owned</span></li>
-                  </ul>
-              </div>
-            </div>
-          </div>
-        {openMenu && (  
+          
           <div id='zero1' className='onStep fadeIn'>
-            <ColumnNewRedux shuffle showLoadMore={false} authorId={hotCollections.author ? hotCollections.author.id : 1} />
+            <ColumnNewRedux showLoadMore={true} authorId={ hotCollections.id } />
           </div>
-        )}
-        {openMenu1 && ( 
-          <div id='zero2' className='onStep fadeIn'>
-            <ColumnNewRedux shuffle showLoadMore={false} />
-          </div>
-        )}
+        
         </section>
     <Footer />
   </div>

@@ -6,24 +6,29 @@ import { clearNfts, clearFilter } from '../../store/actions';
 import NftCard from './NftCard';
 import NftMusicCard from './NftMusicCard';
 import { shuffleArray } from '../../store/utils';
+import { fetchCollectionNfts } from './../../store/actions/thunks'
 
 //react functional component
 const ColumnNewRedux = ({ showLoadMore = true, shuffle = false, authorId = null }) => {
 
     const dispatch = useDispatch();
-    const nftItems = useSelector(selectors.nftItems);
+    const nftItems = useSelector(selectors.collectionNft);
     const nfts = nftItems ? shuffle ? shuffleArray(nftItems) : nftItems : [];
     const [height, setHeight] = useState(0);
-
+    const [page, setPage] = useState(1);
+    console.log(nfts)
     const onImgLoad = ({target:img}) => {
         let currentHeight = height;
         if(currentHeight < img.offsetHeight) {
             setHeight(img.offsetHeight);
         }
     }
+    console.log(nfts)
     
     useEffect(() => {
-        dispatch(actions.fetchNftsBreakdown(authorId));
+        if(authorId) {
+            dispatch(actions.fetchCollectionNfts(page, authorId));
+        }
     }, [dispatch, authorId]);
 
     //will run when component unmounted
@@ -35,7 +40,8 @@ const ColumnNewRedux = ({ showLoadMore = true, shuffle = false, authorId = null 
     },[dispatch]);
 
     const loadMore = () => {
-        dispatch(actions.fetchNftsBreakdown(authorId));
+        dispatch(actions.fetchCollectionNfts(page + 1, authorId));
+        setPage(page + 1);
     }
 
     return (
@@ -46,7 +52,7 @@ const ColumnNewRedux = ({ showLoadMore = true, shuffle = false, authorId = null 
                 :
                 <NftCard nft={nft} key={index} onImgLoad={onImgLoad} height={height} />
             ))}
-            { showLoadMore && nfts.length <= 20 &&
+            { showLoadMore  &&
                 <div className='col-lg-12'>
                     <div className="spacer-single"></div>
                     <span onClick={loadMore} className="btn-main lead m-auto">Load More</span>
