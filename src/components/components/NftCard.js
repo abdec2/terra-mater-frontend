@@ -36,7 +36,7 @@ const NftCard = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12
                 }
                 {nft.collection && nft.collection.feature_img && nft.collection.feature_img.url &&
                     <div className="author_list_pp">
-                        <span onClick={() => navigateTo(`/collection/${nft.collection.id}`)}>
+                        <span onClick={() => navigateTo(`/colection/${nft.collection.id}`)}>
                             <img className="lazy" src={nft.collection.feature_img.url} alt="" />
                             <i className="fa fa-check"></i>
                         </span>

@@ -54,7 +54,7 @@ const CarouselNewRedux = () => {
                         </div>
                     }
                     <div className="author_list_pp">
-                        <span onClick={()=> navigateTo(nft.author_link)}>
+                        <span onClick={()=> navigateTo(`/colection/${nft.collection.id}`)}>
                             { nft.collection.feature_img.data !== null && 
                                 <img className="lazy" src={nft.collection.feature_img.url} alt=""/>
                             }                                    
@@ -69,14 +69,14 @@ const CarouselNewRedux = () => {
                       </Outer>
                     </div>
                     <div className="nft__item_info">
-                        <span onClick={()=> navigateTo(`${nft.nft_link}/${nft.id}`)}>
-                            <h4>{nft.title}</h4>
+                        <span onClick={()=> navigateTo(`/ItemDetail/${nft.id}`)}>
+                            <h4>{nft.token_name}</h4>
                         </span>
                         <div className="nft__item_price">
-                            {nft.price} ETH<span>{nft.bid}/{nft.max_bid}</span>
+                            {nft.price} ETH
                         </div>
                         <div className="nft__item_action">
-                            <span onClick={()=> navigateTo(`${nft.nft_link}/${nft.id}`)}>Place a bid</span>
+                            <span onClick={()=> navigateTo(`/ItemDetail/${nft.id}`)}>{nft.nft_status.Status === "Mint" ? "Mint" : nft.nft_status.Status === "Buy Now" ? "Buy Now" : "" }</span>
                         </div>
                         <div className="nft__item_like">
                             <i className="fa fa-heart"></i><span>{nft.likes}</span>

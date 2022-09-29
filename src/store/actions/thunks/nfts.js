@@ -7,21 +7,12 @@ export const fetchNftsBreakdown = (page=1, collectionId, isMusic = false) => asy
   dispatch(actions.getNftBreakdown.request(Canceler.cancel));
 
   try {
-    let filter = collectionId ? 'filters[collection][id][$eq]='+collectionId : '';
-    let music = isMusic ? 'filters[category][$eq]=music' : '';
-    const relations = [
-      'collection',
-      'nft_status',
-      'collection.feature_img',
-    ];
-    let populate = `populate=${relations}&`;
-    // let populate = `populate=*&`;
-    const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}?${populate}${filter}&${music}&pagination[page]=${page}`, {
+    
+    const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}?page=${page}`, {
       cancelToken: Canceler.token,
       params: {}
     });
-    console.log(data)
-    dispatch(actions.getNftBreakdown.success(data.data));
+    dispatch(actions.getNftBreakdown.success(data));
   } catch (err) {
     dispatch(actions.getNftBreakdown.failure(err));
   }
@@ -51,9 +42,9 @@ export const fetchNftDetail = (nftId) => async (dispatch) => {
     const relations = [
       'collection',
       'nft_status',
-      'collection.feature_img',
+      'collection.feature_img'
     ];
-    let populate = `populate=${relations}&`;
+    let populate = `populate=${relations}`;
     const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}/${nftId}?${populate}`, {
       cancelToken: Canceler.token,
       params: {}

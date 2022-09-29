@@ -15,11 +15,12 @@ export const fetchHotCollections = (collectionId) => async (dispatch) => {
     // ];
     // let populate = `populate=${relations}&`; ${filter}
     let populate = `populate=*`;
-    const { data } = await Axios.get(`${api.baseUrl + api.collections}?${populate}`, {
+    const { data } = await Axios.get(`${api.baseUrl + api.collections}/get_collection?${populate}`, {
       cancelToken: Canceler.token,
       params: {}
     });
-    dispatch(actions.getHotCollections.success(data.data));
+    console.log(data)
+    dispatch(actions.getHotCollections.success(data));
   } catch (err) {
     dispatch(actions.getHotCollections.failure(err));
   }
