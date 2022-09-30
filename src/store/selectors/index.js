@@ -10,6 +10,8 @@ export const authorsState = (state) => state.authors.authorList;
 export const authorRankingsState = (state) => state.authors.authorRanking;
 export const collectionState = (state) => state.collectionReducer.selectedCollection;
 export const collectionNft = (state) => state.collectionReducer.selectedNfts.data;
+export const categoriesState = (state) => state.misc.categories.data;
+export const nftStatusesState = (state) => state.misc.nftStatus.data;
 
 //blogs
 export const blogsState = (state) => state.blogs.blogPosts;
@@ -40,18 +42,17 @@ export const nftItems = createSelector(nftFilter, nftBreakdownState, ( filters, 
     if(!data) {
         return [];
     }
-
     if(categories.size) {
-        data = data.filter( nft => categories.has(nft.category));
+        data = data.filter( nft => categories.has(nft.collection.category.id.toString()));
     }
     if(status.size) {
-        data = data.filter( nft => status.has(nft.status));
+        data = data.filter( nft => status.has(nft.nft_status.id.toString()));
     }
     if(itemsType.size) {
         data = data.filter( nft => itemsType.has(nft.item_type));
     }
     if(collections.size) {
-        data = data.filter( nft => collections.has(nft.collections));
+        data = data.filter( nft => collections.has(nft.collection.id.toString()));
     }
     if(nftTitle.trim().length) {
         let pattern = new RegExp(`${nftTitle.trim()}`, 'gi');

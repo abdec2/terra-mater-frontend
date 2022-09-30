@@ -29,7 +29,9 @@ export const fetchCollectionNfts = (page=1, collectionId, isMusic = false) => as
         cancelToken: Canceler.token,
         params: {}
       });
-      dispatch(actions.getCollectionNfts.success(data));
+      if(data.length > 0) {
+        dispatch(actions.getCollectionNfts.success(data));
+      }
     } catch (err) {
       dispatch(actions.getCollectionNfts.failure(err));
     }

@@ -22,11 +22,11 @@ const states = (state = defaultState, action) => {
     case getType(actions.getCollections.failure):
       return { ...state, selectedCollection: entityLoadingFailed(state.selectedCollection) };   
     case getType(actions.getCollectionNfts.request):
-      return { ...state, selectedNfts: entityLoadingStarted(state.selectedCollection, action.payload) };
+      return { ...state, selectedNfts: entityLoadingStarted(state.selectedNfts, action.payload) };
     case getType(actions.getCollectionNfts.success):
-      return { ...state, selectedNfts: entityLoadingSucceeded(state.selectedCollection, action.payload) };
+      return { ...state, selectedNfts: entityLoadingSucceeded(state.selectedNfts, action.payload) };
     case getType(actions.getCollectionNfts.failure):
-      return { ...state, selectedNfts: entityLoadingFailed(state.selectedCollection) };  
+      return { ...state, selectedNfts: entityLoadingFailed(state.selectedNfts) };  
     default:
       return state;
   }

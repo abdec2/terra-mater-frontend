@@ -6,6 +6,7 @@ import authorListReducer from './authorList';
 import filterReducer from './filters';
 import blogPostsReducer from './blogs';
 import web3Reducer from './web3';
+import misc from './misc';
 
 export const rootReducer = combineReducers({
   NFT: nftReducer,
@@ -14,7 +15,8 @@ export const rootReducer = combineReducers({
   authors: authorListReducer,
   filters: filterReducer,
   blogs: blogPostsReducer,
-  web3: web3Reducer
+  web3: web3Reducer,
+  misc
 });
 
 const reducers = (state, action) => rootReducer(state, action);

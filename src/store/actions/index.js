@@ -39,6 +39,18 @@ export const getCollectionNfts = asyncAction(
     'nft/GET_COLLECTIONS_NFTS_FAIL'
 )();
 
+export const fetchCategories = asyncAction(
+    'nft/GET_CATEGORIES',
+    'nft/GET_CATEGORIES_SUCCESS',
+    'nft/GET_CATEGORIES_FAIL'
+)();
+
+export const fetchStatus = asyncAction(
+    'nft/GET_STATUS',
+    'nft/GET_STATUS_SUCCESS',
+    'nft/GET_STATUS_FAIL'
+)();
+
 export const getAuthorList = asyncAction(
     'nft/GET_AUTHOR_LIST',
     'nft/GET_AUTHOR_LIST_SUCCESS',

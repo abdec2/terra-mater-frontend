@@ -13,6 +13,8 @@ const api = {
     recent: '/api/blog-posts/posts/recents',
     comments: '/api/blog-posts/comments',
     tags: '/api/blog-posts/tags',
+    categories: '/api/categories',
+    status: '/api/nft-statuses'
 }
 
 export const openseaApi = {

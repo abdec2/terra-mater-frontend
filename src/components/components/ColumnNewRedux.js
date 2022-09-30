@@ -12,18 +12,19 @@ import { fetchCollectionNfts } from './../../store/actions/thunks'
 const ColumnNewRedux = ({ showLoadMore = true, shuffle = false, authorId = null }) => {
 
     const dispatch = useDispatch();
+    const store = useSelector(state => state);
     const nftItems = useSelector(selectors.collectionNft);
     const nfts = nftItems ? shuffle ? shuffleArray(nftItems) : nftItems : [];
     const [height, setHeight] = useState(0);
     const [page, setPage] = useState(1);
     console.log(nfts)
+    console.log(store)
     const onImgLoad = ({target:img}) => {
         let currentHeight = height;
         if(currentHeight < img.offsetHeight) {
             setHeight(img.offsetHeight);
         }
     }
-    console.log(nfts)
     
     useEffect(() => {
         if(authorId) {
