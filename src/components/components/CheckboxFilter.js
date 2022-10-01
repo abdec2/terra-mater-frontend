@@ -8,12 +8,17 @@ import {
     fetchStatus, 
     fetchHotCollections
 } from './../../store/actions/thunks'
+import { useState } from 'react';
 
 const CheckboxFilter = () => {
     const dispatch = useDispatch();
     const categories1 = useSelector(categoriesState);
     const nftStatus = useSelector(nftStatusesState);
     const collection = useSelector(hotCollectionsState).data;
+    const [selCat, setSelCat] = useState([]);
+    const [selStatus, setSelStatus] = useState([]);
+    const [selColl, setSelColl] = useState([]);
+
 
     const handleCategory = useCallback((event) => {
         const { value } = event.target;
