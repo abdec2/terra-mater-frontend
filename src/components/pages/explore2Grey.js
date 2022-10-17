@@ -9,24 +9,28 @@ import { StyledHeader } from '../Styles';
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
 
-const explore= () => (
-<div className="greyscheme">
-<StyledHeader theme={theme} />
-  <section className='container'>
-        <div className='row'>
+const explore = () => (
+  <div className="greyscheme">
+    <StyledHeader theme={theme} />
+    <section className='container'>
+      <div className="row">
         <div className="spacer-double"></div>
-          <div className='col-md-3'>
-            <CheckboxFilter />
-          </div>
-          <div className="col-md-9">
-            <ColumnNewThreeColRedux/>
-          </div>
+        <h2 className='text-center'>Explore, collect, and sell NFTs</h2>
+      </div>
+      <div className='row'>
+        <div className="spacer-double"></div>
+        <div className='col-md-3'>
+          <CheckboxFilter />
         </div>
-      </section>
+        <div className="col-md-9">
+          <ColumnNewThreeColRedux />
+        </div>
+      </div>
+    </section>
 
 
-  <Footer />
-</div>
+    <Footer />
+  </div>
 
 );
 export default explore;

@@ -47,33 +47,33 @@ const CarouselNewRedux = () => {
           {nfts && nfts.length && nfts.map( (nft, index) => (
             <div className='itm' index={index + 1} key={index}>
               <div className="d-item">
-                <div className="nft__item">
+                <div className="nft__item p-0">
                     { nft.deadline &&
                         <div className="de_countdown">
                             <Clock deadline={nft.deadline} />
                         </div>
                     }
-                    <div className="author_list_pp">
+                    {/* <div className="author_list_pp">
                         <span onClick={()=> navigateTo(`/colection/${nft.collection.id}`)}>
                             { nft.collection.feature_img.data !== null && 
                                 <img className="lazy" src={nft.collection.feature_img.url} alt=""/>
                             }                                    
                             <i className="fa fa-check"></i>
                         </span>
-                    </div>
-                    <div className="nft__item_wrap" style={{height: `${height}px`}}>
+                    </div> */}
+                    <div className="nft__item_wrap mt-0" style={{height: `${height}px`}}>
                       <Outer>
                         <span>
-                            <img src={nft.img_url} className="lazy nft__item_preview" onLoad={onImgLoad} alt=""/>
+                            <img src={nft.img_url} style={{borderRadius: '0'}} className="lazy nft__item_preview" onLoad={onImgLoad} alt=""/>
                         </span>
                       </Outer>
                     </div>
-                    <div className="nft__item_info">
+                    <div className="nft__item_info p-3 pt-0 pb-1 ">
                         <span onClick={()=> navigateTo(`/ItemDetail/${nft.id}`)}>
                             <h4>{nft.token_name}</h4>
                         </span>
                         <div className="nft__item_price">
-                            {nft.price} ETH
+                            {nft.price} USDT
                         </div>
                         <div className="nft__item_action">
                             <span onClick={()=> navigateTo(`/ItemDetail/${nft.id}`)}>{nft.nft_status.Status === "Mint" ? "Mint" : nft.nft_status.Status === "Buy Now" ? "Buy Now" : "" }</span>

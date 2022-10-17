@@ -1,6 +1,8 @@
 import React from 'react';
 import Reveal from 'react-awesome-reveal';
 import { keyframes } from "@emotion/react";
+import { useNavigate } from 'react-router-dom';
+import colection from '../pages/colection';
 
 const fadeInUp = keyframes`
   0% {
@@ -26,28 +28,35 @@ const inline = keyframes`
    }
 `;
 
-const slidermainparticle= () => (
- <div className="container">
-    <div className="row align-items-center">
-          <div className="col-md-6">
-              <div className="spacer-single"></div>
-              <h6> <span className="text-uppercase color">Gigaland Market</span></h6>
-              <Reveal className='onStep' keyframes={fadeInUp} delay={300} duration={900} triggerOnce>
-              <h1 className="col-white">Create, sell or collect digital items.</h1>
-              </Reveal>
-              <Reveal className='onStep' keyframes={fadeInUp} delay={600} duration={900} triggerOnce>
-              <p className="lead col-white">
+const Slidermainparticle = ({ collection }) => {
+  const navigate = useNavigate()
+    const navigateTo = (link) => {
+        navigate(link)
+    }
+    console.log(collection)
+  return (
+    <div className="container mt-5">
+      <div className="row align-items-center">
+        <div className="col-md-6">
+          <div className="spacer-single"></div>
+          <h6> <span className="text-uppercase color">Terra Mater Market</span></h6>
+          <Reveal className='onStep' keyframes={fadeInUp} delay={300} duration={900} triggerOnce>
+            <h1 className="col-white mb-0">{collection && collection.data[0].attributes.name }</h1>
+            <h3 className="col-white">Latest Collection</h3>
+          </Reveal>
+          <Reveal className='onStep' keyframes={fadeInUp} delay={600} duration={900} triggerOnce>
+            {/* <p className="lead col-white">
               Unit of data stored on a digital ledger, called a blockchain, that certifies a digital asset to be unique and therefore not interchangeable
-              </p>
-              </Reveal>
-              <div className="spacer-10"></div>
-              <Reveal className='onStep d-inline' keyframes={inline} delay={800} duration={900} triggerOnce>
-              <span onClick={()=> window.open("#", "_self")} className="btn-main inline lead">Explore</span>
-              <div className="mb-sm-30"></div>
-              </Reveal>
+              </p> */}
+          </Reveal>
+          <div className="spacer-10"></div>
+          <Reveal className='onStep d-inline' keyframes={inline} delay={800} duration={900} triggerOnce>
+            <span onClick={() => navigateTo("/colection/" + collection.data[0].id)} className="btn-main inline lead">BUY</span>
+            <div className="mb-sm-30"></div>
+          </Reveal>
 
-              <Reveal className='onStep d-inline' keyframes={inline} delay={900} duration={1200} triggerOnce>
-              <div className="row">
+          <Reveal className='onStep d-inline' keyframes={inline} delay={900} duration={1200} triggerOnce>
+            {/* <div className="row">
                   <div className="spacer-single"></div>
                   <div className="row">
                           <div className="col-lg-4 col-md-6 col-sm-4 mb30">
@@ -59,8 +68,8 @@ const slidermainparticle= () => (
 
                           <div className="col-lg-4 col-md-6 col-sm-4 mb30">
                               <div className="de_count text-left">
-                                  <h3><span>27</span>k</h3>
-                                  <h5 className="id-color">Auctions</h5>
+                                  <h3><span>2</span></h3>
+                                  <h5 className="id-color">Collections</h5>
                               </div>
                           </div>
 
@@ -71,15 +80,16 @@ const slidermainparticle= () => (
                               </div>
                           </div>
                       </div>
-              </div>
-              </Reveal>
-          </div>
-          <div className="col-md-6 xs-hide">
-          <Reveal className='onStep d-inline' keyframes={inline} delay={300} duration={1200} triggerOnce>
-              <img src="./img/misc/women-with-vr.png" className="img-fluid" alt=""/>
+              </div> */}
           </Reveal>
-          </div>
+        </div>
+        <div className="col-md-6 xs-hide">
+          <Reveal className='onStep d-inline' keyframes={inline} delay={300} duration={1200} triggerOnce>
+            <img src={collection && collection.data[0].attributes.feature_img.data.attributes.url} width={500} className="img-fluid" alt="" />
+          </Reveal>
+        </div>
       </div>
     </div>
-);
-export default slidermainparticle;
+  )
+};
+export default Slidermainparticle;

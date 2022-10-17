@@ -157,25 +157,27 @@ const Header = function ({ className }) {
       <div className='container'>
         <div className='row w-100-nav'>
           <div className='logo px-0'>
-            <div className='navbar-title navbar-item'>
+            <div className='navbar-title navbar-item p-2'>
               <NavLink to="/">
                 <img
                   src="/img/logo.png"
                   className="img-fluid d-block"
+                  style={{width: '80px'}}
                   alt="#"
                 />
                 <img
-                  src="/img/logo-light.png"
-                  className="img-fluid d-none"
+                  src="/img/logo.png"
+                  className="img-fluid"
+                  style={{width: '80px'}}
                   alt="#"
                 />
               </NavLink>
             </div>
           </div>
 
-          <div className='search'>
+          {/* <div className='search'>
             <input id="quick_search" className="xs-hide" name="quick_search" placeholder="search item here..." type="text" />
-          </div>
+          </div> */}
 
           <BreakpointProvider>
             <Breakpoint l down>

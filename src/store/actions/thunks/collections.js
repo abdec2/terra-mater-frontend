@@ -1,6 +1,7 @@
 import { Axios, Canceler } from '../../../core/axios';
 import * as actions from '../../actions';
 import api from '../../../core/api';
+import axios from 'axios';
 
 export const fetchCollections = (collectionId) => async (dispatch) => {
   dispatch(actions.getCollections.request(Canceler.cancel));
@@ -36,3 +37,22 @@ export const fetchCollectionNfts = (page=1, collectionId, isMusic = false) => as
       dispatch(actions.getCollectionNfts.failure(err));
     }
   };
+
+export const fetchNewCollection = () => async (dispatch) => {
+  dispatch(actions.getNewCollection.request(Canceler.cancel));
+
+  try {
+    // http://localhost:5000/api/collections?populate=*&sort[1]=createdAt:desc&pagination[limit]=1
+    const { data } = await axios.get(`${api.baseUrl}/api/collections?populate=*&sort[1]=createdAt:desc&pagination[limit]=1`, {
+      cancelToken: Canceler.token,
+      params: {}
+    })
+
+    console.log(data.data)
+    if(data.data.length > 0) {
+      dispatch(actions.getNewCollection.success(data));
+    }
+  } catch (e) {
+    actions.getNewCollection.failure(e)
+  }
+}

@@ -10,6 +10,7 @@ export const authorsState = (state) => state.authors.authorList;
 export const authorRankingsState = (state) => state.authors.authorRanking;
 export const collectionState = (state) => state.collectionReducer.selectedCollection;
 export const collectionNft = (state) => state.collectionReducer.selectedNfts.data;
+export const newCollection = (state) => state.collectionReducer.newCollection.data;
 export const categoriesState = (state) => state.misc.categories.data;
 export const nftStatusesState = (state) => state.misc.nftStatus.data;
 

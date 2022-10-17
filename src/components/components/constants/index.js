@@ -212,7 +212,7 @@ export const settingsnew = {
       {
         breakpoint: 1900,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 6,
           slidesToScroll: 1,
           infinite: true
         }
@@ -220,7 +220,7 @@ export const settingsnew = {
       {
         breakpoint: 1600,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 5,
           slidesToScroll: 1,
           infinite: true
         }

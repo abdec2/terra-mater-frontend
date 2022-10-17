@@ -2,20 +2,20 @@ import React from 'react';
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import ScrollToTopBtn from './menu/ScrollToTop';
 import Header from './menu/header';
-import Home from './pages/home';
+// import Home from './pages/home';
 // import HomeGrey from './pages/homeGrey';
 // import Home1 from './pages/home1';
 // import Home1grey from './pages/home1Grey';
 // import Home2 from './pages/home2';
-// import Home2grey from './pages/home2Grey';
+import Home2grey from './pages/home2Grey';
 // import Home3 from './pages/home3';
 // import Home4 from './pages/home4';
 // import Home5 from './pages/home5';
 // import Home6 from './pages/home6';
 // import Explore from './pages/explore';
 // import Exploregrey from './pages/exploreGrey';
-import Explore2 from './pages/explore2';
-// import Explore2grey from './pages/explore2Grey';
+// import Explore2 from './pages/explore2';
+import Explore2grey from './pages/explore2Grey';
 // import ExploreOpensea from './pages/Opensea/explore';
 // import Rangking from './pages/rangking';
 // import RankingRedux from './pages/RankingRedux';
@@ -24,11 +24,11 @@ import Explore2 from './pages/explore2';
 // import Auctiongrey from './pages/AuctionGrey';
 // import Helpcenter from './pages/helpcenter';
 // import Helpcentergrey from './pages/helpcenterGrey';
-import Colection from './pages/colection';
-// import Colectiongrey from './pages/colectionGrey';
+// import Colection from './pages/colection';
+import Colectiongrey from './pages/colectionGrey';
 // import ItemDetail from './pages/ItemDetail';
-import ItemDetailRedux from './pages/ItemDetailRedux';
-// import ItemDetailReduxgrey from './pages/ItemDetailReduxGrey';
+// import ItemDetailRedux from './pages/ItemDetailRedux';
+import ItemDetailReduxgrey from './pages/ItemDetailReduxGrey';
 import Author from './pages/Author';
 // import AuthorGrey from './pages/AuthorGrey';
 // import AuthorOpensea from './pages/Opensea/author';
@@ -109,14 +109,14 @@ const app= () => (
           } 
         />
       </Route>
-      <Route path="/home" element={<Home />} />
-      <Route element={<Explore2/>} path="/explore2" />
+      <Route path="/home" element={<Home2grey />} />
+      <Route element={<Explore2grey/>} path="/explore2" />
       {/* <Route element={<RankingRedux/>} path="/rangking" />
       <Route element={<RankingReduxgrey/>} path="/rangkingGrey" /> */}
       {/* <Route element={<Auction/>} path="/Auction" />
       <Route element={<Helpcenter/>} path="/helpcenter" /> */}
-      <Route element={<Colection/>} path="/colection/:collectionId" />
-      <Route element={<ItemDetailRedux/>} path="/ItemDetail/:nftId" />
+      <Route element={<Colectiongrey/>} path="/colection/:collectionId" />
+      <Route element={<ItemDetailReduxgrey/>} path="/ItemDetail/:nftId" />
       {/* <Route element={<News />} path="/news" />
       <Route element={<NewsSingle />} path="/news/:postId" /> */}
       <Route element={<Create />} path="/create" />

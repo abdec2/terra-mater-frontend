@@ -70,10 +70,10 @@ const footer= () => (
                             <div className="de-flex">
                                 <div className="de-flex-col">
                                     <span onClick={()=> window.open("", "_self")} className="d-flex align-items-center justify-content-center">
-                                        <img alt="" className="" src="./img/logo.png" />
+                                        <img alt="" className="" style={{width: '50px'}} src="./img/logo.png" />
                                         {/* <img alt="" className="f-logo d-3" src="./img/logo-2-light.png" />
                                         <img alt="" className="f-logo d-4" src="./img/logo-3.png" /> */}
-                                        <span className="copy">&copy; Copyright 2022</span>
+                                        <span className="copy">&copy; Copyright 2022, Terra Mater</span>
                                     </span>
                                 </div>
                                 <div className="de-flex-col">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Particle from '../components/Particle';
 import SliderMainParticleGrey from '../components/SliderMainParticleGrey';
 import FeatureBox from '../components/FeatureBox';
@@ -9,18 +9,34 @@ import Footer from '../components/footer';
 
 //IMPORT DYNAMIC STYLED COMPONENT
 import { StyledHeader } from '../Styles';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { fetchNewCollection } from '../../store/actions/thunks/collections';
+import * as selectors from '../../store/selectors';
 //SWITCH VARIABLE FOR PAGE STYLE
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
-const homeone= () => (
-  <div className="greyscheme">
-  <StyledHeader theme={theme} />
-      <section className="jumbotron no-bg relative" style={{backgroundImage: `url(${'./img/background/8.jpg'})`}}>
-       <Particle/>
-         <SliderMainParticleGrey/>
+
+
+const HomeOne = () => {
+  const dispatch = useDispatch()
+  const newCollectionStore = useSelector(selectors.newCollection)
+
+  console.log(newCollectionStore)
+
+  useEffect(() => {
+    dispatch(fetchNewCollection())
+  }, [dispatch])
+
+  return (
+    <div className="greyscheme">
+      <StyledHeader theme={theme} />
+      <section className="jumbotron no-bg relative" style={{ backgroundImage: `url(${'./img/background/8.jpg'})` }}>
+        <Particle />
+        <SliderMainParticleGrey collection={newCollectionStore}  />
       </section>
 
-      <section className='container no-bottom'>
+      {/* <section className='container no-bottom'>
         <div className="row">
             <div className="col-lg-2 col-sm-4 col-6 mb30">
                 <span className="box-url">
@@ -64,19 +80,19 @@ const homeone= () => (
                 </span>
             </div>                                       
         </div>
-      </section>
+      </section> */}
 
-      <section className='container no-top no-bottom'>
+      <section className='container-fluid no-top no-bottom'>
         <div className='row'>
           <div className="spacer-double"></div>
           <div className='col-lg-12 mb-2'>
-              <h2>New Items</h2>
+            <h2 className='ms-3'>New Release</h2>
           </div>
-        </div> 
-        <CarouselNewRedux/>
+        </div>
+        <CarouselNewRedux />
       </section>
 
-      <section className='container no-top no-bottom'>
+      {/* <section className='container no-top no-bottom'>
         <div className='row'>
           <div className="spacer-double"></div>
           <div className='col-lg-12'>
@@ -86,32 +102,34 @@ const homeone= () => (
             <AuthorListRedux/>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      <section className='container no-top no-bottom'>
+      <section className='container-fluid no-top no-bottom'>
         <div className='row'>
           <div className="spacer-double"></div>
           <div className='col-lg-12 mb-2'>
-              <h2>Hot Collections</h2>
+            <h2 className='ms-3'>Coming Soon</h2>
           </div>
-            <div className='col-lg-12'>
-              <CarouselCollectionRedux/>
-            </div>
+          <div className='col-lg-12'>
+            <CarouselNewRedux />
+            {/* <CarouselCollectionRedux /> */}
           </div>
-      </section>
-
-      <section className='container no-top'>
-        <div className='row'>
-            <div className="spacer-double"></div>
-            <div className='col-lg-12 mb-3'>
-              <h2>Create and Sell Now</h2>
-            </div>
-            <FeatureBox/>
         </div>
       </section>
 
-    <Footer />
+      {/* <section className='container no-top'>
+        <div className='row'>
+          <div className="spacer-double"></div>
+          <div className='col-lg-12 mb-3'>
+            <h2>Create and Sell Now</h2>
+          </div>
+          <FeatureBox />
+        </div>
+      </section> */}
 
-  </div>
-);
-export default homeone;
+      <Footer />
+
+    </div>
+  )
+}
+export default HomeOne;
