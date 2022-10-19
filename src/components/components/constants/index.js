@@ -204,7 +204,7 @@ export const settingsnew = {
   export const carouselNew = {
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 6,
     slidesToScroll: 1,
     initialSlide: 0,
     adaptiveHeight: 300,
@@ -246,7 +246,7 @@ export const settingsnew = {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          dots: true
+          dots: false
         }
       }
     ]

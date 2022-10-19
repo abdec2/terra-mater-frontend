@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import ScrollToTopBtn from './menu/ScrollToTop';
-import Header from './menu/header';
+import Header from './../myFiles/components/header';
 // import Home from './pages/home';
 // import HomeGrey from './pages/homeGrey';
 // import Home1 from './pages/home1';
@@ -110,7 +110,7 @@ const app= () => (
         />
       </Route>
       <Route path="/home" element={<Home2grey />} />
-      <Route element={<Explore2grey/>} path="/explore2" />
+      <Route element={<Explore2grey/>} path="/explore" />
       {/* <Route element={<RankingRedux/>} path="/rangking" />
       <Route element={<RankingReduxgrey/>} path="/rangkingGrey" /> */}
       {/* <Route element={<Auction/>} path="/Auction" />

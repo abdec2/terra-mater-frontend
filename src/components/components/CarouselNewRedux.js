@@ -76,7 +76,7 @@ const CarouselNewRedux = () => {
                             {nft.price} USDT
                         </div>
                         <div className="nft__item_action">
-                            <span onClick={()=> navigateTo(`/ItemDetail/${nft.id}`)}>{nft.nft_status.Status === "Mint" ? "Mint" : nft.nft_status.Status === "Buy Now" ? "Buy Now" : "" }</span>
+                            <span onClick={()=> navigateTo(`/ItemDetail/${nft.id}`)}>{nft.nft_status.Status === "Mint" ? "Mint" : nft.nft_status.Status === "Buy Now" ? "Buy Now" : "Not for sale" }</span>
                         </div>
                         <div className="nft__item_like">
                             <i className="fa fa-heart"></i><span>{nft.likes}</span>
