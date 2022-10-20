@@ -7,7 +7,7 @@ const api = {
     authors: '/api/authors',
     authorsSales: '/api/author_ranks',
     hotCollections: '/api/hot-collections',
-    collections: '/api/collection',
+    collection: '/api/collections',
     contactUs: '/api/contact-forms',
     blogs: '/api/blog-posts',
     recent: '/api/blog-posts/posts/recents',

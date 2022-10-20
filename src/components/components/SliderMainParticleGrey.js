@@ -3,6 +3,7 @@ import Reveal from 'react-awesome-reveal';
 import { keyframes } from "@emotion/react";
 import { useNavigate } from 'react-router-dom';
 import colection from '../pages/colection';
+import { Button } from 'react-bootstrap';
 
 const fadeInUp = keyframes`
   0% {
@@ -35,58 +36,31 @@ const Slidermainparticle = ({ collection }) => {
     }
     console.log(collection)
   return (
-    <div className="container mt-5">
+    <div className="container ">
+
       <div className="row align-items-center">
-        <div className="col-md-6">
-          <div className="spacer-single"></div>
-          <h6> <span className="text-uppercase color">Terra Mater Market</span></h6>
-          <Reveal className='onStep' keyframes={fadeInUp} delay={300} duration={900} triggerOnce>
-            <h1 className="col-white mb-0">{collection && collection.data[0].attributes.name }</h1>
-            <h3 className="col-white">Latest Collection</h3>
-          </Reveal>
-          <Reveal className='onStep' keyframes={fadeInUp} delay={600} duration={900} triggerOnce>
-            {/* <p className="lead col-white">
-              Unit of data stored on a digital ledger, called a blockchain, that certifies a digital asset to be unique and therefore not interchangeable
-              </p> */}
-          </Reveal>
-          <div className="spacer-10"></div>
-          <Reveal className='onStep d-inline' keyframes={inline} delay={800} duration={900} triggerOnce>
-            <span onClick={() => navigateTo("/colection/" + collection.data[0].id)} className="btn-main inline lead">BUY</span>
-            <div className="mb-sm-30"></div>
-          </Reveal>
-
-          <Reveal className='onStep d-inline' keyframes={inline} delay={900} duration={1200} triggerOnce>
-            {/* <div className="row">
-                  <div className="spacer-single"></div>
-                  <div className="row">
-                          <div className="col-lg-4 col-md-6 col-sm-4 mb30">
-                              <div className="de_count text-left">
-                                  <h3><span>94215</span></h3>
-                                  <h5 className="id-color">Collectibles</h5>
-                              </div>
-                          </div>
-
-                          <div className="col-lg-4 col-md-6 col-sm-4 mb30">
-                              <div className="de_count text-left">
-                                  <h3><span>2</span></h3>
-                                  <h5 className="id-color">Collections</h5>
-                              </div>
-                          </div>
-
-                          <div className="col-lg-4 col-md-6 col-sm-4 mb30">
-                              <div className="de_count text-left">
-                                  <h3><span>4</span>k</h3>
-                                  <h5 className="id-color">NFT Artist</h5>
-                              </div>
-                          </div>
-                      </div>
-              </div> */}
-          </Reveal>
+        <div className="col-4">
+          <div><img src="/img/logo.png" width={100} alt=""/></div>
         </div>
-        <div className="col-md-6 xs-hide">
-          <Reveal className='onStep d-inline' keyframes={inline} delay={300} duration={1200} triggerOnce>
-            <img src={collection && collection.data[0].attributes.feature_img.data.attributes.url} width={500} className="img-fluid" alt="" />
+        <div className="spacer-10"></div>
+      </div>
+      <div className="row align-items-center">
+        <div className="col-12">
+          <div className="spacer-single"></div>
+          <Reveal className='onStep' keyframes={fadeInUp} delay={600} duration={900} triggerOnce>
+            <h1 className="text-center text-uppercase">Collection {collection && collection.data[0].attributes.
+          name }
+            </h1>
+            <h3 className="text-center">First NFT Incubator and marketplace owned by people</h3>
           </Reveal>
+          
+          <div className="spacer-50"></div>
+          <Reveal className='onStep d-inline' keyframes={fadeInUp} delay={800} duration={900} triggerOnce>
+            <div className='w-50 mx-auto d-flex align-items-center justify-content-center'> 
+              <a onClick={() => navigateTo('/about')} className='px-5 py-2 border rounded-5 text-white' style={{cursor: 'pointer', zIndex: '50'}}>Show me more</a>
+            </div>
+          </Reveal>
+          <div className="spacer-50"></div>
         </div>
       </div>
     </div>

@@ -12,3 +12,16 @@ code {
     monospace;
 }
 
+.slick-track {
+  margin-left: 0 !important;
+}
+
+.nft_coll {
+  background-color: #2e3338;
+  border: none;
+}
+.greyscheme .nft_coll h4 {
+  color: white;
+  font-weight: 500;
+}
+

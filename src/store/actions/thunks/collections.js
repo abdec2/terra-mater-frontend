@@ -43,7 +43,7 @@ export const fetchNewCollection = () => async (dispatch) => {
 
   try {
     // http://localhost:5000/api/collections?populate=*&sort[1]=createdAt:desc&pagination[limit]=1
-    const { data } = await axios.get(`${api.baseUrl}/api/collections?populate=*&sort[1]=createdAt:desc&pagination[limit]=1`, {
+    const { data } = await axios.get(`${api.baseUrl}/api/collections?populate=*&filters[status]=active&sort[1]=createdAt:desc&pagination[limit]=1`, {
       cancelToken: Canceler.token,
       params: {}
     })

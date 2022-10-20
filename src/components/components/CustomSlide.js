@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
 
-const CustomSlide = ({ index, avatar, banner, username, collectionId }) => {
+const CustomSlide = ({ index, avatar, banner, username, collectionId, status }) => {
   const navigate = useNavigate()
     const navigateTo = (link) => {
         navigate(link)
@@ -18,8 +18,13 @@ const CustomSlide = ({ index, avatar, banner, username, collectionId }) => {
               <i className="fa fa-check"></i>
           </div> */}
           <div className="nft_coll_info mt-3">
-              <span onClick={()=> navigateTo("/colection/" + collectionId)}><h4>{ username }</h4></span>
-              {/* <span>{ uniqueId }</span> */}
+            {
+              status.toLowerCase() === "active" ? (
+                <span onClick={()=> navigateTo("/colection/" + collectionId)}><h4>{ username }</h4></span>
+              ) : (
+                <span><h4>{ username }</h4></span>
+              )
+            }
           </div>
       </div>
     </div>

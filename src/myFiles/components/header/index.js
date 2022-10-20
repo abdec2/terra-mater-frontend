@@ -111,7 +111,7 @@ const Index = () => {
                 <Navbar.Collapse id="basic-navbar-nav" className='w-100'>
                     <Nav className="align-items-center w-75 justify-content-between m-auto">
                         <NavLink className='p-3 p-md-0 nav-link' to="/explore">Collections</NavLink>
-                        <NavLink className='p-3 p-md-0 nav-link' to="/elegantIcons">About</NavLink>
+                        <NavLink className='p-3 p-md-0 nav-link' to="/about">About</NavLink>
                         {
                             !islogin && (
                                 <Nav.Link className='p-3 p-md-0' onClick={() => connectWallet(dispatch)}>Connect Wallet</Nav.Link>

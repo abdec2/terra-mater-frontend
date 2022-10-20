@@ -65,6 +65,7 @@ import Mintergrey from './pages/MinterGrey';
 import auth from '../core/auth';
 import Profile from './pages/Profile';
 import CreateNft from './pages/Create/index.js';
+import About from './../myFiles/pages/about';
 
 import { createGlobalStyle } from 'styled-components';
 
@@ -128,7 +129,7 @@ const app= () => (
       <Route element={<Activitygrey />} path="/activityGrey" />
       <Route element={<Contact />} path="/contact" />
       <Route element={<Contactgrey />} path="/contactGrey" /> */}
-      <Route element={<ElegantIcons />} path="/elegantIcons" />
+      <Route element={<About />} path="/about" />
       <Route element={<EtlineIcons />} path="/etlineIcons" />
       <Route element={<FontAwesomeIcons />} path="/fontAwesomeIcons" />
       <Route element={<Accordion />} path="/accordion" />

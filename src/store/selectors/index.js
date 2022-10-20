@@ -13,6 +13,7 @@ export const collectionNft = (state) => state.collectionReducer.selectedNfts.dat
 export const newCollection = (state) => state.collectionReducer.newCollection.data;
 export const categoriesState = (state) => state.misc.categories.data;
 export const nftStatusesState = (state) => state.misc.nftStatus.data;
+export const ComingSoonCollectionState = (state) => state.hotCollection.ComingSoonCollection;
 
 //blogs
 export const blogsState = (state) => state.blogs.blogPosts;

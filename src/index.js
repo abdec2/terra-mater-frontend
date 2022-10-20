@@ -8,6 +8,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.js';
 import './assets/style.scss';
 import './assets/style_grey.scss';
+import './index.css';
 import App from './components/app';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from "react-router-dom";

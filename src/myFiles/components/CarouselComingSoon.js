@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { settings } from "./constants";
-import CustomSlide from "./CustomSlide";
+import { settings } from "./../../components/components/constants";
+import CustomSlide from "./../../components/components/CustomSlide";
 import * as selectors from '../../store/selectors';
-import { fetchHotCollections } from "../../store/actions/thunks";
+import { fetchComingSoonCollections } from "../../store/actions/thunks";
 import api from "../../core/api";
 
 
@@ -14,13 +14,13 @@ const CarouselCollectionRedux = () => {
 
   const dispatch = useDispatch();
   const store = useSelector(state => state)
-  const hotCollectionsState = useSelector(selectors.hotCollectionsState);
+  const hotCollectionsState = useSelector(selectors.ComingSoonCollectionState);
   const hotCollections = hotCollectionsState.data ? hotCollectionsState.data : [];
 
   console.log("Store", store)
   console.log(hotCollections)
   useEffect(() => {
-    dispatch(fetchHotCollections());
+    dispatch(fetchComingSoonCollections());
   }, [dispatch]);
 
   return (
