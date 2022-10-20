@@ -110,18 +110,18 @@ const Index = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav" className='w-100'>
                     <Nav className="align-items-center w-75 justify-content-between m-auto">
-                        <NavLink className='p-3 p-md-0 nav-link' to="/explore">Collections</NavLink>
-                        <NavLink className='p-3 p-md-0 nav-link' to="/about">About</NavLink>
+                        <NavLink className='p-3 p-md-0 nav-link fw-normal' to="/explore">Collections</NavLink>
+                        <NavLink className='p-3 p-md-0 nav-link fw-normal' to="/about">About</NavLink>
                         {
                             !islogin && (
-                                <Nav.Link className='p-3 p-md-0' onClick={() => connectWallet(dispatch)}>Connect Wallet</Nav.Link>
+                                <Nav.Link className='p-3 p-md-0 fw-normal' onClick={() => connectWallet(dispatch)}>Connect Wallet</Nav.Link>
                             )
                         }
                         {
                             islogin && (
                                 <Dropdown>
                                     <Dropdown.Toggle as={CustomToggle} id="my-wallet-dd">
-                                        My Wallet
+                                        <span className="fw-normal me-2">My Wallet</span>
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu variant="dark" className="bg-dark p-2" style={{border: '1px solid #333'}}>
@@ -130,16 +130,16 @@ const Index = () => {
                                             {`${account.slice(0,5)}....${account.slice(37,42)}`}
                                         </Dropdown.Header>
                                         <Dropdown.Divider  />
-                                        <Dropdown.Item className="p-2">
+                                        <Dropdown.Item className="p-2 fw-normal">
                                             My Profile
                                         </Dropdown.Item>
-                                        <Dropdown.Item className="p-2" onClick={handleLogout}>Sign Out</Dropdown.Item>
+                                        <Dropdown.Item className="p-2 fw-normal" onClick={handleLogout}>Sign Out</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             )
                         }
                         <div className='p-3 p-md-0'>
-                            <Form.Control as="select" className='px-5 py-1 mb-0 bg-dark' style={{ color: 'rgba(255,255,255,.55)' }}>
+                            <Form.Control as="select" className='px-5 py-1 mb-0 bg-dark text-white' style={{ color: 'rgba(255,255,255,.55)' }}>
                                 <option value="0">English</option>
                                 <option value="1">Italiano</option>
                             </Form.Control>

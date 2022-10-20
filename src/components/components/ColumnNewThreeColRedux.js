@@ -4,25 +4,26 @@ import * as selectors from '../../store/selectors';
 import * as actions from '../../store/actions/thunks';
 import NftCard from './NftCard';
 import { clearNfts, clearFilter } from '../../store/actions';
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const ColumnNewThreeColRedux = () => {
 
     const dispatch = useDispatch();
 
-    const nftItems = useSelector(selectors.nftItems);
-    console.log(nftItems)
+    const { data, meta } = useSelector(selectors.nftItems);
+    console.log(data)
     const [height, setHeight] = useState(0);
     const [page, setPage] = useState(1);
 
-    const onImgLoad = ({target:img}) => {
+    const onImgLoad = ({ target: img }) => {
         let currentHeight = height;
-        if(currentHeight < img.offsetHeight) {
+        if (currentHeight < img.offsetHeight) {
             setHeight(img.offsetHeight);
         }
     }
-    
+
     useEffect(() => {
-        if(nftItems.length === 0) {
+        if (!data || data.length === 0) {
             dispatch(actions.fetchNftsBreakdown());
         }
     }, [dispatch]);
@@ -33,29 +34,34 @@ const ColumnNewThreeColRedux = () => {
             dispatch(clearFilter());
             dispatch(clearNfts());
         }
-    },[dispatch]);
-    
+    }, [dispatch]);
+
     const loadMore = () => {
         dispatch(actions.fetchNftsBreakdown(page + 1));
         setPage(page + 1)
     }
-    
-  return (
-    <div className='row'>
-        {nftItems && nftItems.map( (nft, index) => (
-                <NftCard nft={nft} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4" />
-            ))}
-            <div className='col-lg-12'>
-                <div className="spacer-single"></div>
-                <span onClick={loadMore} className="btn-main lead m-auto">Load More</span>
-            </div>
-        {/* { nftItems.length <= 25 &&
-            <div className='col-lg-12'>
-                <div className="spacer-single"></div>
-                <span onClick={loadMore} className="btn-main lead m-auto">Load More</span>
-            </div>
-        } */}
-    </div>              
+
+    return (
+        <>
+            {data && (
+                <InfiniteScroll
+                    dataLength={data.length}
+                    next={loadMore}
+                    hasMore={data.length !== meta.total}
+                    loader={<h4>Loading...</h4>}
+                >
+                    <div className='row'>
+                        {data && data.map((nft, index) => (
+                            <NftCard nft={nft} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4" />
+                        ))}
+                        <div className='col-lg-12'>
+                            <div className="spacer-single"></div>
+                        </div>
+
+                    </div>
+                </InfiniteScroll>
+            )}
+        </>
     );
 }
 

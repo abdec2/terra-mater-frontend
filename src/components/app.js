@@ -130,6 +130,7 @@ const app= () => (
       <Route element={<Contact />} path="/contact" />
       <Route element={<Contactgrey />} path="/contactGrey" /> */}
       <Route element={<About />} path="/about" />
+      <Route element={<ElegantIcons />} path="/elegantIcons" />
       <Route element={<EtlineIcons />} path="/etlineIcons" />
       <Route element={<FontAwesomeIcons />} path="/fontAwesomeIcons" />
       <Route element={<Accordion />} path="/accordion" />

@@ -21,7 +21,7 @@ const states = (state = defaultState, action) => {
       return { ...state, nftBreakdown: entityLoadingStarted(state.nftBreakdown, action.payload) };
     case getType(actions.getNftBreakdown.success):
       //append existing data with new data
-      let payload = state.nftBreakdown.data ? [...state.nftBreakdown.data, ...remapObject(action.payload)] : remapObject(action.payload);
+      let payload = state.nftBreakdown.data ? {data: [...state.nftBreakdown.data.data, ...remapObject(action.payload.data)], meta:action.payload.meta} : remapObject(action.payload);
       return { ...state, nftBreakdown: entityLoadingSucceeded(state.nftBreakdown, payload) };
     case getType(actions.getNftBreakdown.failure):
       return { ...state, nftBreakdown: entityLoadingFailed(state.nftBreakdown) };

@@ -48,7 +48,8 @@ const serviceone= () => (
       <div className='container'>
         <div className='row m-10-hor'>
           <div className='col-12'>
-            <h1 className='text-center'>Elegant Icons</h1>
+            <h1 className='text-center'>About</h1>
+            <h4 className='text-white text-center fw-normal fs-4'>First NFT Incubator and marketplace owned by people</h4>
           </div>
         </div>
       </div>

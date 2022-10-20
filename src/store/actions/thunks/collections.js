@@ -5,11 +5,10 @@ import axios from 'axios';
 
 export const fetchCollections = (collectionId) => async (dispatch) => {
   dispatch(actions.getCollections.request(Canceler.cancel));
-
   try {
     const filter = collectionId ? `id=${collectionId}` : ''
     let populate = `populate=*`;
-    const { data } = await Axios.get(`${api.baseUrl + api.collections}/get_collection?${populate}&${filter}`, {
+    const { data } = await Axios.get(`${api.baseUrl + api.collection}/get_collection?${filter}`, {
       cancelToken: Canceler.token,
       params: {}
     });

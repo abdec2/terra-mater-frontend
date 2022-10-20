@@ -8,7 +8,7 @@ export const fetchNftsBreakdown = (page=1, collectionId, isMusic = false) => asy
 
   try {
     const filters = collectionId ? `${'collectionId='+collectionId}` : ''
-    const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}?page=${page}&${filters}`, {
+    const { data, meta } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}?page=${page}&${filters}`, {
       cancelToken: Canceler.token,
       params: {}
     });

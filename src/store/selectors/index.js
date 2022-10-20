@@ -39,8 +39,9 @@ export const nftFilter = createStructuredSelector({
 
 export const nftItems = createSelector(nftFilter, nftBreakdownState, ( filters, nfts ) => {
     let { data } = nfts;
+    const meta = data ? data.meta : null;
+    data = data ? data.data : null;
     const { categories, status, itemsType, collections, nftTitle } = filters;
-    
     if(!data) {
         return [];
     }
@@ -62,5 +63,5 @@ export const nftItems = createSelector(nftFilter, nftBreakdownState, ( filters, 
         data = data.filter( nft => nft.title.match(pattern));
     }
 
-    return data;
+    return {data, meta};
 });

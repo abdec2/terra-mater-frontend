@@ -25,20 +25,26 @@ const CarouselCollectionRedux = () => {
 
   return (
     <div className='nft'>
-      <Slider {...settings}>
-          { hotCollections && hotCollections.map((item, index) => (
-            <CustomSlide
-              key={index}
-              index={index + 1}
-              avatar={(item.feature_img.data !== null) ? item.feature_img.url : `https://via.placeholder.com/300?text=${item.name}`}
-              banner={api.baseUrl + item.banner.url}
-              username={item.name}
-              status={item.status}
-              // uniqueId={item.unique_id}
-              collectionId={item.id}
-            />
-          ))}
-        </Slider>
+      {
+        hotCollections.length > 0 ? (
+          <Slider {...settings}>
+            {hotCollections.length > 0 && hotCollections.map((item, index) => (
+              <CustomSlide
+                key={index}
+                index={index + 1}
+                avatar={(item.feature_img.data !== null) ? item.feature_img.url : `https://via.placeholder.com/300?text=${item.name}`}
+                banner={api.baseUrl + item.banner.url}
+                username={item.name}
+                status={item.status}
+                // uniqueId={item.unique_id}
+                collectionId={item.id}
+              />
+            ))}
+          </Slider>
+        ) : (
+          <h2 className="text-center fw-normal">No Items to display</h2>
+        )
+      }
     </div>
   );
 }
