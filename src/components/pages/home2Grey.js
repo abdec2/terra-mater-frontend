@@ -38,7 +38,7 @@ const HomeOne = () => {
       </section>
 
       <section className='container-fluid no-top no-bottom'>
-        <div className='row'>
+        <div className='row px-2 px-md-5'>
           <div className="spacer-double"></div>
           <div className='col-lg-12 mb-2'>
             <h2 className='ms-3'>New Release</h2>
@@ -48,20 +48,17 @@ const HomeOne = () => {
       </section>
 
       <section className='container-fluid no-top no-bottom'>
-        <div className='row'>
+        <div className='row px-2 px-md-5'>
           <div className="spacer-double"></div>
           <div className='col-lg-12 mb-2'>
             <h2 className='ms-3'>Coming Soon</h2>
           </div>
-          <div className='col-lg-12'>
-            {/* <CarouselNewRedux /> */}
-            <CarouselComingSoon />
-          </div>
         </div>
+        <CarouselComingSoon />
       </section>
       <div className="spacer-50"></div>
       <div className="spacer-50"></div>
-      <section className='container-fluid px-3 no-top mt-5'>
+      <section className='container-fluid px-2 px-md-5 no-top mt-5'>
         <FeatureBox />
         {/* <div className="d-flex flex-column flex-md-row align-items-center justify-content-center ">
           <div className='px-5 py-3 py-md-0 text-center'><h3 className='mb-0'>Contact us</h3></div>

@@ -5,6 +5,8 @@ import * as actions from '../../store/actions/thunks';
 import NftCard from './NftCard';
 import { clearNfts, clearFilter } from '../../store/actions';
 import InfiniteScroll from "react-infinite-scroll-component";
+import Spinner from 'react-bootstrap/Spinner';
+
 
 const ColumnNewThreeColRedux = () => {
 
@@ -48,7 +50,8 @@ const ColumnNewThreeColRedux = () => {
                     dataLength={data.length}
                     next={loadMore}
                     hasMore={data.length !== meta.total}
-                    loader={<h4>Loading...</h4>}
+                    loader={<Spinner animation="border" />}
+                    style={{overflow: 'hidden'}}
                 >
                     <div className='row'>
                         {data && data.map((nft, index) => (

@@ -27,23 +27,14 @@
   color: #ccc !important;
 }
 
-.collection-page-stats h3 {
+.collection-page-stats h4, .collection-page-stats p {
   margin-bottom: 0;
 }
 
+.collectionTabs .nav-item:first-child a {
+  padding-left: 0;
+}
 
-@media only screen and (min-width: 768px) {
-  .collection-page-stats > div {
-    padding: 0 30px;
-  }
-
-  .collection-page-stats > div:first-child {
-    padding: 0 30px 0 0;
-  }
-
-  .collection-page-stats > div:last-child {
-    padding: 0 0 0 30px;
-  }
-
-
+.collectionTabs .nav-item a:hover {
+  color: #888;
 }

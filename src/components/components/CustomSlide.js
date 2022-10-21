@@ -3,29 +3,20 @@ import { useNavigate } from "react-router-dom";
 
 const CustomSlide = ({ index, avatar, banner, username, collectionId, status }) => {
   const navigate = useNavigate()
-    const navigateTo = (link) => {
-        navigate(link)
-    }
-  
+  const navigateTo = (link) => {
+    navigate(link)
+  }
+
   return (
     <div className='itm' index={index}>
-      <div className="nft_coll">
-          <div className="nft_wrap">
-              <span><img src={avatar} className="lazy img-fluid" width={'100%'} alt=""/></span>
-          </div>
-          {/* <div className="nft_coll_pp">
-              <span onClick={()=> window.open("/colection/" + collectionId, "_self")}><img className="lazy" src={avatar} alt=""/></span>
-              <i className="fa fa-check"></i>
-          </div> */}
-          <div className="nft_coll_info mt-3">
-            {
-              status.toLowerCase() === "active" ? (
-                <span onClick={()=> navigateTo("/colection/" + collectionId)}><h4>{ username }</h4></span>
-              ) : (
-                <span><h4>{ username }</h4></span>
-              )
-            }
-          </div>
+      <div className="m-2">
+        <div className="">
+          <span className="d-flex flex-column" onClick={() => navigateTo("/colection/" + collectionId)} style={{cursor: 'pointer'}}>
+            <img src={avatar} className="lazy img-fluid rounded-4" width={'100%'} alt="" />
+            <span ><h5 style={{marginTop: '-35px'}} className="px-4">{username}</h5></span>
+          </span>
+        </div>
+        
       </div>
     </div>
   )

@@ -1,12 +1,15 @@
-import React, { forwardRef, memo, useEffect } from "react";
+import React, { forwardRef, memo, useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import ColumnNewRedux from '../components/ColumnNewRedux';
 import Footer from '../components/footer';
 import * as selectors from '../../store/selectors';
-import { fetchCollections } from "../../store/actions/thunks";
+import { fetchCollections, fetchCollectionNfts } from "../../store/actions/thunks";
 import api from "../../core/api";
 import { useParams } from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
+import InfiniteScroll from "react-infinite-scroll-component";
+import Spinner from 'react-bootstrap/Spinner';
+import NftCard from '../components/NftCard';
 
 
 //IMPORT DYNAMIC STYLED COMPONENT
@@ -32,29 +35,29 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 ));
 
 const Colection = function () {
-  const [openMenu, setOpenMenu] = React.useState(true);
-  const [openMenu1, setOpenMenu1] = React.useState(false);
+  const [page, setPage] = useState(1);
+  const [height, setHeight] = useState(0);
   const { collectionId } = useParams();
-  const handleBtnClick = () => {
-    setOpenMenu(!openMenu);
-    setOpenMenu1(false);
-    document.getElementById("Mainbtn").classList.add("active");
-    document.getElementById("Mainbtn1").classList.remove("active");
-  };
-  const handleBtnClick1 = () => {
-    setOpenMenu1(!openMenu1);
-    setOpenMenu(false);
-    document.getElementById("Mainbtn1").classList.add("active");
-    document.getElementById("Mainbtn").classList.remove("active");
-  };
-
   const dispatch = useDispatch();
   const collectionState = useSelector(selectors.collectionState);
+  const collectionNft = useSelector(selectors.collectionNft);
   const hotCollections = collectionState.data ? collectionState.data[0] : {};
-  console.log(hotCollections)
+
+  const onImgLoad = ({ target: img }) => {
+    let currentHeight = height;
+    if (currentHeight < img.offsetHeight) {
+      setHeight(img.offsetHeight);
+    }
+  }
+
+  const loadMore = () => {
+    dispatch(fetchCollectionNfts(page + 1, collectionId));
+    setPage(page + 1)
+  }
 
   useEffect(() => {
     dispatch(fetchCollections(collectionId));
+    dispatch(fetchCollectionNfts(page, collectionId));
   }, [dispatch, collectionId]);
 
   return (
@@ -65,19 +68,19 @@ const Colection = function () {
         </div>
       </section>
 
-      <section className='container-fluid d_coll no-top no-bottom'>
+      <section className='container-fluid d_coll no-top '>
         <div className='row'>
           <div className="col-md-12">
-            <div className="px-5" >
+            <div className="px-2 px-md-5" >
               <div className="bg-white rounded-4 p-1" style={{ width: '150px', marginTop: '-120px' }}>
                 <img className="rounded-4 w-100" src={hotCollections.feature_img ? hotCollections.feature_img.url : 'https://via.placeholder.com/150x150.png?text=Logo'} alt="" />
               </div>
             </div>
-            <div className="px-5 d-flex  align-items-start align-items-sm-center justify-content-between flex-column flex-md-row flex-md-row-reverse">
+            <div className="px-2 px-md-5 d-flex  align-items-start justify-content-between flex-column flex-md-row flex-md-row-reverse">
               <div className="d-flex align-items-center justify-content-center collection-social-icon-parent ms-auto">
                 <div className="d-none d-md-flex social align-items-center justify-content-center mt-4">
                   <TooltipIcon id='website' tooltipTxt='Website' placement='top' >
-                    <a className="website"> 
+                    <a className="website">
                       <WebsiteIcon size={20} />
                     </a>
                   </TooltipIcon>
@@ -159,45 +162,100 @@ const Colection = function () {
                 </div>
 
               </div>
-              <div className="d-flex align-items-center mt-4">
-                <h2 className="fw-normal m-0">
+              <div className="mt-4 d-flex align-items-center">
+                <h2 className="fw-normal m-0 me-2 fs-2">
                   {hotCollections && hotCollections.name}
                 </h2>
-                <div className="ms-2 bg-primary px-1 rounded-5" style={{ marginTop: '-20px' }}><i className="fa fa-check text-white d-none d-md-inline-block"></i></div>
+                <i className="fa fa-check text-white bg-primary p-1 rounded-5 " style={{ marginTop: '-15px' }}></i>
               </div>
 
             </div>
           </div>
         </div>
         <div className="row mb-4">
-          <div className="col-12 col-md-6">
-            <div className="px-5">
+          <div className="col-12 col-sm-8 col-md-6 col-lg-4">
+            <div className="px-2 px-md-5">
               <p className="">{hotCollections.desc}</p>
             </div>
           </div>
         </div>
         <div className="row">
           <div className="col-12">
-            <div className="px-5 d-flex flex-wrap align-items-start align-items-sm-center collection-page-stats justify-content-center justify-content-md-start">
+            <div className="d-none px-2 px-md-5 w-100 d-md-inline-flex flex-wrap collection-page-stats gap-5">
               <div>
-                <h3>10K</h3>
+                <h4>10K</h4>
                 <p>items</p>
               </div>
               <div>
-                <h3><UsdtIcon size={20} /> 10.000</h3>
+                <h4><UsdtIcon size={20} /> 10.000</h4>
                 <p>floor price</p>
               </div>
               <div>
-                <h3>382</h3>
+                <h4>382</h4>
                 <p>owners</p>
               </div>
               <div>
-                <h3> <UsdtIcon size={20} /> 10000</h3>
+                <h4> <UsdtIcon size={20} /> 10000</h4>
+                <p>total volume</p>
+              </div>
+            </div>
+            <div className="px-2 px-md-5 w-100 d-inline-flex d-md-none flex-wrap collection-page-stats gap-4">
+              <div>
+                <h4>10K</h4>
+                <p>items</p>
+              </div>
+              <div>
+                <h4><UsdtIcon size={20} /> 10.000</h4>
+                <p>floor price</p>
+              </div>
+              <div>
+                <h4>382</h4>
+                <p>owners</p>
+              </div>
+              <div>
+                <h4> <UsdtIcon size={20} /> 10000</h4>
                 <p>total volume</p>
               </div>
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="container-fluid px-2 px-md-5 no-top mt-4">
+        <div className="row">
+          <div className="col-12 col-md-3">
+            <div className="position-relative">
+              <div className="heading position-absolute float-start top-0 start-0"><h3>Filters</h3></div>
+            </div>
+
+          </div>
+          <div className="col-12 col-md-9">
+            {
+              collectionNft && collectionNft.data && (
+                <InfiniteScroll
+                  dataLength={collectionNft.data.length}
+                  next={loadMore}
+                  hasMore={collectionNft.data.length !== collectionNft.meta.total}
+                  loader={<Spinner animation="border" />}
+                  style={{ overflow: 'hidden' }}
+                >
+                  <div className='row'>
+                    {collectionNft.data && collectionNft.data.map((nft, index) => (
+                      <NftCard nft={nft} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4" />
+                    ))}
+                    <div className='col-lg-12'>
+                      <div className="spacer-single"></div>
+                    </div>
+
+                  </div>
+                </InfiniteScroll>
+              )
+            }
+          </div>
+
+        </div>
+
+
       </section>
 
 

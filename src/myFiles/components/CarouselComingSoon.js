@@ -24,7 +24,7 @@ const CarouselCollectionRedux = () => {
   }, [dispatch]);
 
   return (
-    <div className='nft'>
+    <div className='nft px-2 px-md-5'>
       {
         hotCollections.length > 0 ? (
           <Slider {...settings}>

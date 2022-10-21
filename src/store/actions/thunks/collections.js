@@ -20,18 +20,14 @@ export const fetchCollections = (collectionId) => async (dispatch) => {
 };
 
 export const fetchCollectionNfts = (page=1, collectionId, isMusic = false) => async (dispatch) => {
-
     dispatch(actions.getCollectionNfts.request(Canceler.cancel));
-  
     try {
       const filters = collectionId ? `${'collectionId='+collectionId}` : ''
       const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}?page=${page}&${filters}`, {
         cancelToken: Canceler.token,
         params: {}
       });
-      if(data.length > 0) {
-        dispatch(actions.getCollectionNfts.success(data));
-      }
+      dispatch(actions.getCollectionNfts.success(data));
     } catch (err) {
       dispatch(actions.getCollectionNfts.failure(err));
     }

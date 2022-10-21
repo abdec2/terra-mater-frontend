@@ -4,7 +4,8 @@ import {
   initEntityState,
   entityLoadingStarted,
   entityLoadingSucceeded,
-  entityLoadingFailed
+  entityLoadingFailed,
+  remapObject
 } from '../utils';
 
 export const defaultState = {
@@ -22,12 +23,22 @@ const states = (state = defaultState, action) => {
       return { ...state, selectedCollection: entityLoadingSucceeded(state.selectedCollection, action.payload) };
     case getType(actions.getCollections.failure):
       return { ...state, selectedCollection: entityLoadingFailed(state.selectedCollection) };
+
     case getType(actions.getCollectionNfts.request):
       return { ...state, selectedNfts: entityLoadingStarted(state.selectedNfts, action.payload) };
     case getType(actions.getCollectionNfts.success):
-      return { ...state, selectedNfts: entityLoadingSucceeded(state.selectedNfts, action.payload) };
+      //append existing data with new data
+      let payload = state.selectedNfts.data ? {data: [...state.selectedNfts.data.data, ...remapObject(action.payload.data)], meta:action.payload.meta} : remapObject(action.payload);
+      return { ...state, selectedNfts: entityLoadingSucceeded(state.selectedNfts, payload) };
     case getType(actions.getCollectionNfts.failure):
       return { ...state, selectedNfts: entityLoadingFailed(state.selectedNfts) };
+
+    // case getType(actions.getCollectionNfts.request):
+    //   return { ...state, selectedNfts: entityLoadingStarted(state.selectedNfts, action.payload) };
+    // case getType(actions.getCollectionNfts.success):
+    //   return { ...state, selectedNfts: entityLoadingSucceeded(state.selectedNfts, action.payload) };
+    // case getType(actions.getCollectionNfts.failure):
+    //   return { ...state, selectedNfts: entityLoadingFailed(state.selectedNfts) };
 
     case getType(actions.getNewCollection.request):
       return { ...state, newCollection: entityLoadingStarted(state.newCollection, action.payload) };
