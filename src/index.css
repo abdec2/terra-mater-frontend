@@ -1,17 +1,3 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 .slick-track {
   margin-left: 0 !important;
 }
@@ -20,12 +6,44 @@ code {
   background-color: #2e3338;
   border: none;
 }
+
 .greyscheme .nft_coll h4 {
   color: white;
   font-weight: 500;
 }
 
-.collection-social-icon-parent > a {
+.collection-social-icon-parent .social>a {
   padding: 15px;
   cursor: pointer;
+}
+
+.collection-social-icon-parent .social>a:hover {
+  transition: all ease-in-out 300ms;
+  transform: scale(1.3);
+}
+
+.share-dd-item:hover {
+  background: none;
+  color: #ccc !important;
+}
+
+.collection-page-stats h3 {
+  margin-bottom: 0;
+}
+
+
+@media only screen and (min-width: 768px) {
+  .collection-page-stats > div {
+    padding: 0 30px;
+  }
+
+  .collection-page-stats > div:first-child {
+    padding: 0 30px 0 0;
+  }
+
+  .collection-page-stats > div:last-child {
+    padding: 0 0 0 30px;
+  }
+
+
 }

@@ -61,12 +61,13 @@ const HomeOne = () => {
       </section>
       <div className="spacer-50"></div>
       <div className="spacer-50"></div>
-      <section className='container no-top mt-5'>
-        <div className="d-flex flex-column flex-md-row align-items-center justify-content-center ">
+      <section className='container-fluid px-3 no-top mt-5'>
+        <FeatureBox />
+        {/* <div className="d-flex flex-column flex-md-row align-items-center justify-content-center ">
           <div className='px-5 py-3 py-md-0 text-center'><h3 className='mb-0'>Contact us</h3></div>
           <div className='px-5 py-3 py-md-0 text-center'><h3 className='mb-0'>Work with us</h3></div>
           <div className='px-5 py-3 py-md-0 text-center'><h3 className='mb-0'>Do you have a project?</h3></div>
-        </div>  
+        </div>   */}
       </section>
 
       <Footer />
