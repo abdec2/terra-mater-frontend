@@ -19,17 +19,31 @@ export const fetchCollections = (collectionId) => async (dispatch) => {
   }
 };
 
-export const fetchCollectionNfts = (page=1, collectionId, isMusic = false) => async (dispatch) => {
-    dispatch(actions.getCollectionNfts.request(Canceler.cancel));
+export const fetchCollectionNfts = (page=1, collectionId, statuses) => async (dispatch) => {
+    if(statuses && statuses.length > 0) {
+      dispatch(actions.filterStatus.request(Canceler.cancel));
+    } else {
+      dispatch(actions.getCollectionNfts.request(Canceler.cancel));
+    }
     try {
       const filters = collectionId ? `${'collectionId='+collectionId}` : ''
-      const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}?page=${page}&${filters}`, {
+      const status = (statuses && statuses.length > 0) ? `${'statuses='+JSON.stringify(statuses)}` : ''
+      const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}?page=${page}&${filters}&${status}`, {
         cancelToken: Canceler.token,
         params: {}
       });
-      dispatch(actions.getCollectionNfts.success(data));
+      if(statuses && statuses.length > 0) {
+        dispatch(actions.filterStatus.success(data));
+      } else {
+        dispatch(actions.getCollectionNfts.success(data));
+      }
     } catch (err) {
-      dispatch(actions.getCollectionNfts.failure(err));
+      if(statuses && statuses.length > 0) {
+        dispatch(actions.filterStatus.failure(err));
+      } else {
+        dispatch(actions.getCollectionNfts.failure(err));
+      }
+      
     }
   };
 

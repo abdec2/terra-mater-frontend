@@ -33,19 +33,16 @@ const states = (state = defaultState, action) => {
     case getType(actions.getCollectionNfts.failure):
       return { ...state, selectedNfts: entityLoadingFailed(state.selectedNfts) };
 
-    // case getType(actions.getCollectionNfts.request):
-    //   return { ...state, selectedNfts: entityLoadingStarted(state.selectedNfts, action.payload) };
-    // case getType(actions.getCollectionNfts.success):
-    //   return { ...state, selectedNfts: entityLoadingSucceeded(state.selectedNfts, action.payload) };
-    // case getType(actions.getCollectionNfts.failure):
-    //   return { ...state, selectedNfts: entityLoadingFailed(state.selectedNfts) };
-
     case getType(actions.getNewCollection.request):
       return { ...state, newCollection: entityLoadingStarted(state.newCollection, action.payload) };
     case getType(actions.getNewCollection.success):
       return { ...state, newCollection: entityLoadingSucceeded(state.newCollection, action.payload) };
     case getType(actions.getNewCollection.failure):
       return { ...state, newCollection: entityLoadingFailed(state.newCollection) };
+
+    case getType(actions.clearCollectionNfts):
+      return { ...state, selectedNfts: initEntityState(null)};
+
     default:
       return state;
   }

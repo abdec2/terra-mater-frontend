@@ -19,10 +19,7 @@ const explore = () => (
       </div>
       <div className='row'>
         <div className="spacer-double"></div>
-        <div className='col-md-3'>
-          <CheckboxFilter />
-        </div>
-        <div className="col-md-9">
+        <div className="col-md-12">
           <ColumnNewThreeColRedux />
         </div>
       </div>

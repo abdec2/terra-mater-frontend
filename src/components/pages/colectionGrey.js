@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, useEffect, useState } from "react";
+import React, { forwardRef, memo, useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import ColumnNewRedux from '../components/ColumnNewRedux';
 import Footer from '../components/footer';
@@ -10,12 +10,17 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from 'react-bootstrap/Spinner';
 import NftCard from '../components/NftCard';
+import Form from 'react-bootstrap/Form';
+import StickyBox from "react-sticky-box";
 
 
 //IMPORT DYNAMIC STYLED COMPONENT
 import { StyledHeader } from '../Styles';
 import { DiscordIcon, EtherscanIcon, TwitterIcon, UsdtIcon, WebsiteIcon } from "../../myFiles/components/Icons";
 import TooltipIcon from "../../myFiles/components/TooltipIcon";
+import { Button } from "react-bootstrap";
+import CheckboxFilter from "../components/CheckboxFilter";
+import { clearFilter, clearCollectionNfts } from "../../store/actions";
 //SWITCH VARIABLE FOR PAGE STYLE
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
@@ -37,11 +42,18 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 const Colection = function () {
   const [page, setPage] = useState(1);
   const [height, setHeight] = useState(0);
+  const [selStatus, setSelStatus]= useState([])
   const { collectionId } = useParams();
   const dispatch = useDispatch();
+  const store = useSelector(state => state)
   const collectionState = useSelector(selectors.collectionState);
   const collectionNft = useSelector(selectors.collectionNft);
+  const filteredNft = useSelector(state => state.filters.selectedStatus);
   const hotCollections = collectionState.data ? collectionState.data[0] : {};
+  const nftItems =  (filteredNft.data && filteredNft.data.data.length > 0) ? filteredNft.data : collectionNft;
+  console.log(collectionNft)
+  console.log(store)
+
 
   const onImgLoad = ({ target: img }) => {
     let currentHeight = height;
@@ -49,16 +61,28 @@ const Colection = function () {
       setHeight(img.offsetHeight);
     }
   }
-
-  const loadMore = () => {
-    dispatch(fetchCollectionNfts(page + 1, collectionId));
-    setPage(page + 1)
-  }
+  
+  const loadMore = useCallback(() => {
+    console.log(page)
+    dispatch(fetchCollectionNfts(page, collectionId, selStatus));
+  }, [selStatus, page])
 
   useEffect(() => {
+    dispatch(clearCollectionNfts())
+    dispatch(clearFilter())
     dispatch(fetchCollections(collectionId));
-    dispatch(fetchCollectionNfts(page, collectionId));
   }, [dispatch, collectionId]);
+
+  useEffect(()=> {
+    if (selStatus.length === 0) {
+      dispatch(clearFilter())
+      if(!filteredNft.data) {
+        loadMore()
+      }
+    } else {
+      loadMore()
+    }
+  }, [selStatus.length, page])
 
   return (
     <div className="greyscheme">
@@ -67,8 +91,7 @@ const Colection = function () {
         <div className='mainbreadcumb'>
         </div>
       </section>
-
-      <section className='container-fluid d_coll no-top '>
+      <section className='container-fluid d_coll no-top no-bottom pb-5 mb-5'>
         <div className='row'>
           <div className="col-md-12">
             <div className="px-2 px-md-5" >
@@ -221,27 +244,34 @@ const Colection = function () {
         </div>
       </section>
 
-      <section className="container-fluid px-2 px-md-5 no-top mt-4">
+      <section className="container-fluid px-2 px-md-5 no-top">
         <div className="row">
+          <div className="w-100 border-bottom mb-3 borderColor"></div>
+          <div className="col-12">
+            <Form.Control type="text" placeholder="Search" className="m-0"/>
+          </div>
+          <div className="w-100 border-top mt-3 borderColor"></div>
+        </div>
+        <div className="row mb-3 mt-4">
           <div className="col-12 col-md-3">
-            <div className="position-relative">
-              <div className="heading position-absolute float-start top-0 start-0"><h3>Filters</h3></div>
+            <div className="">
+              <div className="heading"><h3>Filters</h3></div>
+              <CheckboxFilter collectionId={collectionId} setPage={setPage} selStatus={selStatus} setSelStatus={setSelStatus} />
             </div>
-
           </div>
           <div className="col-12 col-md-9">
             {
               collectionNft && collectionNft.data && (
                 <InfiniteScroll
-                  dataLength={collectionNft.data.length}
-                  next={loadMore}
-                  hasMore={collectionNft.data.length !== collectionNft.meta.total}
+                  dataLength={nftItems.data.length}
+                  next={() => setPage(page + 1)}
+                  hasMore={nftItems.data.length < nftItems.meta.total}
                   loader={<Spinner animation="border" />}
                   style={{ overflow: 'hidden' }}
                 >
                   <div className='row'>
-                    {collectionNft.data && collectionNft.data.map((nft, index) => (
-                      <NftCard nft={nft} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4" />
+                    {nftItems.data && nftItems.data.map((nft, index) => (
+                      <NftCard nft={nft} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4" />
                     ))}
                     <div className='col-lg-12'>
                       <div className="spacer-single"></div>

@@ -38,3 +38,7 @@
 .collectionTabs .nav-item a:hover {
   color: #888;
 }
+
+.borderColor {
+  border-color: #353c42 !important;
+}
