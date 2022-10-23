@@ -105,6 +105,18 @@ export const filterStatus = asyncAction(
     'nft/FILTER_STATUS_FAIL'
 )();
 
+export const filterStatusUpdate = asyncAction(
+    'nft/FILTER_STATUS_UPDATE',
+    'nft/FILTER_STATUS_UPDATE_SUCCESS',
+    'nft/FILTER_STATUS_UPDATE_FAIL'
+)();
+
+export const searchCollectionNFT = asyncAction(
+    'nft/SEARCH_COLLECTION_NFT',
+    'nft/SEARCH_COLLECTION_NFT_SUCCESS',
+    'nft/SEARCH_COLLECTION_NFT_FAIL'
+)();
+
 
 export const clearNfts = action('nft/CLEAR_ALL_NFTS')();
 export const clearCollectionNfts = action('nft/CLEAR_COLLECTION_NFTS')();

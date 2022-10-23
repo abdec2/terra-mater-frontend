@@ -132,7 +132,7 @@ const Index = () => {
                                             {`${account.slice(0,5)}....${account.slice(37,42)}`}
                                         </Dropdown.Header>
                                         <Dropdown.Divider  />
-                                        <Dropdown.Item className="p-2 fw-normal">
+                                        <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate('/Profile')}>
                                             My Profile
                                         </Dropdown.Item>
                                         <Dropdown.Item className="p-2 fw-normal" onClick={handleLogout}>Sign Out</Dropdown.Item>

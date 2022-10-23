@@ -63,7 +63,7 @@ import Tabs from './pages/tabs';
 import Minter from './pages/Minter';
 import Mintergrey from './pages/MinterGrey';
 import auth from '../core/auth';
-import Profile from './pages/Profile';
+import Profile from '../myFiles/pages/profile';
 import CreateNft from './pages/Create/index.js';
 import About from './../myFiles/pages/about';
 
@@ -102,7 +102,7 @@ const app= () => (
       </Route>
       <Route path="/Profile">
         <Route 
-          path=":authorId" 
+          path=":userId" 
           element={
             <ProtectedRoute>
               <Profile />

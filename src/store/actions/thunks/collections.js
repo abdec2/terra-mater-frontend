@@ -19,8 +19,10 @@ export const fetchCollections = (collectionId) => async (dispatch) => {
   }
 };
 
-export const fetchCollectionNfts = (page=1, collectionId, statuses) => async (dispatch) => {
-    if(statuses && statuses.length > 0) {
+export const fetchCollectionNfts = (page=1, collectionId, statuses, replaceFilteredData = false) => async (dispatch) => {
+    if(replaceFilteredData && statuses && statuses.length > 0) {
+      dispatch(actions.filterStatusUpdate.request(Canceler.cancel));
+    } else if (!replaceFilteredData && statuses && statuses.length > 0) {
       dispatch(actions.filterStatus.request(Canceler.cancel));
     } else {
       dispatch(actions.getCollectionNfts.request(Canceler.cancel));
@@ -32,13 +34,20 @@ export const fetchCollectionNfts = (page=1, collectionId, statuses) => async (di
         cancelToken: Canceler.token,
         params: {}
       });
-      if(statuses && statuses.length > 0) {
+      console.log('aaaa')
+      if(replaceFilteredData && statuses && statuses.length > 0) {
+        dispatch(actions.filterStatusUpdate.success(data));
+      } else if (!replaceFilteredData && statuses && statuses.length > 0) {
         dispatch(actions.filterStatus.success(data));
       } else {
         dispatch(actions.getCollectionNfts.success(data));
       }
+
     } catch (err) {
-      if(statuses && statuses.length > 0) {
+      console.log('bbbb')
+      if(replaceFilteredData && statuses && statuses.length > 0) {
+        dispatch(actions.filterStatusUpdate.failure(err));
+      } else if (!replaceFilteredData && statuses && statuses.length > 0) {
         dispatch(actions.filterStatus.failure(err));
       } else {
         dispatch(actions.getCollectionNfts.failure(err));
@@ -65,3 +74,21 @@ export const fetchNewCollection = () => async (dispatch) => {
     actions.getNewCollection.failure(e)
   }
 }
+
+export const searchCollectionNFT = (collectionId, searchtxt) => async (dispatch) => {
+
+  dispatch(actions.filterStatusUpdate.request(Canceler.cancel));
+  try {
+    const filters = collectionId ? `${'collectionId='+collectionId}` : ''
+    const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}/fwfilters?${filters}&searchtxt=${searchtxt}`, {
+      cancelToken: Canceler.token,
+      params: {}
+    });
+    
+    if (data.data.length > 0) {
+      dispatch(actions.filterStatusUpdate.success(data));
+    }
+  } catch (err) {
+      dispatch(actions.filterStatusUpdate.failure(err));
+  }
+};
