@@ -42,3 +42,7 @@
 .borderColor {
   border-color: #353c42 !important;
 }
+
+.list-style-none {
+  list-style: none;
+}

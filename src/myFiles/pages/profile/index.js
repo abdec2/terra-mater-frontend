@@ -9,6 +9,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from 'react-bootstrap/Spinner';
 import NftCard from '../../../components/components/NftCard';
 import Form from 'react-bootstrap/Form';
+import auth from './../../../core/auth'
 
 
 //IMPORT DYNAMIC STYLED COMPONENT
@@ -18,6 +19,7 @@ import TooltipIcon from "./../../components/TooltipIcon";
 import { Button } from "react-bootstrap";
 import CheckboxFilter from "../../../components/components/CheckboxFilter";
 import { clearFilter, clearCollectionNfts } from "../../../store/actions";
+import Tabs from "../../components/Tabs";
 //SWITCH VARIABLE FOR PAGE STYLE
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
@@ -40,11 +42,13 @@ const Profile = function () {
   const { userId } = useParams();
   const dispatch = useDispatch();
   const store = useSelector(state => state)
+  const userInfo = auth.getUserInfo()
+  console.log(userInfo)
   
   return (
     <div className="greyscheme">
       <StyledHeader theme={theme} />
-      <section id='profile_banner' className='jumbotron breadcumb '>
+      <section id='profile_banner' className='jumbotron breadcumb ' style={{background: 'url("./img/background/6.jpg")'}}>
         <div className='mainbreadcumb'>
           <h1 className="text-center">Profile</h1>
         </div>
@@ -59,7 +63,7 @@ const Profile = function () {
             </div>
             <div className="px-2 px-md-5 d-flex  align-items-start justify-content-between flex-column flex-md-row flex-md-row-reverse">
               <div className="d-flex align-items-center justify-content-center collection-social-icon-parent ms-auto">
-                <div className="d-none d-md-flex social align-items-center justify-content-center mt-4">
+                {/* <div className="d-none d-md-flex social align-items-center justify-content-center mt-4">
                   <TooltipIcon id='website' tooltipTxt='Website' placement='top' >
                     <a className="website">
                       <WebsiteIcon size={20} />
@@ -82,9 +86,9 @@ const Profile = function () {
                   </TooltipIcon>
 
                   <div style={{ height: '15px', width: '1px', background: '#ccc' }} className="mx-2"></div>
-                </div>
+                </div> */}
 
-                <div className="share mt-4">
+                {/* <div className="share mt-4">
                   <Dropdown>
                     <Dropdown.Toggle as={CustomToggle} id="share-dd">
                       <i className="fa fa-fw text-white" aria-hidden="true"></i>
@@ -98,9 +102,9 @@ const Profile = function () {
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
-                </div>
+                </div> */}
 
-                <div className="d-md-none mobile-social mt-4">
+                {/* <div className="d-md-none mobile-social mt-4">
                   <Dropdown>
                     <Dropdown.Toggle as={CustomToggle} id="share-dd">
                       <i className="fa fa-fw text-white" aria-hidden="true"></i>
@@ -140,13 +144,13 @@ const Profile = function () {
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
-                </div>
+                </div> */}
 
               </div>
               <div className="mt-4 d-flex align-items-center">
                 <h2 className="fw-normal m-0 me-2 fs-2">
                   {/* {hotCollections && hotCollections.name} */}
-                  name
+                  {`${userInfo.address.slice(0,5)}...${userInfo.address.slice(37,42)}`}
                 </h2>
                 <i className="fa fa-check text-white bg-primary p-1 rounded-5 " style={{ marginTop: '-15px' }}></i>
               </div>
@@ -154,22 +158,21 @@ const Profile = function () {
             </div>
           </div>
         </div>
-        <div className="row mb-4">
+        {/* <div className="row mb-4">
           <div className="col-12 col-sm-8 col-md-6 col-lg-4">
             <div className="px-2 px-md-5">
               <p className="">description</p>
             </div>
           </div>
-        </div>
+        </div> */}
         
       </section>
 
       <section className="container-fluid px-2 px-md-5 no-top">
         <div className="row">
-          
-        </div>
-        <div className="row mb-3 mt-4">
-
+          <div class="col-12">
+            <Tabs />
+          </div>
         </div>
 
       </section>

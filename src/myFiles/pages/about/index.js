@@ -1,69 +1,104 @@
-import React from 'react';
+import React, { forwardRef, memo, useCallback, useEffect, useRef, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import Footer from './../../../components/components/footer';
-import { createGlobalStyle } from 'styled-components';
+import * as selectors from '../../../store/selectors';
+import { fetchCollections, fetchCollectionNfts, searchCollectionNFT } from "../../../store/actions/thunks";
+import { useParams } from "react-router-dom";
+import Dropdown from 'react-bootstrap/Dropdown';
+import InfiniteScroll from "react-infinite-scroll-component";
+import Spinner from 'react-bootstrap/Spinner';
+import NftCard from '../../../components/components/NftCard';
+import Form from 'react-bootstrap/Form';
+import auth from './../../../core/auth'
+import metrics from './../../../assets/metrics.png'
+
+
+//IMPORT DYNAMIC STYLED COMPONENT
 import { StyledHeader } from '../../../components/Styles';
+import { DiscordIcon, EtherscanIcon, TwitterIcon, UsdtIcon, WebsiteIcon } from "./../../components/Icons";
+import TooltipIcon from "./../../components/TooltipIcon";
+import { Button, Table } from "react-bootstrap";
+import CheckboxFilter from "../../../components/components/CheckboxFilter";
+import { clearFilter, clearCollectionNfts } from "../../../store/actions";
+import Tabs from "../../components/Tabs";
+//SWITCH VARIABLE FOR PAGE STYLE
+const theme = 'GREY'; //LIGHT, GREY, RETRO
 
-const theme = 'GREY'; 
+const CustomToggle = forwardRef(({ children, onClick }, ref) => (
+  <a
+    href=""
+    className="px-2"
+    ref={ref}
+    onClick={(e) => {
+      e.preventDefault();
+      onClick(e);
+    }}
+  >
+    {children}
 
-const GlobalStyles = createGlobalStyle`
-  header#myHeader.navbar.sticky.white {
-    background: #403f83;
-    border-bottom: solid 1px #403f83;
-  }
-  header#myHeader.navbar .search #quick_search{
-    color: #fff;
-    background: rgba(255, 255, 255, .1);
-  }
-  header#myHeader.navbar.white .btn, .navbar.white a, .navbar.sticky.white a{
-    color: #fff;
-  }
-  header#myHeader .dropdown-toggle::after{
-    color: rgba(255, 255, 255, .5);
-  }
-  header#myHeader .logo .d-block{
-    display: none !important;
-  }
-  header#myHeader .logo .d-none{
-    display: block !important;
-  }
-  @media only screen and (max-width: 1199px) {
-    .navbar{
-      background: #403f83;
-    }
-    .navbar .menu-line, .navbar .menu-line1, .navbar .menu-line2{
-      background: #fff;
-    }
-    .item-dropdown .dropdown a{
-      color: #fff !important;
-    }
-  }
-`;
+  </a>
+));
 
-const serviceone= () => (
-<div>
-<GlobalStyles/>
-    <StyledHeader theme={theme} />
-  <section className='jumbotron breadcumb no-bg' style={{backgroundImage: `url(${'./img/background/subheader.jpg'})`}}>
-    <div className='mainbreadcumb'>
-      <div className='container'>
-        <div className='row m-10-hor'>
-          <div className='col-12'>
-            <h1 className='text-center'>About</h1>
-            <h4 className='text-white text-center fw-normal fs-4'>First NFT Incubator and marketplace owned by people</h4>
+const Profile = function () {
+  const { userId } = useParams();
+  const dispatch = useDispatch();
+  const store = useSelector(state => state)
+  const userInfo = auth.getUserInfo()
+  console.log(userInfo)
+
+  return (
+    <div className="greyscheme">
+      <StyledHeader theme={theme} />
+      <section id='profile_banner' className='jumbotron breadcumb ' style={{ background: 'url("./img/background/6.jpg")' }}>
+        <div className='mainbreadcumb'>
+          <h1 className="text-center">About</h1>
+          <p className="text-center fs-3">The first NFT incubator and marketplace owned by people</p>
+        </div>
+      </section>
+
+      <section className="container">
+        <div class="row mb-4 px-2 px-md-5">
+          <div class="col-12">
+            <h2 className="fw-normal">Opensea vs Terra Mater</h2>
           </div>
         </div>
-      </div>
+
+        <div className="row px-2 px-md-5">
+          <div class="col-12 col-sm-6 mb-4">
+            <div className="">
+              <h4 className="">Opensea</h4>
+              <ul className="list-style-none ps-0">
+                <li>Owned by few</li>
+                <li>Mostly unrelevant collections</li>
+                <li>Lots of collection not audited without kyc</li>
+                <li>No more benefits other than exchange service</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 mb-4">
+            <div className="">
+              <h4 className="">Terra Mater</h4>
+              <ul className="list-style-none ps-0">
+                <li>Owned by Terra Mater NFT holders</li>
+                <li>Collection based on real projects</li>
+                <li>Extremely accurate selection of the collection</li>
+                <li>Lots of benefits to NFT holders other than exchange service</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="row px-2 px-md-5">
+          <div class="col-12 col-md-6 offset-md-3">
+            <div className="w-100 mx-auto">
+              <img className="w-100" src={metrics} alt="" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
-  </section>
-
-  <section className='container'>
-    <div className='row'>
-      
-    </div>
-  </section>
-
-  <Footer />
-</div>
-
-);
-export default serviceone;
+  );
+}
+export default memo(Profile);
