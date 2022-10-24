@@ -46,3 +46,18 @@
 .list-style-none {
   list-style: none;
 }
+
+.btn-custom-card {
+  border: none;
+  background: none;
+  color: #FF343F;
+  display: block;
+}
+
+.collectionTabs .nav-item a.active {
+  color: #FF343F;
+}
+
+.categoryTabs .nav-item a.active {
+  border-bottom: 1px solid #fff;
+}

@@ -20,6 +20,7 @@ import { Button } from "react-bootstrap";
 import CheckboxFilter from "../../../components/components/CheckboxFilter";
 import { clearFilter, clearCollectionNfts } from "../../../store/actions";
 import Tabs from "../../components/Tabs";
+import useFetchNFT from "../../../hooks/useFetchNft";
 //SWITCH VARIABLE FOR PAGE STYLE
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
@@ -39,11 +40,10 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 ));
 
 const Profile = function () {
-  const { userId } = useParams();
-  const dispatch = useDispatch();
-  const store = useSelector(state => state)
   const userInfo = auth.getUserInfo()
-  console.log(userInfo)
+  const [fetchNFTs, setFetchNfts] = useState(true)
+  const nfts = useFetchNFT(userInfo.address, fetchNFTs, setFetchNfts)
+  console.log(nfts)
   
   return (
     <div className="greyscheme">
@@ -158,20 +158,13 @@ const Profile = function () {
             </div>
           </div>
         </div>
-        {/* <div className="row mb-4">
-          <div className="col-12 col-sm-8 col-md-6 col-lg-4">
-            <div className="px-2 px-md-5">
-              <p className="">description</p>
-            </div>
-          </div>
-        </div> */}
         
       </section>
 
       <section className="container-fluid px-2 px-md-5 no-top">
         <div className="row">
-          <div class="col-12">
-            <Tabs />
+          <div className="col-12">
+            <Tabs nfts={nfts} />
           </div>
         </div>
 
