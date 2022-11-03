@@ -21,6 +21,12 @@ export const getNftDetail = asyncAction(
     'nft/GET_NFT_DETAIL_FAIL'
 )();
 
+export const Mint_NFT = asyncAction(
+    'nft/MINT_NFT',
+    'nft/MINT_NFT_SUCCESS',
+    'nft/MINT_NFT_FAIL'
+)();
+
 export const getHotCollections = asyncAction(
     'nft/GET_HOT_COLLECTIONS',
     'nft/GET_HOT_COLLECTIONS_SUCCESS',

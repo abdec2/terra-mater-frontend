@@ -13,10 +13,10 @@ import {
     useMatch,
     useResolvedPath
 } from "react-router-dom";
-import { connectWallet } from './../../../components/menu/connectWallet';
+import { connectWallet, switchNetwork } from './../../../components/menu/connectWallet';
 import * as actions from './../../../store/actions';
 import auth from '../../../core/auth';
-import { providerOptions } from './../../../config/config'
+import { CONFIG, providerOptions } from './../../../config/config'
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, forwardRef } from "react";
 
@@ -73,7 +73,11 @@ const Index = () => {
         const provider = await web3Modal.connect();
 
         const web3 = new Web3(provider);
-        dispatch(actions.addWeb3({ account }))
+        const network = await web3.eth.getChainId()
+        if(network !== CONFIG.CHAIN_ID) {
+            switchNetwork(provider)
+        }
+        dispatch(actions.addWeb3({ account, provider, web3 }))
     }
 
     useEffect(() => {

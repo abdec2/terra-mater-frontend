@@ -1,6 +1,9 @@
 import { Axios, Canceler } from '../../../core/axios';
 import * as actions from '../../actions';
 import api from '../../../core/api';
+import auth from '../../../core/auth';
+
+
 
 export const fetchNftsBreakdown = (page=1, collectionId, isMusic = false) => async (dispatch) => {
 
@@ -33,6 +36,31 @@ export const fetchNftShowcase = () => async (dispatch) => {
     dispatch(actions.getNftShowcase.failure(err));
   }
 };
+
+export const mintNFT = (nftId, ownerAddress) => async (dispatch) => {
+  console.log(nftId)
+  try {
+    const token = auth.getToken()
+    const {data} = await Axios.put(`${api.baseUrl}${api['nft-v1s']}/${nftId}`, 
+    {
+      data: {
+        owner: ownerAddress, 
+        nft_status: 3
+      }
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+    )
+
+    dispatch(fetchNftDetail(nftId))
+
+  } catch (err) {
+    console.log(err)
+  }
+
+}
 
 export const fetchNftDetail = (nftId) => async (dispatch) => {
   console.log(nftId)
