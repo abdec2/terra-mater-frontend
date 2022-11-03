@@ -221,52 +221,36 @@ const Colection = function () {
           </div>
         </div>
         <div className="row mb-4">
-          <div className="col-12 col-sm-8 col-md-6 col-lg-4">
+          <div className="col-12 col-sm-8 col-md-6">
             <div className="px-2 px-md-5">
               <p className="">{hotCollections.desc}</p>
             </div>
           </div>
         </div>
-        <div className="row">
+        {/* <div className="row">
           <div className="col-12">
             <div className="d-none px-2 px-md-5 w-100 d-md-inline-flex flex-wrap collection-page-stats gap-5">
               <div>
                 <h4>10K</h4>
                 <p>items</p>
               </div>
-              {/* <div>
-                <h4><UsdtIcon size={20} /> 10.000</h4>
-                <p>floor price</p>
-              </div> */}
               <div>
                 <h4>382</h4>
                 <p>owners</p>
               </div>
-              {/* <div>
-                <h4> <UsdtIcon size={20} /> 10000</h4>
-                <p>total volume</p>
-              </div> */}
             </div>
             <div className="px-2 px-md-5 w-100 d-inline-flex d-md-none flex-wrap collection-page-stats gap-4">
               <div>
                 <h4>10K</h4>
                 <p>items</p>
               </div>
-              {/* <div>
-                <h4><UsdtIcon size={20} /> 10.000</h4>
-                <p>floor price</p>
-              </div> */}
               <div>
                 <h4>382</h4>
                 <p>owners</p>
               </div>
-              {/* <div>
-                <h4> <UsdtIcon size={20} /> 10000</h4>
-                <p>total volume</p>
-              </div> */}
             </div>
           </div>
-        </div>
+        </div> */}
       </section>
 
       <section className="container-fluid px-2 px-md-5 no-top">

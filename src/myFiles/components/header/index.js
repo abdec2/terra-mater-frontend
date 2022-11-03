@@ -77,7 +77,6 @@ const Index = () => {
     }
 
     useEffect(() => {
-
         if (userData && userData.address) {
             setIsLogin(true)
             addLoginState(userData.address)

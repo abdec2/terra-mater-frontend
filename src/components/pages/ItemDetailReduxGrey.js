@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 
 //IMPORT DYNAMIC STYLED COMPONENT
 import { StyledHeader } from '../Styles';
+import { UsdtIcon } from "../../myFiles/components/Icons";
 //SWITCH VARIABLE FOR PAGE STYLE
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
@@ -85,24 +86,14 @@ const ItemDetailRedux = () => {
                                 <div className="item_info_views"><i className="fa fa-eye"></i>{nft.views}</div>
                                 <div className="item_info_like"><i className="fa fa-heart"></i>{nft.likes}</div>
                             </div>
-                            <h3 className="text-uppercase color">{nft.token_name}</h3>
+                            <h3 className="text-uppercase color mb-0">{nft.token_name}</h3>
+                            <div className="mb-3">
+                                <span>Owner:</span>
+                                <span className="ms-3">{nft.owner !== '' ? nft.owner : nft.collection && `${nft.collection.contract_address.slice(0, 5)}....${nft.collection.contract_address.slice(37, 42)}`}</span>
+                            </div>
                             <p>{nft.description}</p>
 
                             <div className="d-flex flex-row">
-                                {/* <div className="mr40">
-                                    <h6>Creator</h6>
-                                    <div className="item_author">                                    
-                                        <div className="author_list_pp">
-                                            <span>
-                                                <img className="lazy" src={nft.author && api.baseUrl + nft.author.avatar.url} alt=""/>
-                                                <i className="fa fa-check"></i>
-                                            </span>
-                                        </div>                                    
-                                        <div className="author_list_info">
-                                            <span>{nft.author && nft.author.username}</span>
-                                        </div>
-                                    </div>
-                                </div> */}
                                 <div className="mr40">
                                     <h6>Collection</h6>
                                     <div className="item_author">
@@ -117,18 +108,32 @@ const ItemDetailRedux = () => {
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
 
                             <div className="spacer-40"></div>
 
                             <div className="d-block mb-3">
-                                <div className="mr40">
-                                    <h6>Owner</h6>
-                                    <span>{nft.owner !== '' ? nft.owner : nft.collection && `${nft.collection.contract_address.slice(0, 5)}....${nft.collection.contract_address.slice(37, 42)}`}</span>
+                                <div className="mb-3">
+                                    <span>Current price</span>
+                                    <h3 className="mb-1"> <UsdtIcon size={20}/>&nbsp;&nbsp; 130</h3>
+                                </div>
+                                <div className="d-flex flex-row">
+                                    {
+                                        nft.nft_status && nft.nft_status.Status === 'Mint' && (
+                                            <button className='btn-main lead  mr15' onClick={() => setOpenCheckout(true)}>Mint</button>
+                                        )
+
+                                    }
+                                    {
+                                        nft.nft_status && nft.nft_status.Status === 'Buy Now' && (
+                                            <button className='btn-main lead  mr15' onClick={() => setOpenCheckout(true)}>Buy Now</button>
+                                        )
+                                    }
 
                                 </div>
 
-                                <div className="row mt-3">
+                                <div className="row mt-5">
                                     {
                                         nft.props && nft.props.map((item, key) => (
                                             <div key={key} className="col-lg-4 col-md-6 col-sm-6">
@@ -155,20 +160,7 @@ const ItemDetailRedux = () => {
 
                                 <div className="de_tab_content">
                                     {/* button for checkout */}
-                                    <div className="d-flex flex-row mt-5">
-                                        {
-                                            nft.nft_status && nft.nft_status.Status === 'Mint' && (
-                                                <button className='btn-main lead mb-5 mr15' onClick={() => setOpenCheckout(true)}>Mint</button>
-                                            )
 
-                                        }
-                                        {
-                                            nft.nft_status && nft.nft_status.Status === 'Buy Now' && (
-                                                <button className='btn-main lead mb-5 mr15' onClick={() => setOpenCheckout(true)}>Buy Now</button>
-                                            )
-                                        }
-
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -184,25 +176,15 @@ const ItemDetailRedux = () => {
                             <h3>Checkout</h3>
                         </div>
                         <p>You are about to purchase a <span className="bold">{nft.token_name}</span>
-                            {/* <span className="bold">from Monica Lucas</span> */}
                         </p>
-                        {/* <div className='detailcheckout mt-4'>
-                            <div className='listcheckout'>
-                                <h6>
-                                    Enter quantity.
-                                    <span className="color">10 available</span>
-                                </h6>
-                                <input type="text" name="buy_now_qty" id="buy_now_qty" className="form-control" />
-                            </div>
-
-                        </div> */}
+                       
                         <div className='heading mt-3'>
-                            <p>Your balance</p>
+                            <p>Item price</p>
                             <div className='subtotal'>
-                                10.67856 USDT
+                                <UsdtIcon size={20} /> {nft.price} USDT
                             </div>
                         </div>
-                        <div className='heading'>
+                        {/* <div className='heading'>
                             <p>Service fee 2.5%</p>
                             <div className='subtotal'>
                                 0.00325 USDT
@@ -213,12 +195,22 @@ const ItemDetailRedux = () => {
                             <div className='subtotal'>
                                 0.013325 USDT
                             </div>
+                        </div> */}
+                        <div className="d-flex flex-row">
+                            <div className="w-100 px-2">
+                                <button className='btn-main lead mb-5'>Approve</button>
+                            </div>
+                            <div className="w-100 px-2">
+                                <button className='btn-main lead mb-5'>{nft.nft_status.Status}</button>
+                            </div>
                         </div>
-                        <button className='btn-main lead mb-5'>{nft.nft_status.Status}</button>
+                        <div>
+                            <span>Note: Kindly approve before minting / buying.</span>
+                        </div>
                     </div>
                 </div>
             }
-            
+
 
         </div>
     );
