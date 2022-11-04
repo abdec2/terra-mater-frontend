@@ -43,6 +43,7 @@ function Tabs({ nfts }) {
                       <h3 className='text-center fw-normal'>No items to display</h3>
                     )
                   }
+                
               </div>
             </Tab.Pane>
             <Tab.Pane eventKey="onsale">

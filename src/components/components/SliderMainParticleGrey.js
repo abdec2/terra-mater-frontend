@@ -48,8 +48,7 @@ const Slidermainparticle = ({ collection }) => {
         <div className="col-12">
           <div className="spacer-single"></div>
           <Reveal className='onStep' keyframes={fadeInUp} delay={600} duration={900} triggerOnce>
-            <h1 className="text-center text-uppercase">Collection {collection && collection.data[0].attributes.
-          name }
+            <h1 className="text-center text-uppercase">Collection Terra Mater
             </h1>
             <h3 className="text-center">First NFT Incubator and marketplace owned by people</h3>
           </Reveal>

@@ -4,7 +4,7 @@ import Clock from "../components/Clock";
 import Footer from '../components/footer';
 //import { createGlobalStyle } from 'styled-components';
 import * as selectors from '../../store/selectors';
-import { fetchNftDetail } from "../../store/actions/thunks";
+import { fetchNftDetail, mintNFT } from "../../store/actions/thunks";
 /*import Checkout from "../components/Checkout";*/
 import api from "../../core/api";
 import moment from "moment";
@@ -87,10 +87,20 @@ const ItemDetailRedux = () => {
     }
 
     const handleMint = async () => {
-        const nftPrice = web3.utils.toWei(nft.price.toString(), 'mwei')
-        const nftContract = new web3.eth.Contract(nftAbi, nft.collection.contract_address)
-        const estimateGas = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).estimateGas({from: web3Store.account})
-        const mintTx = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString()})
+        try {
+            setLoading(true)
+            const nftPrice = web3.utils.toWei(nft.price.toString(), 'mwei')
+            const nftContract = new web3.eth.Contract(nftAbi, nft.collection.contract_address)
+            const estimateGas = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).estimateGas({from: web3Store.account})
+            const mintTx = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString()})
+            console.log(mintTx)
+            dispatch(mintNFT(nftId, web3Store.account))
+            setLoading(false)
+            setOpenCheckout(false)
+        } catch(e) {
+            console.log(e)
+            setLoading(false)
+        }
             
     }
 
@@ -104,16 +114,13 @@ const ItemDetailRedux = () => {
                 alert('connect wallet')
                 return
             }
-            setLoading(true)
             if (nft.nft_status.Status.toLowerCase() === "mint") {
                 handleMint()
             } else {
                 handleBuy()
             }
-            setLoading(false)
         } catch (e) {
             console.log(e)
-            setLoading(false)
         }
     }
 
@@ -148,7 +155,7 @@ const ItemDetailRedux = () => {
                             <h3 className="text-uppercase color mb-0">{nft.token_name}</h3>
                             <div className="mb-3">
                                 <span>Owner:</span>
-                                <span className="ms-3">{nft.owner !== '' ? nft.owner : nft.collection && `${nft.collection.contract_address.slice(0, 5)}....${nft.collection.contract_address.slice(37, 42)}`}</span>
+                                <span className="ms-3">{nft.owner && nft.owner !== '' ? `${nft.owner.slice(0, 5)}....${nft.owner.slice(37, 42)}` : nft.collection && `${nft.collection.contract_address.slice(0, 5)}....${nft.collection.contract_address.slice(37, 42)}`}</span>
                             </div>
                             <p>{nft.description}</p>
 
