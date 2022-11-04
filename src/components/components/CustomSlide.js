@@ -13,7 +13,7 @@ const CustomSlide = ({ index, avatar, banner, username, collectionId, status }) 
         <div className="">
           <span className="d-flex flex-column" onClick={() => navigateTo("/colection/" + collectionId)} style={{cursor: 'pointer'}}>
             <img src={avatar} className="lazy img-fluid rounded-4" width={'100%'} alt="" />
-            <span ><h5 style={{marginTop: '-35px'}} className="px-4">{username}</h5></span>
+            <span ><h5 style={{marginTop: '-35px'}} className="px-4 text-truncate">{username}</h5></span>
           </span>
         </div>
         

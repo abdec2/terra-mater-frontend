@@ -25,7 +25,7 @@ const Outer = styled.div`
 `;
 
 //react functional component
-const WalletNFT = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4', height, onImgLoad }) => {
+const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4', height, onImgLoad }) => {
     const [nftdata, setNftData] = useState(null)
     const [loading, setLoading] = useState(false)
     const [openCheckout, setOpenCheckout] = useState(false);
@@ -150,8 +150,19 @@ const WalletNFT = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-
         }
     }
 
-    const updateNFTRecord = async () => {
-
+    const updateNFTRecord = async (_nft, itemId) => {
+        try {
+            const {data} = axios.put(`${api.baseUrl+api['nft-v1s']}/${_nft.id}`, {
+                data: {
+                    owner: web3Store.account,
+                    price: nftPrice,
+                    item_id: itemId, 
+                    nft_status: 2
+                }
+            })
+        } catch(e) {
+            console.log(e)
+        }
     }
 
     const createNFT = async (nftCollection, itemId) => {
@@ -161,6 +172,7 @@ const WalletNFT = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-
             console.log(_nft)
             if(exist) {
                 // update NFT status
+                await updateNFTRecord(_nft, itemId)
             } else {
                 // create nft record
                 await addNFTRecord(nftCollection, itemId)
@@ -207,7 +219,9 @@ const WalletNFT = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-
             console.log(ListTx)
             const itemId = ListTx.events.MarketItemCreated.returnValues.itemId
             await makeBackendEntries(itemId)
+            setOpenCheckout(false)
             setLoading(false)
+            setFetchNfts(true)
         } catch (e) {
             console.log(e);
             setLoading(false)
@@ -227,7 +241,7 @@ const WalletNFT = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-
                         <Card.Img variant="top" src={(nftdata.media[0].gateway !== '') ? nftdata.media[0].gateway : 'https://via.placeholder.com/300x300.png?text=NFT Image'} />
                         <Card.Body>
                             <Card.Title>{nftdata.metadata.name ? nftdata.metadata.name : "Refresh Data"}</Card.Title>
-                            <p className="mb-3" style={{ fontSize: '14px' }}>{nftdata.contractMetadata.name}</p>
+                            <p className="mb-3" style={{ fontSize: '14px' }}>{nftdata.contractMetadata && nftdata.contractMetadata.name}</p>
                             {nftdata.metadata.name && (
                                 <button className='btn-custom-card' onClick={() => setOpenCheckout(true)}>List Now</button>
                             )}

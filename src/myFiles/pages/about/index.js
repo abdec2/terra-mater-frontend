@@ -88,11 +88,24 @@ const Profile = function () {
           </div>
         </div>
 
-        <div class="row px-2 px-md-5">
+        <div class="row px-2 px-md-5 mb-4">
           <div class="col-12 col-md-6 offset-md-3">
             <div className="w-100 mx-auto">
               <img className="w-100" src={metrics} alt="" />
             </div>
+          </div>
+        </div>
+
+        <div className="row px-2 px-md-5">
+          <div className="col-12">
+            <p>TERRAMATER conceive NFTs in a much broader and more organic way than how NFTs are commonly used; this allows to provide NFTs with many use cases and to really make the most of them.</p>
+
+            <p>TerraMater was born with the intention of listing NFTs collections related to serious, lasting, incisive projects in various contexts and useful for achieving the good for the people.
+              NFTs collections can be created, incubated and launched thanks to TerraMater, capable of offering a fertile place for all those projects that want to exist and do good, and that require a team of technical developers, analysts and expert advisors of complex systems, as well as an audience of members ready to finance them.</p>
+
+            <p>
+              The TERRAMATER NTFs make the holders co-creators, co-participants, entitled to rewards, economic benefits from TERRAMATER platform, and guarantee exclusive access to many products and services.
+            </p>
           </div>
         </div>
       </section>

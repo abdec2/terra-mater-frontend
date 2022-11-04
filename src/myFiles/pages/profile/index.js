@@ -164,7 +164,7 @@ const Profile = function () {
       <section className="container-fluid px-2 px-md-5 no-top">
         <div className="row">
           <div className="col-12">
-            <Tabs nfts={nfts} />
+            <Tabs nfts={nfts} setFetchNfts={setFetchNfts} />
           </div>
         </div>
 

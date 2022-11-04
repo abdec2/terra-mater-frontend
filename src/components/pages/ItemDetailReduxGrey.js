@@ -67,6 +67,33 @@ const ItemDetailRedux = () => {
     const [openCheckout, setOpenCheckout] = React.useState(false);
     const [openCheckoutbid, setOpenCheckoutbid] = React.useState(false);
 
+    const approveNFTContractForUSDT = async () => {
+        try {
+            console.log('asdasd')
+            const approveAmount = web3.utils.toWei(nft.price.toString(), 'mwei')
+            const usdtContract = new web3.eth.Contract(usdtAbi, CONFIG.USDT_ADDRESS)
+            const estimateGas = await usdtContract.methods.approve(nft.collection.contract_address, approveAmount.toString()).estimateGas({ from: web3Store.account })
+            const approvetx = await usdtContract.methods.approve(nft.collection.contract_address, approveAmount.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString() })
+            console.log(approvetx)
+        } catch (e) {
+            console.log(e)
+            setLoading(false)
+        }
+    }
+
+    const approveMktPlaceForUSDT = async () => {
+        try {
+            const approveAmount = web3.utils.toWei(nft.price.toString(), 'mwei')
+            const usdtContract = new web3.eth.Contract(usdtAbi, CONFIG.USDT_ADDRESS)
+            const estimateGas = await usdtContract.methods.approve(CONFIG.MARKETPLACE_ADDRESS, approveAmount.toString()).estimateGas({ from: web3Store.account })
+            const approvetx = await usdtContract.methods.approve(CONFIG.MARKETPLACE_ADDRESS, approveAmount.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString() })
+            console.log(approvetx)
+        } catch (e) {
+            console.log(e)
+            setLoading(false)
+        }
+    }
+
     const handleApprove = async () => {
         try {
             if (!web3Store.account) {
@@ -74,11 +101,13 @@ const ItemDetailRedux = () => {
                 return
             }
             setLoading(true)
-            const approveAmount = web3.utils.toWei(nft.price.toString(), 'mwei')
-            const usdtContract = new web3.eth.Contract(usdtAbi, CONFIG.USDT_ADDRESS)
-            const estimateGas = await usdtContract.methods.approve(CONFIG.MARKETPLACE_ADDRESS, approveAmount.toString()).estimateGas({ from: web3Store.account })
-            const approvetx = await usdtContract.methods.approve(CONFIG.MARKETPLACE_ADDRESS, approveAmount.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString() })
-            console.log(approvetx)
+
+            if(nft.nft_status.Status.toLowerCase() === "mint") {
+                await approveNFTContractForUSDT()
+            } else {
+                await approveMktPlaceForUSDT()
+            }
+            
             setLoading(false)
         } catch (e) {
             console.log(e)
@@ -91,6 +120,7 @@ const ItemDetailRedux = () => {
             setLoading(true)
             const nftPrice = web3.utils.toWei(nft.price.toString(), 'mwei')
             const nftContract = new web3.eth.Contract(nftAbi, nft.collection.contract_address)
+            console.log(nftPrice.toString())
             const estimateGas = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).estimateGas({from: web3Store.account})
             const mintTx = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString()})
             console.log(mintTx)
@@ -105,7 +135,21 @@ const ItemDetailRedux = () => {
     }
 
     const handleBuy = async () => {
-        
+        try {
+            setLoading(true)
+            const nftPrice = web3.utils.toWei(nft.price.toString(), 'mwei')
+            const mpContract = new web3.eth.Contract(marketplaceAbi, CONFIG.MARKETPLACE_ADDRESS)
+            const estimateGas = await mpContract.methods.createMarketSale(nft.collection.contract_address, nft.item_id, nftPrice.toString()).estimateGas({from: web3Store.account})
+            console.log(estimateGas.toString())
+            const createSaleTx = await mpContract.methods.createMarketSale(nft.collection.contract_address, nft.item_id, nftPrice.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString()})
+            console.log(createSaleTx)
+            dispatch(mintNFT(nftId, web3Store.account))
+            setLoading(false)
+            setOpenCheckout(false)
+        } catch(e) {
+            console.log(e)
+            setLoading(false)
+        }
     }
 
     const handleTransaction = async () => {
@@ -165,7 +209,7 @@ const ItemDetailRedux = () => {
                                     <div className="item_author">
                                         <div className="author_list_pp">
                                             <span>
-                                                <img className="lazy" src={nft.collection && nft.collection.feature_img.url} alt="" />
+                                                <img className="lazy" src={(nft.collection && nft.collection.feature_img) ? nft.collection && nft.collection.feature_img.url: `https://via.placeholder.com/300?text=${nft.collection && nft.collection.name}` } alt="" />
                                                 <i className="fa fa-check"></i>
                                             </span>
                                         </div>

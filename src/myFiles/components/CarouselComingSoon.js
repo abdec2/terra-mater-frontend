@@ -32,7 +32,7 @@ const CarouselCollectionRedux = () => {
               <CustomSlide
                 key={index}
                 index={index + 1}
-                avatar={(item.feature_img.data !== null) ? item.feature_img.url : `https://via.placeholder.com/300?text=${item.name}`}
+                avatar={(item.feature_img.data !== null) ? item.feature_img.url : `https://via.placeholder.com/300`}
                 banner={api.baseUrl + item.banner.url}
                 username={item.name}
                 status={item.status}
