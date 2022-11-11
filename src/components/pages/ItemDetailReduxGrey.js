@@ -11,6 +11,7 @@ import moment from "moment";
 import usdtAbi from './../../config/usdtAbi.json'
 import marketplaceAbi from './../../config/Marketplace.json'
 import nftAbi from './../../config/NftAbi.json' 
+import { useNavigate } from 'react-router-dom';
 
 import { useParams } from "react-router-dom";
 
@@ -22,6 +23,10 @@ import { CONFIG } from "../../config/config";
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
 const ItemDetailRedux = () => {
+    const navigate = useNavigate();
+    const navigateTo = (link) => {
+        navigate(link);
+    }
 
     const [openMenu0, setOpenMenu0] = React.useState(true);
     const [openMenu, setOpenMenu] = React.useState(false);
@@ -206,14 +211,14 @@ const ItemDetailRedux = () => {
                             <div className="d-flex flex-row">
                                 <div className="mr40">
                                     <h6>Collection</h6>
-                                    <div className="item_author">
+                                    <div className="item_author" onClick={() => navigateTo(`/colection/${nft.collection && nft.collection.id}`)}>
                                         <div className="author_list_pp">
                                             <span>
                                                 <img className="lazy" src={(nft.collection && nft.collection.feature_img) ? nft.collection && nft.collection.feature_img.url: `https://via.placeholder.com/300?text=${nft.collection && nft.collection.name}` } alt="" />
                                                 <i className="fa fa-check"></i>
                                             </span>
                                         </div>
-                                        <div className="author_list_info">
+                                        <div className="author_list_info" style={{cursor: 'pointer'}}>
                                             <span>{nft.collection && nft.collection.name}</span>
                                         </div>
                                     </div>

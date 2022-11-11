@@ -22,7 +22,7 @@ const NftCard = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12
 
     return (
         <div className={className}>
-            <div className="nft__item m-0 p-0">
+            <div className="nft__item m-0 p-0" onClick={() => navigateTo(`/ItemDetail/${nft.id}`)}>
                 <div className="nft__item_wrap mt-0" style={{ height: `${height}px` }}>
                     <Outer>
                         <span>
@@ -46,7 +46,7 @@ const NftCard = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12
                         } */}
                     </div>
                     <div className="nft__item_action">
-                        <span onClick={() => navigateTo(`/ItemDetail/${nft.id}`)}>{nft.nft_status.Status === 'Mint' ? 'Mint Now' : nft.nft_status.Status === 'Buy Now' ? 'Buy Now' : 'View'}</span>
+                        <span>{nft.nft_status.Status === 'Mint' ? 'Mint Now' : nft.nft_status.Status === 'Buy Now' ? 'Buy Now' : 'View'}</span>
                     </div>
                     <div className="nft__item_like">
                         <i className="fa fa-heart"></i><span>{nft.likes}</span>

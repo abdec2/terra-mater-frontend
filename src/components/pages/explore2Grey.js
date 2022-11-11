@@ -12,7 +12,7 @@ const theme = 'GREY'; //LIGHT, GREY, RETRO
 const explore = () => (
   <div className="greyscheme">
     <StyledHeader theme={theme} />
-    <section className='container-fluid px-2 px-md-5'>
+    <section className='container-fluid px-2 px-md-5 min-vh-100'>
       <div className="row">
         <div className="spacer-double"></div>
         <h2 className='text-center'>Explore, collect, and sell NFTs</h2>

@@ -27,7 +27,7 @@ const ListCollections = ({ categoryId = null }) => {
             {
                 (collections && collections.data.length > 0) ? (
                     collections.data.map((item, index) => (
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={index}>
+                        <div className="col-12 col-sm-6 col-md-4 col-lg-2" key={index}>
                             <CustomSlide
                                 key={index}
                                 index={index + 1}
