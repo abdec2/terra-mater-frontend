@@ -19,6 +19,7 @@ import { useParams } from "react-router-dom";
 import { StyledHeader } from '../Styles';
 import { UsdtIcon } from "../../myFiles/components/Icons";
 import { CONFIG } from "../../config/config";
+import auth from "../../core/auth";
 //SWITCH VARIABLE FOR PAGE STYLE
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
@@ -27,7 +28,7 @@ const ItemDetailRedux = () => {
     const navigateTo = (link) => {
         navigate(link);
     }
-
+    const userInfo = auth.getUserInfo()
     const [openMenu0, setOpenMenu0] = React.useState(true);
     const [openMenu, setOpenMenu] = React.useState(false);
     const [openMenu1, setOpenMenu1] = React.useState(false);
@@ -113,7 +114,6 @@ const ItemDetailRedux = () => {
                 await approveMktPlaceForUSDT()
             }
             
-            setLoading(false)
         } catch (e) {
             console.log(e)
             setLoading(false)
@@ -173,6 +173,30 @@ const ItemDetailRedux = () => {
         }
     }
 
+    const makeTransaction = async () => {
+        try {
+            if(nft.owner && nft.owner !== '' && isOwner(nft.owner)) {
+                return
+            }
+            await handleApprove()
+            await handleTransaction()
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const isOwner = (address) => {
+        return userInfo.address === address
+    }
+
+    const formatOwner = (address) => {
+        if(isOwner) {
+            return 'You'
+        } 
+        
+        return `${address.slice(0,5)}...${address.slice(37,42)}`;
+    }
+
     useEffect(() => {
         dispatch(fetchNftDetail(nftId));
     }, [dispatch, nftId]);
@@ -204,7 +228,7 @@ const ItemDetailRedux = () => {
                             <h3 className="text-uppercase color mb-0">{nft.token_name}</h3>
                             <div className="mb-3">
                                 <span>Owner:</span>
-                                <span className="ms-3">{nft.owner && nft.owner !== '' ? `${nft.owner.slice(0, 5)}....${nft.owner.slice(37, 42)}` : nft.collection && `${nft.collection.contract_address.slice(0, 5)}....${nft.collection.contract_address.slice(37, 42)}`}</span>
+                                <span className="ms-3">{nft.owner && nft.owner !== '' ? `${formatOwner(nft.owner)}` : nft.collection && `${nft.collection.contract_address.slice(0, 5)}....${nft.collection.contract_address.slice(37, 42)}`}</span>
                             </div>
                             <p>{nft.description}</p>
 
@@ -302,13 +326,19 @@ const ItemDetailRedux = () => {
                                             <UsdtIcon size={20} /> {nft.price} USDT
                                         </div>
                                     </div>
-                                   
+                                    {
+                                        nft.nft_status.Status.toLowerCase() === 'buy now' ? (
+                                            <div className='heading '>
+                                                <p>5% Sale fee is included in this price. </p>
+                                            </div>
+                                        ) : ''
+                                    }
                                     <div className="d-flex flex-row">
-                                        <div className="w-100 px-2">
+                                        {/* <div className="w-100 px-2">
                                             <button className='btn-main lead mb-5' onClick={handleApprove}>Approve</button>
-                                        </div>
+                                        </div> */}
                                         <div className="w-100 px-2">
-                                            <button className='btn-main lead mb-5' onClick={handleTransaction}>{nft.nft_status.Status}</button>
+                                            <button className='btn-main lead mb-5' onClick={makeTransaction}>{nft.nft_status.Status}</button>
                                         </div>
                                     </div>
                                     <div>

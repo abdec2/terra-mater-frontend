@@ -21,6 +21,7 @@ import TooltipIcon from "../../myFiles/components/TooltipIcon";
 import { Button } from "react-bootstrap";
 import CheckboxFilter from "../components/CheckboxFilter";
 import { clearFilter, clearCollectionNfts } from "../../store/actions";
+import axios from "axios";
 //SWITCH VARIABLE FOR PAGE STYLE
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
@@ -41,6 +42,7 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 
 const Colection = function () {
   const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0)
   const [height, setHeight] = useState(0);
   const [selStatus, setSelStatus]= useState([])
   const searchTxt = useRef(null)
@@ -62,6 +64,10 @@ const Colection = function () {
       setHeight(img.offsetHeight);
     }
   }
+
+  const kFormatter = (num) =>  {
+    return Math.abs(num) > 999 ? Math.sign(num)*((Math.abs(num)/1000).toFixed(2)) + 'k' : Math.sign(num)*Math.abs(num)
+  }
   
   const loadMore = useCallback(() => {
     console.log(page)
@@ -78,6 +84,19 @@ const Colection = function () {
     }
   }
 
+  const dateFormator = (date) => {
+    const pDate = new Date(date)
+    let month = pDate.toDateString()
+    month = month.split(" ")
+    return month[1]+" "+month[3]
+  } 
+
+  const getNFTCount = async () => {
+    const res = await axios.get(`${api.baseUrl}/api/nft?filters[collection]=${collectionId}`)
+    console.log(res.data)
+    setTotalItems(res.data.meta.pagination.total)
+  }
+
   useEffect(() => {
     dispatch(fetchCollections(collectionId));
     if (filteredNft.data && collectionNft.data) {
@@ -88,6 +107,7 @@ const Colection = function () {
   useEffect(()=> {
     dispatch(clearCollectionNfts())
     dispatch(clearFilter())
+    getNFTCount()
   }, [])
 
   useEffect(()=> {
@@ -216,9 +236,14 @@ const Colection = function () {
                 </h2>
                 <i className="fa fa-check text-white bg-primary p-1 rounded-5 " style={{ marginTop: '-15px' }}></i>
               </div>
-
             </div>
           </div>
+        </div>
+        <div className="d-flex mb-3 px-2 px-md-5 gap-4"> 
+          <div>Items <span className="fw-bold">{kFormatter(totalItems)}</span></div>
+          <div>Created <span className="fw-bold">{dateFormator(hotCollections.publishedAt)}</span></div>
+          <div>Creator Fee <span className="fw-bold">7%</span></div>
+          <div>Chain <span className="fw-bold">{hotCollections.chain_name}</span></div>
         </div>
         <div className="row mb-4">
           <div className="col-12 col-sm-8 col-md-6">

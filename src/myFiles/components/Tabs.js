@@ -3,6 +3,7 @@ import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
 import Tab from 'react-bootstrap/Tab';
+import OnSaleItem from './OnSaleItem';
 import WalletNFT from './WalletNFT';
 
 function Tabs({ nfts, setFetchNfts }) {
@@ -34,7 +35,16 @@ function Tabs({ nfts, setFetchNfts }) {
             <Tab.Pane eventKey="collected">
               <div className="row mt-5">
                   {
-                    nfts && nfts.ownedNfts.map((item, index) => (
+                     (nfts && nfts.ownedNfts.length > 0) ? (
+                        nfts.ownedNfts.map((item, index) => (
+                          <WalletNFT setFetchNfts={setFetchNfts} nft={item} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4" />
+                        ))
+                     ) : (
+                      <h3 className='text-center fw-normal'>No items to display</h3>
+                     )
+                  }
+                  {/* {
+                    nfts && nfts.ownedNfts.length > 0 && nfts.ownedNfts.map((item, index) => (
                       <WalletNFT setFetchNfts={setFetchNfts} nft={item} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4" />
                     ))
                   }
@@ -42,14 +52,15 @@ function Tabs({ nfts, setFetchNfts }) {
                     !nfts && (
                       <h3 className='text-center fw-normal'>No items to display</h3>
                     )
-                  }
+                  } */}
                 
               </div>
             </Tab.Pane>
             <Tab.Pane eventKey="onsale">
               <div className="row mt-5">
                 <div className="col-12">
-                  <h3 className='text-center fw-normal'>No items to display</h3>
+                  <OnSaleItem /> 
+                  {/* <h3 className='text-center fw-normal'>No items to display</h3> */}
                 </div>
               </div>
             </Tab.Pane>

@@ -229,6 +229,11 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
 
     }
 
+    const makeTransaction = async () => {
+        await handleApprove()
+        await handleListItem()
+    }
+
     useEffect(() => {
         setNftData(nft)
     }, [])
@@ -269,11 +274,11 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
                                     </p>
                                     <Form.Control className='border border-secondary text-black-50' type='text' placeholder='Enter list price...' defaultValue={nftPrice} onChange={(e) => setNftPrice(e.target.value)} />
                                     <div className="d-flex flex-row">
-                                        <div className="w-100 px-2">
+                                        {/* <div className="w-100 px-2">
                                             <button className='btn-main lead mb-5' onClick={handleApprove}>Approve</button>
-                                        </div>
+                                        </div> */}
                                         <div className="w-100 px-2">
-                                            <button className='btn-main lead mb-5' onClick={handleListItem}>List NFT</button>
+                                            <button className='btn-main lead mb-5' onClick={makeTransaction}>List NFT</button>
                                         </div>
                                     </div>
                                     <div>

@@ -2,7 +2,6 @@
   "name": "gigaland",
   "version": "0.1.0",
   "private": true,
-  "homepage": "./",
   "dependencies": {
     "@alch/alchemy-web3": "^1.1.8",
     "@tim-soft/react-spring-web": "^9.0.0-beta.36",
