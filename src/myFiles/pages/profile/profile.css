@@ -1,0 +1,31 @@
+.uploadDiv {
+    background-size: cover !important;
+}
+
+.uploadDiv:hover::after {
+    content:'Upload';
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+}
+
+.loadingDiv {
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top:0;
+    left:0;
+}
+.spinnerDIv{
+    position: absolute;
+    top:50%;
+    left:50%;
+}
+

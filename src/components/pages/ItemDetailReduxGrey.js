@@ -10,7 +10,7 @@ import api from "../../core/api";
 import moment from "moment";
 import usdtAbi from './../../config/usdtAbi.json'
 import marketplaceAbi from './../../config/Marketplace.json'
-import nftAbi from './../../config/NftAbi.json' 
+import nftAbi from './../../config/NftAbi.json'
 import { useNavigate } from 'react-router-dom';
 
 import { useParams } from "react-router-dom";
@@ -20,6 +20,10 @@ import { StyledHeader } from '../Styles';
 import { UsdtIcon } from "../../myFiles/components/Icons";
 import { CONFIG } from "../../config/config";
 import auth from "../../core/auth";
+import axios from "axios";
+import { useCallback } from "react";
+import { useState } from "react";
+import Accordian from "../../myFiles/components/Accordian";
 //SWITCH VARIABLE FOR PAGE STYLE
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
@@ -29,10 +33,13 @@ const ItemDetailRedux = () => {
         navigate(link);
     }
     const userInfo = auth.getUserInfo()
+    const jwtToken = auth.getToken()
     const [openMenu0, setOpenMenu0] = React.useState(true);
     const [openMenu, setOpenMenu] = React.useState(false);
     const [openMenu1, setOpenMenu1] = React.useState(false);
     const [loading, setLoading] = React.useState(false)
+    const [like, setLike] = useState(false)
+    const [likeData, setLikeData] = useState(0)
 
     const web3Store = useSelector(state => state.web3)
     const web3 = web3Store.web3;
@@ -40,36 +47,36 @@ const ItemDetailRedux = () => {
 
     const { nftId } = useParams();
 
-    const handleBtnClick0 = () => {
-        setOpenMenu0(!openMenu0);
-        setOpenMenu(false);
-        setOpenMenu1(false);
-        document.getElementById("Mainbtn0").classList.add("active");
-        document.getElementById("Mainbtn").classList.remove("active");
-        document.getElementById("Mainbtn1").classList.remove("active");
-    };
-    const handleBtnClick = () => {
-        setOpenMenu(!openMenu);
-        setOpenMenu1(false);
-        setOpenMenu0(false);
-        document.getElementById("Mainbtn").classList.add("active");
-        document.getElementById("Mainbtn1").classList.remove("active");
-        document.getElementById("Mainbtn0").classList.remove("active");
-    };
-    const handleBtnClick1 = () => {
-        setOpenMenu1(!openMenu1);
-        setOpenMenu(false);
-        setOpenMenu0(false);
-        document.getElementById("Mainbtn1").classList.add("active");
-        document.getElementById("Mainbtn").classList.remove("active");
-        document.getElementById("Mainbtn0").classList.remove("active");
-    };
+    // const handleBtnClick0 = () => {
+    //     setOpenMenu0(!openMenu0);
+    //     setOpenMenu(false);
+    //     setOpenMenu1(false);
+    //     document.getElementById("Mainbtn0").classList.add("active");
+    //     document.getElementById("Mainbtn").classList.remove("active");
+    //     document.getElementById("Mainbtn1").classList.remove("active");
+    // };
+    // const handleBtnClick = () => {
+    //     setOpenMenu(!openMenu);
+    //     setOpenMenu1(false);
+    //     setOpenMenu0(false);
+    //     document.getElementById("Mainbtn").classList.add("active");
+    //     document.getElementById("Mainbtn1").classList.remove("active");
+    //     document.getElementById("Mainbtn0").classList.remove("active");
+    // };
+    // const handleBtnClick1 = () => {
+    //     setOpenMenu1(!openMenu1);
+    //     setOpenMenu(false);
+    //     setOpenMenu0(false);
+    //     document.getElementById("Mainbtn1").classList.add("active");
+    //     document.getElementById("Mainbtn").classList.remove("active");
+    //     document.getElementById("Mainbtn0").classList.remove("active");
+    // };
 
     const dispatch = useDispatch();
     const nftDetailState = useSelector(selectors.nftDetailState);
     const nft = nftDetailState.data ? nftDetailState.data : [];
     console.log(nft);
-
+    
     const [openCheckout, setOpenCheckout] = React.useState(false);
     const [openCheckoutbid, setOpenCheckoutbid] = React.useState(false);
 
@@ -108,12 +115,12 @@ const ItemDetailRedux = () => {
             }
             setLoading(true)
 
-            if(nft.nft_status.Status.toLowerCase() === "mint") {
+            if (nft.nft_status.Status.toLowerCase() === "mint") {
                 await approveNFTContractForUSDT()
             } else {
                 await approveMktPlaceForUSDT()
             }
-            
+
         } catch (e) {
             console.log(e)
             setLoading(false)
@@ -126,17 +133,17 @@ const ItemDetailRedux = () => {
             const nftPrice = web3.utils.toWei(nft.price.toString(), 'mwei')
             const nftContract = new web3.eth.Contract(nftAbi, nft.collection.contract_address)
             console.log(nftPrice.toString())
-            const estimateGas = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).estimateGas({from: web3Store.account})
-            const mintTx = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString()})
+            const estimateGas = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).estimateGas({ from: web3Store.account })
+            const mintTx = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString() })
             console.log(mintTx)
             dispatch(mintNFT(nftId, web3Store.account))
             setLoading(false)
             setOpenCheckout(false)
-        } catch(e) {
+        } catch (e) {
             console.log(e)
             setLoading(false)
         }
-            
+
     }
 
     const handleBuy = async () => {
@@ -144,14 +151,14 @@ const ItemDetailRedux = () => {
             setLoading(true)
             const nftPrice = web3.utils.toWei(nft.price.toString(), 'mwei')
             const mpContract = new web3.eth.Contract(marketplaceAbi, CONFIG.MARKETPLACE_ADDRESS)
-            const estimateGas = await mpContract.methods.createMarketSale(nft.collection.contract_address, nft.item_id, nftPrice.toString()).estimateGas({from: web3Store.account})
+            const estimateGas = await mpContract.methods.createMarketSale(nft.collection.contract_address, nft.item_id, nftPrice.toString()).estimateGas({ from: web3Store.account })
             console.log(estimateGas.toString())
-            const createSaleTx = await mpContract.methods.createMarketSale(nft.collection.contract_address, nft.item_id, nftPrice.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString()})
+            const createSaleTx = await mpContract.methods.createMarketSale(nft.collection.contract_address, nft.item_id, nftPrice.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString() })
             console.log(createSaleTx)
             dispatch(mintNFT(nftId, web3Store.account))
             setLoading(false)
             setOpenCheckout(false)
-        } catch(e) {
+        } catch (e) {
             console.log(e)
             setLoading(false)
         }
@@ -175,7 +182,7 @@ const ItemDetailRedux = () => {
 
     const makeTransaction = async () => {
         try {
-            if(nft.owner && nft.owner !== '' && isOwner(nft.owner)) {
+            if (nft.owner && nft.owner !== '' && isOwner(nft.owner)) {
                 return
             }
             await handleApprove()
@@ -190,15 +197,73 @@ const ItemDetailRedux = () => {
     }
 
     const formatOwner = (address) => {
-        if(isOwner) {
+        if (isOwner) {
             return 'You'
-        } 
-        
-        return `${address.slice(0,5)}...${address.slice(37,42)}`;
+        }
+
+        return `${address.slice(0, 5)}...${address.slice(37, 42)}`;
+    }
+
+    const updateCallback = useCallback(() => {
+        updateViewCount()
+    }, [nft])
+
+    const updateLikeCount = async () => {
+        try {
+            console.log(like)
+            const likeValue = !like ? 1 : -1
+            console.log(likeValue)
+            console.log(nft.likes)
+            const res = await axios.put(`${api.baseUrl+api["nft-v1s"]}/${nftId}`, {
+                    data: {
+                        "likes": parseInt(likeData) + likeValue
+                    }
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwtToken}`
+                    }
+                }
+            )
+            setLikeData(res.data.data.attributes.likes)
+            console.log(res.data)
+            
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const updateViewCount = async () => {
+        try {
+            console.log(nft.views)
+            const res = await axios.put(`${api.baseUrl+api["nft-v1s"]}/${nftId}`, {
+                    data: {
+                        "views": parseInt(nft.views) + 1
+                    }
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwtToken}`
+                    }
+                }
+            )
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const kFormatter = (num) =>  {
+        return Math.abs(num) > 999 ? Math.sign(num)*((Math.abs(num)/1000).toFixed(2)) + 'k' : Math.sign(num)*Math.abs(num)
     }
 
     useEffect(() => {
+        updateCallback()
+        setLikeData(nft.likes)
+    }, [nft])
+
+    useEffect(() => {
         dispatch(fetchNftDetail(nftId));
+        
     }, [dispatch, nftId]);
 
     return (
@@ -222,8 +287,11 @@ const ItemDetailRedux = () => {
                             <h2>{nft.title}</h2>
                             <div className="item_info_counts">
                                 <div className="item_info_type"><i className="fa fa-image"></i>{nft && nft.collection && nft.collection.category && nft.collection.category.category}</div>
-                                <div className="item_info_views"><i className="fa fa-eye"></i>{nft.views}</div>
-                                <div className="item_info_like"><i className="fa fa-heart"></i>{nft.likes}</div>
+                                <div className="item_info_views"><i className="fa fa-eye"></i>{kFormatter(nft.views)}</div>
+                                <div className={`item_info_like`} style={{cursor: 'pointer'}} onClick={() => {
+                                    setLike(!like)
+                                    updateLikeCount()
+                                }}><i className={`fa fa-heart ${like ? 'text-danger' : ''}`}></i>{kFormatter(likeData)}</div>
                             </div>
                             <h3 className="text-uppercase color mb-0">{nft.token_name}</h3>
                             <div className="mb-3">
@@ -238,11 +306,11 @@ const ItemDetailRedux = () => {
                                     <div className="item_author" onClick={() => navigateTo(`/colection/${nft.collection && nft.collection.id}`)}>
                                         <div className="author_list_pp">
                                             <span>
-                                                <img className="lazy" src={(nft.collection && nft.collection.feature_img) ? nft.collection && nft.collection.feature_img.url: `https://via.placeholder.com/300?text=${nft.collection && nft.collection.name}` } alt="" />
+                                                <img className="lazy" src={(nft.collection && nft.collection.feature_img) ? nft.collection && nft.collection.feature_img.url : `https://via.placeholder.com/300?text=${nft.collection && nft.collection.name}`} alt="" />
                                                 <i className="fa fa-check"></i>
                                             </span>
                                         </div>
-                                        <div className="author_list_info" style={{cursor: 'pointer'}}>
+                                        <div className="author_list_info" style={{ cursor: 'pointer' }}>
                                             <span>{nft.collection && nft.collection.name}</span>
                                         </div>
                                     </div>
@@ -271,8 +339,8 @@ const ItemDetailRedux = () => {
                                     }
 
                                 </div>
-
-                                <div className="row mt-5">
+                                
+                                {/* <div className="row mt-5">
                                     {
                                         nft.props && nft.props.map((item, key) => (
                                             <div key={key} className="col-lg-4 col-md-6 col-sm-6">
@@ -284,25 +352,16 @@ const ItemDetailRedux = () => {
                                         ))
                                     }
 
-                                </div>
+                                </div> */}
 
                             </div>
 
-                            <div className="de_tab">
-
-                                {/* <ul className="de_nav">
-                                    <li id='Mainbtn0' className="active"><span onClick={handleBtnClick0}>Details</span></li>
-                                    <li id='Mainbtn' ><span onClick={handleBtnClick}>Bids</span></li>
-                                    <li id='Mainbtn1' className=''><span onClick={handleBtnClick1}>History</span></li>
-                                </ul> */}
-
-
-                                <div className="de_tab_content">
-                                    {/* button for checkout */}
-
-                                </div>
-                            </div>
                         </div>
+                    </div>
+                </div>
+                <div className="row mt-4">
+                    <div className="col-md-12">
+                        <Accordian nft={nft} />
                     </div>
                 </div>
             </section>
@@ -346,7 +405,7 @@ const ItemDetailRedux = () => {
                                     </div>
                                 </div>
                             </div>
-                        ): (
+                        ) : (
                             <div className='checkout'>
                                 <div className='maincheckout'>
                                     <button disabled className='btn-close' onClick={() => setOpenCheckout(false)}>x</button>
@@ -356,7 +415,7 @@ const ItemDetailRedux = () => {
                                 </div>
                             </div>
                         )
-                        
+
                     }
 
                 </>
