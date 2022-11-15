@@ -1,6 +1,6 @@
 const api = {
     // baseUrl: 'http://localhost:5000', 
-    baseUrl: 'http://ec2-52-45-224-73.compute-1.amazonaws.com:5000',
+    baseUrl: 'https://api.terramaternfts.com',
     nfts: '/api/nfts',
     "nft-v1s": '/api/nft-v1s', 
     nftShowcases: '/api/nft_showcases',
