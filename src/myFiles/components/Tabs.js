@@ -35,8 +35,8 @@ function Tabs({ nfts, setFetchNfts }) {
             <Tab.Pane eventKey="collected">
               <div className="row mt-5">
                   {
-                     (nfts && nfts.ownedNfts.length > 0) ? (
-                        nfts.ownedNfts.map((item, index) => (
+                     (nfts && nfts.length > 0) ? (
+                        nfts.map((item, index) => (
                           <WalletNFT setFetchNfts={setFetchNfts} nft={item} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4" />
                         ))
                      ) : (
@@ -58,10 +58,10 @@ function Tabs({ nfts, setFetchNfts }) {
             </Tab.Pane>
             <Tab.Pane eventKey="onsale">
               <div className="row mt-5">
-                <div className="col-12">
+                
                   <OnSaleItem /> 
                   {/* <h3 className='text-center fw-normal'>No items to display</h3> */}
-                </div>
+                
               </div>
             </Tab.Pane>
           </Tab.Content>

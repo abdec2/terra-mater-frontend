@@ -57,16 +57,6 @@ const Profile = function () {
   const handleUploadClose = () => setShowUpload(false);
   const handleUploadShow = () => setShowUpload(true);
 
-
-
-  const updateAvatar = async (id) => {
-    try {
-
-    } catch (e) {
-
-    }
-  }
-
   const createAvatar = async (file) => {
     try {
       const data = new FormData()

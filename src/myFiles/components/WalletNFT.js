@@ -40,21 +40,6 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
         navigate(link);
     }
 
-    const reloadData = async () => {
-        try {
-            const endpoint = process.env.REACT_APP_ALCHEMY_KEY
-            const nfts = await fetch(`${endpoint}/getNFTMetadata?contractAddress=${nftdata.contract.address}&tokenId=${nftdata.id.tokenId}`, {
-                method: 'GET',
-                redirect: 'follow'
-            })
-            const response = await nfts.json();
-            console.log(response)
-            setNftData(response)
-        } catch (e) {
-            console.log(e)
-        }
-    }
-
     const validateForm = () => {
         const input = nftPrice;
         let res = false
@@ -75,9 +60,9 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
         }
         try {
             setLoading(true)
-            console.log(nft.contract.address)
-            const nftContract = new web3.eth.Contract(nftAbi, nft.contract.address)
-            const tokenId = parseInt(nft.id.tokenId, 16);
+            console.log(nft.token_address)
+            const nftContract = new web3.eth.Contract(nftAbi, nft.token_address)
+            const tokenId = nft.token_id;
             const estimateGas = await nftContract.methods.approve(CONFIG.MARKETPLACE_ADDRESS, tokenId).estimateGas({ from: web3Store.account })
             const approve = await nftContract.methods.approve(CONFIG.MARKETPLACE_ADDRESS, tokenId.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString() })
             console.log(approve)
@@ -89,7 +74,7 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
     }
 
     const checkCollectionByContractAddress = async () => {
-        const { data } = await axios.get(`${api.baseUrl + api.collection}?filters[contract_address]=${nft.contract.address}`)
+        const { data } = await axios.get(`${api.baseUrl + api.collection}?filters[contract_address]=${nft.token_address}`)
         return { exist: data.data.length > 0, collection: data.data[0] }
     }
 
@@ -97,12 +82,12 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
         try {
             const {data} = await axios.post(`${api.baseUrl + api.collection}`, {
                 data: {
-                    name: nft.contractMetadata.name,
-                    contract_address: nft.contract.address,
+                    name: nft.name,
+                    contract_address: nft.token_address,
                     chain_id: CONFIG.CHAIN_ID,
                     chain_name: CONFIG.NETWORK,
                     status: 'Active',
-                    desc: nft.contractMetadata.name,
+                    desc: nft.normalized_metadata.description,
                     users_permissions_user: userInfo.id,
                     category: 1
                 }
@@ -118,24 +103,24 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
     }
 
     const checkNftExist = async (nftCollection) => {
-        const tokenId = parseInt(nft.id.tokenId, 16);
+        const tokenId = nft.token_id;
         const { data } = await axios.get(`${api.baseUrl}/api/nft?filters[$and][0][collection]=${nftCollection.id}&filters[$and][1][token_id]=${tokenId}`)
         return { exist: data.data.length > 0, _nft: data.data[0] }
     }
 
     const addNFTRecord = async (nftCollection, itemId) => {
         try {
-            const tokenId = parseInt(nft.id.tokenId, 16);
+            const tokenId = nft.token_id;
             const { data } = axios.post(`${api.baseUrl+api['nft-v1s']}`, {data:{
-                token_name: nft.metadata.name, 
+                token_name: nft.normalized_metadata.name, 
                 owner: web3Store.account,
                 views: 0,
                 price: nftPrice, 
                 likes: 0,
-                description: nft.description, 
+                description: nft.normalized_metadata.description, 
                 token_id: tokenId, 
-                token_standard: nft.contractMetadata.tokenType, 
-                img_url: nft.media[0].gateway,
+                token_standard: nft.contract_type, 
+                img_url: transformImagePath(nft.normalized_metadata.image),
                 item_id: itemId,
                 collection: nftCollection.id,
                 nft_status: 2, 
@@ -209,13 +194,12 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
         }
         try {
             setLoading(true)
-            console.log(nft.contract.address)
+            console.log(nft.token_address)
             const price = web3.utils.toWei(nftPrice.toString(), 'mwei')
             const mpContract = new web3.eth.Contract(marketplaceAbi, CONFIG.MARKETPLACE_ADDRESS)
-            const tokenId = parseInt(nft.id.tokenId, 16);
-            const estimateGas = await mpContract.methods.createMarketItem(nft.contract.address, tokenId, price).estimateGas({from: web3Store.account})
+            const estimateGas = await mpContract.methods.createMarketItem(nft.token_address, nft.token_id, price).estimateGas({from: web3Store.account})
             console.log(estimateGas.toString())
-            const ListTx = await mpContract.methods.createMarketItem(nft.contract.address, tokenId, price).send({from: web3Store.account, gasLimit: estimateGas.toString()})
+            const ListTx = await mpContract.methods.createMarketItem(nft.token_address, nft.token_id, price).send({from: web3Store.account, gasLimit: estimateGas.toString()})
             console.log(ListTx)
             const itemId = ListTx.events.MarketItemCreated.returnValues.itemId
             await makeBackendEntries(itemId)
@@ -234,6 +218,15 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
         await handleListItem()
     }
 
+    const transformImagePath = (imageUrl) => {
+        let url = imageUrl
+        const isIpfs = url.startsWith('ipfs://')
+        if(isIpfs) {
+            url = url.replace('ipfs://', 'https://ipfs.io/ipfs/')
+        }
+        return url
+    }
+
     useEffect(() => {
         setNftData(nft)
     }, [])
@@ -241,20 +234,13 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
     return (
         <>
             {
-                nftdata && (
+                nftdata && nftdata.normalized_metadata.image && (
                     <Card className='m-2' style={{ width: '18rem' }}>
-                        <Card.Img variant="top" src={(nftdata.media[0].gateway !== '') ? nftdata.media[0].gateway : 'https://via.placeholder.com/300x300.png?text=NFT Image'} />
+                        <Card.Img variant="top" src={transformImagePath(nftdata.normalized_metadata.image)} />
                         <Card.Body>
-                            <Card.Title>{nftdata.metadata.name ? nftdata.metadata.name : "Refresh Data"}</Card.Title>
-                            <p className="mb-3" style={{ fontSize: '14px' }}>{nftdata.contractMetadata && nftdata.contractMetadata.name}</p>
-                            {nftdata.metadata.name && (
-                                <button className='btn-custom-card' onClick={() => setOpenCheckout(true)}>List Now</button>
-                            )}
-                            {
-                                !nftdata.metadata.name && (
-                                    <button className='btn-custom-card' onClick={reloadData}>Refresh</button>
-                                )
-                            }
+                            <Card.Title>{nftdata.normalized_metadata.name}</Card.Title>
+                            <p className="mb-3" style={{ fontSize: '14px' }}>{nftdata.name}</p>
+                            <button className='btn-custom-card' onClick={() => setOpenCheckout(true)}>List Now</button>
                         </Card.Body>
                     </Card>
                 )

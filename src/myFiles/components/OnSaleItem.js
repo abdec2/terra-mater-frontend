@@ -87,7 +87,7 @@ const OnSaleItem = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 c
                 nftdata && (
                     (nftdata && nftdata.length > 0) ? (
                         nftdata.map((nft, i) => (
-                            <Card key={i} className='m-2' style={{ width: '18rem' }}>
+                            <Card key={i} className='m-2 card' style={{ width: '18rem' }}>
                                 <Card.Img variant="top" src={(nft.attributes.img_url !== '') ? nft.attributes.img_url : 'https://via.placeholder.com/300x300.png?text=NFT Image'} />
                                 <Card.Body>
                                     <Card.Title>{nft.attributes.token_name}</Card.Title>
