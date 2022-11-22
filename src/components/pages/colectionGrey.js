@@ -248,7 +248,12 @@ const Colection = function () {
         <div className="row mb-4">
           <div className="col-12 col-sm-8 col-md-6">
             <div className="px-2 px-md-5">
-              <p className="">{hotCollections.desc}</p>
+              <p className="">
+                {hotCollections.desc}
+                {hotCollections.detail_link && (
+                  <a className="ms-2 text-primary" href={hotCollections.detail_link} target="_blank">Find out more</a>
+                )}
+              </p>
             </div>
           </div>
         </div>
