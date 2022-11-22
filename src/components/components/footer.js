@@ -25,7 +25,7 @@ const footer= () => (
                                         <span onClick={()=> window.open("", "_self")}><i className="fa fa-rss fa-lg"></i></span>
                                     </div>
                                 </div>
-                                <div className='de-flex-col'>Powered by: <a className='ms-2' href='http://brdigitech.com' target='_blank'>Brdigitech</a></div>
+                                {/* <div className='de-flex-col'>Powered by: <a className='ms-2' href='http://brdigitech.com' target='_blank'>Brdigitech</a></div> */}
                             </div>
                         </div>
                     </div>
