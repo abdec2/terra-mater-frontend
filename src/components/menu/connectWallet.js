@@ -31,7 +31,7 @@ export const connectWallet = async (dispatch) => {
     if (result.data.user) {
         auth.setToken(result.data.jwt, true)
         auth.setUserInfo(result.data.user, true)
-        dispatch(actions.addWeb3({ account, provider, web3 }))
+        dispatch(actions.addWeb3({ account, provider, web3}))
         const network = await web3.eth.getChainId()
         if (network !== CONFIG.CHAIN_ID) {
             switchNetwork(provider)

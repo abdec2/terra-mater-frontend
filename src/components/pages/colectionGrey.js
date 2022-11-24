@@ -12,11 +12,12 @@ import Spinner from 'react-bootstrap/Spinner';
 import NftCard from '../components/NftCard';
 import Form from 'react-bootstrap/Form';
 import StickyBox from "react-sticky-box";
+import { FacebookShareButton, TwitterShareButton } from "react-share";
 
 
 //IMPORT DYNAMIC STYLED COMPONENT
 import { StyledHeader } from '../Styles';
-import { DiscordIcon, EtherscanIcon, TwitterIcon, UsdtIcon, WebsiteIcon } from "../../myFiles/components/Icons";
+import { DiscordIcon, EtherscanIcon, FacebookIcon, TelegramIcon, TwitterIcon, UsdtIcon, WebsiteIcon } from "../../myFiles/components/Icons";
 import TooltipIcon from "../../myFiles/components/TooltipIcon";
 import { Button } from "react-bootstrap";
 import CheckboxFilter from "../components/CheckboxFilter";
@@ -55,7 +56,7 @@ const Colection = function () {
   const hotCollections = collectionState.data ? collectionState.data[0] : {};
   const nftItems =  (filteredNft.data && filteredNft.data.data.length > 0) ? filteredNft.data : collectionNft;
   console.log(filteredNft)
-  console.log(store)
+  console.log('hotCollections', hotCollections)
 
 
   const onImgLoad = ({ target: img }) => {
@@ -147,26 +148,60 @@ const Colection = function () {
             <div className="px-2 px-md-5 d-flex  align-items-start justify-content-between flex-column flex-md-row flex-md-row-reverse">
               <div className="d-flex align-items-center justify-content-center collection-social-icon-parent ms-auto">
                 <div className="d-none d-md-flex social align-items-center justify-content-center mt-4">
-                  <TooltipIcon id='website' tooltipTxt='Website' placement='top' >
-                    <a className="website">
-                      <WebsiteIcon size={20} />
-                    </a>
-                  </TooltipIcon>
-                  <TooltipIcon id='etherscan' tooltipTxt='View on etherscan' placement='top' >
-                    <a className="etherscan">
-                      <EtherscanIcon size={20} />
-                    </a>
-                  </TooltipIcon>
-                  <TooltipIcon id='Discord' tooltipTxt='Discord' placement='top' >
-                    <a className="discord">
-                      <DiscordIcon size={20} />
-                    </a>
-                  </TooltipIcon>
-                  <TooltipIcon id='Twitter' tooltipTxt='Twitter' placement='top' >
-                    <a className="twitter">
-                      <TwitterIcon size={20} />
-                    </a>
-                  </TooltipIcon>
+                  {
+                    hotCollections && hotCollections.website && (
+                      <TooltipIcon id='website' tooltipTxt='Website' placement='top' >
+                        <a className="website" href={hotCollections.website} target="_blank">
+                          <WebsiteIcon size={20} />
+                        </a>
+                      </TooltipIcon>
+                    )
+                  }
+                  {
+                    hotCollections && hotCollections.etherscan && (
+                      <TooltipIcon id='etherscan' tooltipTxt='View on etherscan' placement='top' >
+                        <a className="etherscan" href={hotCollections.etherscan} target="_blank">
+                          <EtherscanIcon size={20} />
+                        </a>
+                      </TooltipIcon>
+                    )
+                  }
+                  {
+                    hotCollections && hotCollections.discord && (
+                      <TooltipIcon id='Discord' tooltipTxt='Discord' placement='top' >
+                        <a className="discord" href={hotCollections.discord} target="_blank">
+                          <DiscordIcon size={20} />
+                        </a>
+                      </TooltipIcon>
+                    )
+                  }
+                  {
+                    hotCollections && hotCollections.twitter && (
+                      <TooltipIcon id='Twitter' tooltipTxt='Twitter' placement='top' >
+                        <a className="twitter" href={hotCollections.twitter} target="_blank">
+                          <TwitterIcon size={20} />
+                        </a>
+                      </TooltipIcon>
+                    )
+                  }
+                  {
+                    hotCollections && hotCollections.facebook && (
+                      <TooltipIcon id='Facebook' tooltipTxt='Facebook' placement='top' >
+                        <a className="facebook" href={hotCollections.facebook} target="_blank">
+                          <FacebookIcon size={20} />
+                        </a>
+                      </TooltipIcon>
+                    )
+                  }
+                  {
+                    hotCollections && hotCollections.telegram && (
+                      <TooltipIcon id='Telegram' tooltipTxt='Telegram' placement='top' >
+                        <a className="telegram" href={hotCollections.telegram} target="_blank">
+                          <TelegramIcon size={20} />
+                        </a>
+                      </TooltipIcon>
+                    )
+                  }
 
                   <div style={{ height: '15px', width: '1px', background: '#ccc' }} className="mx-2"></div>
                 </div>
@@ -178,10 +213,14 @@ const Colection = function () {
                     </Dropdown.Toggle>
                     <Dropdown.Menu variant="dark" className="bg-dark p-2" style={{ border: '1px solid #333' }}>
                       <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <i className="fa fa-fw" aria-hidden="true"></i> Share on facebook
+                        <FacebookShareButton url={document.location.href} >
+                          <i className="fa fa-fw" aria-hidden="true"></i> Share on facebook
+                        </FacebookShareButton>
                       </Dropdown.Item>
                       <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <i className="fa fa-fw" aria-hidden="true" ></i> Share on Twitter
+                        <TwitterShareButton url={document.location.href}>
+                          <i className="fa fa-fw" aria-hidden="true" ></i> Share on Twitter
+                        </TwitterShareButton>
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>

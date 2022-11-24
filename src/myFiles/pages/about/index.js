@@ -96,31 +96,31 @@ const Profile = function () {
 
         <div className="row px-2 px-md-5 mt-5 align-item-center justify-content-center">
           <div className="col-lg-4 mb30">
-            <span className="box-url" style={{minHeight: '160px'}}>
+            <span className="box-url" style={{ minHeight: '160px' }}>
               <h4>1. Stake & Earn</h4>
               <p>Staking to obtain cryptos</p>
             </span>
           </div>
           <div className="col-lg-4 mb30">
-            <span className="box-url" style={{minHeight: '160px'}}>
+            <span className="box-url" style={{ minHeight: '160px' }}>
               <h4>2. Pass to PLETHORA</h4>
               <p>Pass to PLETHORA of exclusive services and events.</p>
             </span>
           </div>
           <div className="col-lg-4 mb30">
-            <span className="box-url" style={{minHeight: '160px'}}>
+            <span className="box-url" style={{ minHeight: '160px' }}>
               <h4>3. Fees Distribution</h4>
               <p>Exchange fees distribution to NFT holders through smart contract.</p>
             </span>
           </div>
           <div className="col-lg-4 mb30">
-            <span className="box-url" style={{minHeight: '184px'}}>
+            <span className="box-url" style={{ minHeight: '184px' }}>
               <h4>4. Governance</h4>
               <p>NFT holders governance through votes in blockchain</p>
             </span>
           </div>
           <div className="col-lg-4 mb30">
-            <span className="box-url" style={{minHeight: '184px'}}>
+            <span className="box-url" style={{ minHeight: '184px' }}>
               <h4>5. Treasury Bonus</h4>
               <p>Treasury bonus distributed to NFT holders through smart contract</p>
             </span>
@@ -155,63 +155,31 @@ const Profile = function () {
           </div>
         </div>
 
-        <div className="row px-2 px-md-5 mt-5">
+        <div className="row px-2 px-md-5 mt-2">
           <div className="col-12">
-            <h2 className="fw-bold text-uppercase">NFTs Adoption</h2>
-            <h6 className="fw-normal fs-4">Each project will be tokenized thanks to NFTs and everyone can be a participant like never before.</h6>
-            <p className="mt-4">
-              A Non-Fungible Token (NFT) is a special type of cryptographic token that represents the deed of ownership and the certificate of authenticity registered on the blockchain of a unique asset of its kind, be it digital or physical; the non-fungible tokens are therefore not mutually interchangeable. On the contrary, cryptocurrencies such as Bitcoin and many other tokens, as well as FIAT coins (USD, EUR, GBP ...) which are fungible, can exist in multiple copies exactly identical and interchangeable, and of which it is therefore not possible to uniquely define the identity of the single token that differentiates it from all others of the same type.
+            <p className="mt-3">
+              TERRAMATER conceive NFTs in a much broader and more organic way than how NFTs are commonly used; this allows to provide NFTs with many use cases and to really make the most of them.
+              <a href="https://harmonious-paradise.gitbook.io/harmonious-paradise-project/nfts-projects/nfts-adoption" className="ms-2 text-primary" target="_blank">find out more</a>
             </p>
-
-            <p className="mt-3 fw-bold">
-              We conceive NFTs in a much broader and more organic way than how they are commonly used; this allows us to provide them with many use cases and to really make the most of them to achieve our Mission; in fact, each of our projects is represented by an NFT collection consisting of a finite number of NFTs with multiple and particular characteristics:
-            </p>
-
-            <ul>
-              <li>A NEW KIND OF OWNERSHIP AND PARTECIPATION</li>
-              <li>A NEW KIND OF SHARE</li>
-              <li>A NEW KIND OF REWARDS</li>
-              <li>A NEW KIND OF STAKING </li>
-              <li>A NEW KIND OF MINING</li>
-              <li>A NEW WAY OF VOTING</li>
-              <li>A NEW KIND OF PASSPARTOUT</li>
-              <li>A NEW KIND OF FRANCHISING</li>
-            </ul>
-
-            <p className="mt-3 fw-bold">
-              The technological world offers unlimited possibilities of expression and with the right research and development and the new philosophies that we conceive over time, our NFTs continuously acquire new use cases. The limit tends to infinity.
-            </p>
-
           </div>
         </div>
 
-        <div className="row px-2 px-md-5">
+        <div className="row px-2 px-md-5 mt-2">
           <div className="col-12">
-            <p>TerraMater was born with the intention of listing NFTs collections related to serious, lasting, incisive projects in various contexts and useful for achieving the good for the people.
-              NFTs collections can be created, incubated and launched thanks to TerraMater, capable of offering a fertile place for all those projects that want to exist and do good, and that require a team of technical developers, analysts and expert advisors of complex systems, as well as an audience of members ready to finance them.</p>
+            <p className="mt-3">
+              TerraMater was born with the intention of listing NFTs collections related to serious, lasting,
+              incisive projects in various contexts and useful for achieving the good for the people.NFTs collections can be created, incubated and launched thanks to TerraMater, capable of
+              offering a fertile place for all those projects that want to exist and do good, and that require a team of technical developers, analysts and expert advisors of complex systems, as well as an audience of members ready to finance them.
+              <a href="https://harmonious-paradise.gitbook.io/harmonious-paradise-project/nfts-projects/nfts-collection-terramater/terramater-platform" className="ms-2 text-primary" target="_blank">find out more</a>
+            </p>
           </div>
         </div>
 
-        <div className="row px-2 px-md-5 mt-5">
+        <div className="row px-2 px-md-5 mt-2">
           <div className="col-12">
-            <h2 className="fw-bold text-uppercase">TERRAMATER Platform</h2>
-            <h6 className="fw-normal fs-4">Solution: NFT MARKETPLACE & INCUBATOR PLATFORM</h6>
-            <p className="mt-4">
-              TerraMater was born with the intention of listing collections related to serious, lasting, incisive projects in various contexts and useful for achieving the mission of the Harmonious Paradise community. These are obviously community projects, such as the AntiAgeingCenter collection and the collection of TerraMater itself which are the first two to be listed. All the other collections will follow in the future.
-            </p>
-
             <p className="mt-3">
-              There is also space for external collections, or those that the Governance will deem up to be listed, and that can be created, incubated and launched thanks to TerraMater, capable of offering a fertile place for all those projects that want to exist and make the difference, and because of this reason they require a team of technical developers, analysts and advisors who are experts in complex systems, as well as an audience of members ready to finance them with the due returns and benefits.
-            </p>
-
-            <p className="mt-3">
-              The meticulous choice of projects makes it literally impossible that these are scams. By doing so, the platform also becomes a certifying entity in the world of blockchain, especially in the field of NFTs.
-            </p>
-
-            <p className="mt-3">
-              The TERRAMATER NTFs make the holders co-creators, co-participants, entitled to rewards,
-              economic benefits from TERRAMATER platform, and guarantee exclusive access to many
-              products and services.
+              The TERRAMATER NTFs make the holders co-creators, co-participants, entitled to rewards, economic benefits from TERRAMATER platform, and guarantee exclusive access to many products and services.
+              <a href="https://harmonious-paradise.gitbook.io/harmonious-paradise-project/nfts-projects/nfts-collection-terramater/characteristics-and-functionality" className="ms-2 text-primary" target="_blank">find out more</a>
             </p>
           </div>
         </div>

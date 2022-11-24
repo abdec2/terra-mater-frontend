@@ -62,6 +62,7 @@ const Index = () => {
     const handleLogout = () => {
         auth.clearAppStorage();
         dispatch(actions.delWeb3())
+        setIsLogin(false)
         navigate('/')
     }
 
