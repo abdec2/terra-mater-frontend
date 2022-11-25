@@ -45,7 +45,7 @@ const Colection = function () {
   const [page, setPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0)
   const [height, setHeight] = useState(0);
-  const [selStatus, setSelStatus]= useState([])
+  const [selStatus, setSelStatus] = useState([])
   const searchTxt = useRef(null)
   const { collectionId } = useParams();
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ const Colection = function () {
   const collectionNft = useSelector(selectors.collectionNft);
   const filteredNft = useSelector(state => state.filters.selectedStatus);
   const hotCollections = collectionState.data ? collectionState.data[0] : {};
-  const nftItems =  (filteredNft.data && filteredNft.data.data.length > 0) ? filteredNft.data : collectionNft;
+  const nftItems = (filteredNft.data && filteredNft.data.data.length > 0) ? filteredNft.data : collectionNft;
   console.log(filteredNft)
   console.log('hotCollections', hotCollections)
 
@@ -66,10 +66,10 @@ const Colection = function () {
     }
   }
 
-  const kFormatter = (num) =>  {
-    return Math.abs(num) > 999 ? Math.sign(num)*((Math.abs(num)/1000).toFixed(2)) + 'k' : Math.sign(num)*Math.abs(num)
+  const kFormatter = (num) => {
+    return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(2)) + 'k' : Math.sign(num) * Math.abs(num)
   }
-  
+
   const loadMore = useCallback(() => {
     console.log(page)
     dispatch(fetchCollectionNfts(page, collectionId, selStatus));
@@ -89,8 +89,8 @@ const Colection = function () {
     const pDate = new Date(date)
     let month = pDate.toDateString()
     month = month.split(" ")
-    return month[1]+" "+month[3]
-  } 
+    return month[1] + " " + month[3]
+  }
 
   const getNFTCount = async () => {
     const res = await axios.get(`${api.baseUrl}/api/nft?filters[collection]=${collectionId}`)
@@ -105,16 +105,16 @@ const Colection = function () {
     }
   }, [dispatch, collectionId]);
 
-  useEffect(()=> {
+  useEffect(() => {
     dispatch(clearCollectionNfts())
     dispatch(clearFilter())
     getNFTCount()
   }, [])
 
-  useEffect(()=> {
+  useEffect(() => {
     if (selStatus.length === 0) {
       dispatch(clearFilter())
-      if(!filteredNft.data) {
+      if (!filteredNft.data) {
         loadMore()
       }
     } else {
@@ -122,7 +122,7 @@ const Colection = function () {
     }
   }, [page])
 
-  useEffect(()=> {
+  useEffect(() => {
     if (selStatus.length === 0) {
       dispatch(clearFilter())
     } else {
@@ -232,38 +232,78 @@ const Colection = function () {
                       <i className="fa fa-fw text-white" aria-hidden="true"></i>
                     </Dropdown.Toggle>
                     <Dropdown.Menu variant="dark" className="bg-dark p-2" style={{ border: '1px solid #333' }}>
-                      <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <TooltipIcon id='website' tooltipTxt='Website' placement='top' >
-                          <a className="website">
-                            <WebsiteIcon size={20} />
-                            <span className="ms-2">Website</span>
-                          </a>
-                        </TooltipIcon>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <TooltipIcon id='etherscan' tooltipTxt='View on etherscan' placement='top' >
-                          <a className="etherscan">
-                            <EtherscanIcon size={20} />
-                            <span className="ms-2">View on Etherscan</span>
-                          </a>
-                        </TooltipIcon>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <TooltipIcon id='Discord' tooltipTxt='Discord' placement='top' >
-                          <a className="discord">
-                            <DiscordIcon size={20} />
-                            <span className="ms-2">Discord</span>
-                          </a>
-                        </TooltipIcon>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <TooltipIcon id='Twitter' tooltipTxt='Twitter' placement='top' >
-                          <a className="twitter">
-                            <TwitterIcon size={20} />
-                            <span className="ms-2">Twitter</span>
-                          </a>
-                        </TooltipIcon>
-                      </Dropdown.Item>
+                      {
+                        hotCollections && hotCollections.website && (
+                          <Dropdown.Item className="p-2 fw-normal text-white share-dd-item" href={hotCollections.website} target="_blank">
+                            <TooltipIcon id='website' tooltipTxt='Website' placement='top' >
+                              <>
+                                <WebsiteIcon size={20} />
+                                <span className="ms-2">Website</span>
+                              </>
+                            </TooltipIcon>
+                          </Dropdown.Item>
+                        )
+                      }
+                      {
+                        hotCollections && hotCollections.etherscan && (
+                          <Dropdown.Item className="p-2 fw-normal text-white share-dd-item" href={hotCollections.etherscan} target="_blank">
+                            <TooltipIcon id='etherscan' tooltipTxt='View on etherscan' placement='top' >
+                              <>
+                                <EtherscanIcon size={20} />
+                                <span className="ms-2">View on Etherscan</span>
+                              </>
+                            </TooltipIcon>
+                          </Dropdown.Item>
+                        )
+                      }
+                      {
+                        hotCollections && hotCollections.discord && (
+                          <Dropdown.Item className="p-2 fw-normal text-white share-dd-item" href={hotCollections.discord} target="_blank">
+                            <TooltipIcon id='Discord' tooltipTxt='Discord' placement='top' >
+                              <>
+                                <DiscordIcon size={20} />
+                                <span className="ms-2">Discord</span>
+                              </>
+                            </TooltipIcon>
+                          </Dropdown.Item>
+                        )
+                      }
+                      {
+                        hotCollections && hotCollections.twitter && (
+                          <Dropdown.Item className="p-2 fw-normal text-white share-dd-item" href={hotCollections.twitter} target="_blank">
+                            <TooltipIcon id='Twitter' tooltipTxt='Twitter' placement='top' >
+                              <>
+                                <TwitterIcon size={20} />
+                                <span className="ms-2">Twitter</span>
+                              </>
+                            </TooltipIcon>
+                          </Dropdown.Item>
+                        )
+                      }
+                      {
+                        hotCollections && hotCollections.facebook && (
+                          <Dropdown.Item className="p-2 fw-normal text-white share-dd-item" href={hotCollections.facebook} target="_blank">
+                            <TooltipIcon id='facebook' tooltipTxt='facebook' placement='top' >
+                              <>
+                                <FacebookIcon size={20} />
+                                <span className="ms-2">Twitter</span>
+                              </>
+                            </TooltipIcon>
+                          </Dropdown.Item>
+                        )
+                      }
+                      {
+                        hotCollections && hotCollections.telegram && (
+                          <Dropdown.Item className="p-2 fw-normal text-white share-dd-item" href={hotCollections.telegram} target="_blank">
+                            <TooltipIcon id='telegram' tooltipTxt='telegram' placement='top' >
+                              <>
+                                <TelegramIcon size={20} />
+                                <span className="ms-2">Twitter</span>
+                              </>
+                            </TooltipIcon>
+                          </Dropdown.Item>
+                        )
+                      }
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>
@@ -278,7 +318,7 @@ const Colection = function () {
             </div>
           </div>
         </div>
-        <div className="d-flex mb-3 px-2 px-md-5 gap-4"> 
+        <div className="d-flex mb-3 px-2 px-md-5 gap-4">
           <div>Items <span className="fw-bold">{kFormatter(totalItems)}</span></div>
           <div>Created <span className="fw-bold">{dateFormator(hotCollections.publishedAt)}</span></div>
           <div>Creator Fee <span className="fw-bold">7%</span></div>

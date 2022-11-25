@@ -15,7 +15,7 @@ const useFetchNFT = (account, fetchNFTs, setFetchNFTs) => {
                 const options = {
                     method: 'GET',
                     url: `https://deep-index.moralis.io/api/v2/${account}/nft`,
-                    params: {chain: 'goerli', format: 'decimal', normalizeMetadata: 'true'},
+                    params: {chain: 'polygon', format: 'decimal', normalizeMetadata: 'true'},
                     headers: {accept: 'application/json', 'X-API-Key': process.env.REACT_APP_MORALIS_API_KEY}
                   };
                 

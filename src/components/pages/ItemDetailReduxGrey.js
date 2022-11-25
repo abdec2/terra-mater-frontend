@@ -193,11 +193,13 @@ const ItemDetailRedux = () => {
     }
 
     const isOwner = (address) => {
-        return userInfo.address === address
+        console.log('address', address)
+        console.log('userInfo.address', userInfo.address)
+        return userInfo.address.toLowerCase() === address?.toLowerCase()
     }
 
     const formatOwner = (address) => {
-        if (isOwner) {
+        if (isOwner()) {
             return 'You'
         }
 
