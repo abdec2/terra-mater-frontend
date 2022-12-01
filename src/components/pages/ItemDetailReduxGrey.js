@@ -14,6 +14,7 @@ import nftAbi from './../../config/NftAbi.json'
 import { useNavigate } from 'react-router-dom';
 
 import { useParams } from "react-router-dom";
+import { reconnectWallet } from "../menu/connectWallet";
 
 //IMPORT DYNAMIC STYLED COMPONENT
 import { StyledHeader } from '../Styles';
@@ -80,6 +81,13 @@ const ItemDetailRedux = () => {
     const [openCheckout, setOpenCheckout] = React.useState(false);
     const [openCheckoutbid, setOpenCheckoutbid] = React.useState(false);
 
+    const handleOpenCheckout = async () => {
+        if (!web3Store.account) {
+            await reconnectWallet(dispatch)
+        }
+        setOpenCheckout(true)
+    }
+
     const approveNFTContractForUSDT = async () => {
         try {
             console.log('asdasd')
@@ -110,8 +118,7 @@ const ItemDetailRedux = () => {
     const handleApprove = async () => {
         try {
             if (!web3Store.account) {
-                alert('connect wallet')
-                return
+                await reconnectWallet(dispatch)
             }
             setLoading(true)
 
@@ -167,8 +174,7 @@ const ItemDetailRedux = () => {
     const handleTransaction = async () => {
         try {
             if (!web3Store.account) {
-                alert('connect wallet')
-                return
+                await reconnectWallet(dispatch)
             }
             if (nft.nft_status.Status.toLowerCase() === "mint") {
                 handleMint()
@@ -194,8 +200,10 @@ const ItemDetailRedux = () => {
 
     const isOwner = (address) => {
         console.log('address', address)
-        console.log('userInfo.address', userInfo.address)
-        return userInfo.address.toLowerCase() === address?.toLowerCase()
+        if(userInfo) {
+            return userInfo.address.toLowerCase() === address?.toLowerCase()
+        }
+        return false
     }
 
     const formatOwner = (address) => {
@@ -330,13 +338,13 @@ const ItemDetailRedux = () => {
                                 <div className="d-flex flex-row">
                                     {
                                         nft.nft_status && nft.nft_status.Status === 'Mint' && (
-                                            <button className='btn-main lead  mr15' onClick={() => setOpenCheckout(true)}>Mint</button>
+                                            <button className='btn-main lead  mr15' onClick={handleOpenCheckout}>Mint</button>
                                         )
 
                                     }
                                     {
                                         nft.nft_status && nft.nft_status.Status === 'Buy Now' && (
-                                            <button className='btn-main lead  mr15' onClick={() => setOpenCheckout(true)}>Buy Now</button>
+                                            <button className='btn-main lead  mr15' onClick={handleOpenCheckout}>Buy Now</button>
                                         )
                                     }
 

@@ -52,7 +52,8 @@ import Createoption from './pages/createOptions';
 // import Activity from './pages/activity';
 // import Activitygrey from './pages/activityGrey';
 // import Contact from './pages/contact';
-// import Contactgrey from './pages/contactGrey';
+import ContactUS from './pages/contactus';
+import Contactgrey from './pages/contactGrey';
 import ElegantIcons from './pages/elegantIcons';
 import EtlineIcons from './pages/etlineIcons';
 import FontAwesomeIcons from './pages/fontAwesomeIcons';
@@ -68,6 +69,7 @@ import CreateNft from './pages/Create/index.js';
 import About from './../myFiles/pages/about';
 
 import { createGlobalStyle } from 'styled-components';
+import WorkWithUs from './pages/workWithUs';
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -127,8 +129,10 @@ const app= () => (
       <Route element={<Createoption />} path="/createOptions" />
       {/* <Route element={<Activity />} path="/activity" />
       <Route element={<Activitygrey />} path="/activityGrey" />
-      <Route element={<Contact />} path="/contact" />
-      <Route element={<Contactgrey />} path="/contactGrey" /> */}
+      <Route element={<Contact />} path="/contact" /> */}
+      <Route element={<WorkWithUs />} path="/work" />
+      <Route element={<ContactUS />} path="/contactus" />
+      <Route element={<Contactgrey />} path="/haveproject" /> 
       <Route element={<About />} path="/about" />
       <Route element={<ElegantIcons />} path="/elegantIcons" />
       <Route element={<EtlineIcons />} path="/etlineIcons" />

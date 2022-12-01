@@ -12,6 +12,7 @@ import marketplaceAbi from './../../config/Marketplace.json'
 import auth from '../../core/auth';
 import axios from 'axios';
 import api from '../../core/api';
+import { reconnectWallet } from '../../components/menu/connectWallet';
 
 
 
@@ -39,6 +40,7 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
     const navigateTo = (link) => {
         navigate(link);
     }
+
 
     const validateForm = () => {
         const input = nftPrice;
@@ -214,6 +216,9 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
     }
 
     const makeTransaction = async () => {
+        if (!web3Store.account) {
+            await reconnectWallet(dispatch)
+        }
         await handleApprove()
         await handleListItem()
     }

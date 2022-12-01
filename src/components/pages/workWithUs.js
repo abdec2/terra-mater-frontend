@@ -2,11 +2,10 @@ import React from 'react';
 import emailjs from 'emailjs-com';
 import Footer from '../components/footer';
 import { createGlobalStyle } from 'styled-components';
-import { useState } from 'react';
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import axios from 'axios';
-import api from '../../core/api';
 import { CONFIG } from '../../config/config';
+import api from '../../core/api';
 import { Spinner } from 'react-bootstrap';
 
 const GlobalStyles = createGlobalStyle`
@@ -92,8 +91,12 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-const Contact= function() {
+const WorkWithUs = function () {
   const [loading, setLoading] = useState(false)
+  const name = useRef()
+  const surname = useRef()
+  const position = useRef()
+  const msg = useRef()
 
   function sendEmail(e) {
     setLoading(true)
@@ -102,10 +105,16 @@ const Contact= function() {
     const failed = document.getElementById("failed");
     e.preventDefault();
 
-    const form = new FormData(e.target)
-    form.append('to', CONFIG.CONTACT_EMAIL)
-
-    axios.post(`${api.baseUrl}/api/email-attachment`, form).then(res => {
+    axios.post(`${api.baseUrl}/api/email`, {
+      to: CONFIG.CONTACT_EMAIL,
+      subject: "Work With Us Form",
+      html: `
+      <p>Name: ${name.current.value}</p>
+      <p>Surname: ${surname.current.value}</p>
+      <p>Asking Position: ${position.current.value}</p>
+      <p>Note: ${msg.current.value}</p>
+      `
+    }).then(res => {
       success.classList.add('show');
       button.classList.add('show');
       failed.classList.remove('show');
@@ -115,44 +124,42 @@ const Contact= function() {
       console.log(e)
       setLoading(false)
     })
-   
+
   }
 
   return (
-  <div className="greyscheme">
-  <GlobalStyles />
+    <div className="greyscheme">
+      <GlobalStyles />
 
-  <section className='jumbotron breadcumb no-bg' style={{ background: 'url("./img/background/6.jpg")' }}>
-    <div className='mainbreadcumb'>
-      <div className='container'>
-        <div className='row'>
-          <div className="col-md-12 text-center">
-              <h1>DO YOU HAVE A PROJECT? TELL US!</h1>
+      <section className='jumbotron breadcumb no-bg' style={{ background: 'url("./img/background/6.jpg")' }}>
+        <div className='mainbreadcumb'>
+          <div className='container'>
+            <div className='row'>
+              <div className="col-md-12 text-center">
+                <h1>WORK WITH US</h1>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
       <section className='container'>
         <div className='row'>
           <div className='col-lg-8 offset-lg-2 mb-3'>
-          {/* <h3>Do you have any question?</h3> */}
+            {/* <h3>Do you have any question?</h3> */}
             <div className='mb-5'>
               <p>
-                FIND OUT MORE ABOUT OUR HARMONIOUS PARADISE 
+                FIND OUT MORE ABOUT OUR HARMONIOUS PARADISE
                 <a href='https://harmonious-paradise.gitbook.io/harmonious-paradise-project/' target="_blank" > here </a>
                 and WORK WITH US
               </p>
             </div>
             <div className="form-side">
               <form className="formcontact" onSubmit={sendEmail}>
-                <input disabled={loading} type="text" className="form-control" name="name" placeholder="Name" required />
-                <input disabled={loading} type="text" className="form-control" name="surname" placeholder="Surname" required />
-                <textarea disabled={loading} name="desc" className="form-control" placeholder="Short description about project" required />
-                
-                <input disabled={loading} type="text" className="form-control" name="ref_link" placeholder="Reference link" />
-                <input disabled={loading} type="file" className='form-control' name="attachment" id="attachment" />
+                <input ref={name} disabled={loading} type="text" className="form-control" name="name" placeholder="Name" required />
+                <input ref={surname} disabled={loading} type="text" className="form-control" name="surname" placeholder="Surname" required />
+                <input ref={position} disabled={loading} type="text" className="form-control" name="position" placeholder="Asking Position" required />
+                <textarea ref={msg} disabled={loading} name="note" className="form-control" placeholder="Note" required />
                 <div id='success' className='hide'>Your message has been sent...</div>
                 <div id='failed' className='hide'>Message failed...</div>
                 {
@@ -205,4 +212,4 @@ const Contact= function() {
     </div>
   );
 }
-export default Contact;
+export default WorkWithUs;

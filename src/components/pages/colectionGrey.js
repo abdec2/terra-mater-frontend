@@ -54,7 +54,7 @@ const Colection = function () {
   const collectionNft = useSelector(selectors.collectionNft);
   const filteredNft = useSelector(state => state.filters.selectedStatus);
   const hotCollections = collectionState.data ? collectionState.data[0] : {};
-  const nftItems = (filteredNft.data && filteredNft.data.data.length > 0) ? filteredNft.data : collectionNft;
+  const nftItems = (filteredNft.data && selStatus.length > 0) ? filteredNft.data : collectionNft;
   console.log(filteredNft)
   console.log('hotCollections', hotCollections)
 

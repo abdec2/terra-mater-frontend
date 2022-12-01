@@ -61,3 +61,19 @@ export const switchNetwork = async (provider) => {
 
     }
 }
+
+export const reconnectWallet = async (dispatch) => {
+    const web3Modal = new Web3Modal({
+        providerOptions // required
+    });
+
+    const provider = await web3Modal.connect();
+    const web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+    const account = accounts[0];
+    const network = await web3.eth.getChainId()
+    if(network !== CONFIG.CHAIN_ID) {
+        switchNetwork(provider)
+    }
+    dispatch(actions.addWeb3({ account, provider, web3 }))
+}

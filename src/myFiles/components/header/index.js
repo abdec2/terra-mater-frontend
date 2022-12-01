@@ -66,25 +66,25 @@ const Index = () => {
         navigate('/')
     }
 
-    const addLoginState = async (account) => {
-        const web3Modal = new Web3Modal({
-            providerOptions // required
-        });
+    // const addLoginState = async (account) => {
+    //     const web3Modal = new Web3Modal({
+    //         providerOptions // required
+    //     });
 
-        const provider = await web3Modal.connect();
+    //     const provider = await web3Modal.connect();
 
-        const web3 = new Web3(provider);
-        const network = await web3.eth.getChainId()
-        if(network !== CONFIG.CHAIN_ID) {
-            switchNetwork(provider)
-        }
-        dispatch(actions.addWeb3({ account, provider, web3 }))
-    }
+    //     const web3 = new Web3(provider);
+    //     const network = await web3.eth.getChainId()
+    //     if(network !== CONFIG.CHAIN_ID) {
+    //         switchNetwork(provider)
+    //     }
+    //     dispatch(actions.addWeb3({ account, provider, web3 }))
+    // }
 
     useEffect(() => {
         if (userData && userData.address) {
             setIsLogin(true)
-            addLoginState(userData.address)
+            //addLoginState(userData.address)
         } else {
             setIsLogin(false)
         }
@@ -150,9 +150,9 @@ const Index = () => {
                                 <option value="1">Italiano</option>
                             </Form.Control>
                         </div>
-                        <div className='mb-4 mb-lg-0'>
+                        {/* <div className='mb-4 mb-lg-0'>
                             <Search />
-                        </div>
+                        </div> */}
                     </Nav>
                 </Navbar.Collapse>
             </Container>

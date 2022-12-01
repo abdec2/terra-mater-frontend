@@ -6,7 +6,7 @@ export const providerOptions = {
       package: WalletConnectProvider, // required
       options: {
         rpc: {
-          5: process.env.REACT_APP_ALCHEMY_KEY
+          137: process.env.REACT_APP_ALCHEMY_KEY
         }
       }
     }
@@ -17,5 +17,6 @@ export const CONFIG = {
   MARKETPLACE_ADDRESS: '0xaBfB6a3D21eB1ad803CC706BF2Fe955Ff5520E73',
   CHAIN_ID: 137, 
   NETWORK: 'Polygon Mainnet',
-  BLOCKCHAIN_EXPLORER: 'https://polygonscan.com/'
+  BLOCKCHAIN_EXPLORER: 'https://polygonscan.com/', 
+  CONTACT_EMAIL: 'info@terramaternfts.com'
 }
