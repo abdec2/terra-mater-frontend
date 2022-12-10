@@ -118,6 +118,7 @@ const Index = () => {
                     <Nav className="align-items-center w-100 justify-content-between m-auto ">
                         <NavLink className='p-3 p-lg-0 nav-link fw-normal' to="/explore">Collections</NavLink>
                         <NavLink className='p-3 p-lg-0 nav-link fw-normal' to="/about">About</NavLink>
+                        <NavLink className='p-3 p-lg-0 nav-link fw-normal' to="/nft-staking">NFT Staking</NavLink>
                         {
                             !islogin && (
                                 <Nav.Link className='p-3 p-lg-0 fw-normal' onClick={() => connectWallet(dispatch)}>Connect Wallet</Nav.Link>

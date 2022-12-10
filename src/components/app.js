@@ -67,6 +67,7 @@ import auth from '../core/auth';
 import Profile from '../myFiles/pages/profile';
 import CreateNft from './pages/Create/index.js';
 import About from './../myFiles/pages/about';
+import StakingNft from '../myFiles/pages/stakingNFT';
 
 import { createGlobalStyle } from 'styled-components';
 import WorkWithUs from './pages/workWithUs';
@@ -109,6 +110,14 @@ const app= () => (
             <ProtectedRoute>
               <Profile />
             </ProtectedRoute>
+          } 
+        />
+      </Route>
+      <Route path="/nft-staking">
+        <Route 
+          path="/nft-staking" 
+          element={
+              <StakingNft />
           } 
         />
       </Route>

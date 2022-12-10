@@ -1,0 +1,277 @@
+.containerMain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.container_box_btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 2%;
+}
+.onStep {
+  margin-top: 10%;
+}
+.containerMain h1 {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: rgba(123, 123, 123, 0.976);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.containerMain p {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: white;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.container_box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.ContainerStakedMain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 55rem;
+  height: 35rem;
+}
+
+.walletBtn {
+  background-color: #ff343f;
+  border: none;
+  color: white;
+  padding: 1rem 2rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.2rem;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 3rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.walletBtn:hover {
+  box-shadow: 2px 2px 20px 0px #ff343f;
+  transition: 0.3s;
+}
+.containerOptions {
+  display: flex;
+  gap: 1rem;
+}
+
+.containerOptions h1 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(123, 123, 123, 0.976);
+  margin-bottom: 1rem;
+  text-align: center;
+  text-decoration: underline;
+  line-height: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.containerOptions h1:hover {
+  color: #ff343f;
+  transition: 0.3s;
+}
+.containerOptionsParent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  margin-top: 1rem;
+}
+.containerStaked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+
+  position: relative;
+
+  padding: 1rem;
+  overflow-y: scroll;
+}
+.containerStaked::-webkit-scrollbar {
+  width: 0.5rem;
+}
+.containerStaked::-webkit-scrollbar-thumb {
+  background-color: rgb(163, 154, 154);
+  border-radius: 12px;
+  display: none;
+}
+
+.stakingCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 10rem;
+  width: 30rem;
+}
+.stakingCardImg {
+  object-fit: cover;
+  text-align: center;
+  height: 100%;
+  /* width: 30rem; */
+  cursor: pointer;
+}
+.InnerCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ff343f5a;
+}
+.stakingCardImg:active {
+  transform: scale(0.9);
+  transition: 0.3s;
+}
+.stakingCardImg img {
+  width: 90px;
+  height: 90px;
+  border: rgba(123, 123, 123, 0.976);
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+}
+/* .stakingCardImgselected img {
+  object-fit: cover;
+  text-align: center;
+  height: 130px;
+  width: 130px;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  margin-top: 2rem;
+  transition: 0.3s;
+} */
+.footer {
+  margin-top: 10%;
+}
+.stakingCardText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  gap: 2rem;
+}
+.stakingCardText h1 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(123, 123, 123, 0.976);
+  margin-bottom: 1rem;
+  text-align: center;
+  line-height: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.cnfrmStake {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 5rem;
+}
+.cnfrmStake button {
+  background-color: #ff343f;
+  border: none;
+  color: white;
+  padding: 1rem 2rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.2rem;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 3rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.cnfrmStake button:hover {
+  box-shadow: 2px 2px 20px 0px #ff343f;
+  background-color: #ff343f;
+  transition: 0.3s;
+}
+.checkBox {
+  background-color: transparent;
+  border: 1px solid rgb(163, 154, 154);
+  box-shadow: 2px 2px 20px 0px #ff343f;
+  cursor: pointer;
+  color: #ff343f;
+  margin-top: 2rem;
+}
+.form-check-input {
+  border-radius: 0.2rem;
+  height: 1.3rem;
+  width: 1.3rem;
+}
+.checkBox:hover {
+  background-color: #ff343f;
+  color: white;
+  transition: 0.3s;
+}
+.form-check-input:checked {
+  background-color: #ff343f;
+  border-color: #ff343f;
+  box-shadow: 2px 2px 20px 0px #ff343f;
+}
+.cnfrmStake hr {
+  width: 20rem;
+  height: 2px;
+  background-color: #ff343f;
+  border: none;
+}
+.txt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  padding-top: 4rem;
+  font-size: 1rem;
+}
+.txt h3 {
+  font-size: 1rem;
+}
+.txt p {
+  font-size: 1rem;
+}
+
+@media only screen and (max-width: 35em) {
+  .cnfrmStake hr {
+    width: 5rem;
+    height: 1px;
+    background-color: #ff343f;
+    border: none;
+  }
+  .ContainerStakedMain {
+    width: 95%;
+    height: 95%;
+  }
+  .stakingCard {
+    width: 100%;
+    height: 100%;
+  }
+}
