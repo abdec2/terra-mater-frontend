@@ -149,6 +149,8 @@ const Contact= function() {
               <form className="formcontact" onSubmit={sendEmail}>
                 <input disabled={loading} type="text" className="form-control" name="name" placeholder="Name" required />
                 <input disabled={loading} type="text" className="form-control" name="surname" placeholder="Surname" required />
+                <input disabled={loading} type="email" className="form-control" name="email" placeholder="Email" required />
+                <input disabled={loading} type="text" className="form-control" name="phone" placeholder="Phone" required />
                 <textarea disabled={loading} name="desc" className="form-control" placeholder="Short description about project" required />
                 
                 <input disabled={loading} type="text" className="form-control" name="ref_link" placeholder="Reference link" />

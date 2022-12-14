@@ -17,13 +17,13 @@ const footer= () => (
                                     </span>
                                 </div>
                                 <div className="de-flex-col">
-                                    <div className="social-icons">
+                                    {/* <div className="social-icons">
                                         <span onClick={()=> window.open("", "_self")}><i className="fa fa-facebook fa-lg"></i></span>
                                         <span onClick={()=> window.open("", "_self")}><i className="fa fa-twitter fa-lg"></i></span>
                                         <span onClick={()=> window.open("", "_self")}><i className="fa fa-linkedin fa-lg"></i></span>
                                         <span onClick={()=> window.open("", "_self")}><i className="fa fa-pinterest fa-lg"></i></span>
                                         <span onClick={()=> window.open("", "_self")}><i className="fa fa-rss fa-lg"></i></span>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 {/* <div className='de-flex-col'>Powered by: <a className='ms-2' href='http://brdigitech.com' target='_blank'>Brdigitech</a></div> */}
                             </div>

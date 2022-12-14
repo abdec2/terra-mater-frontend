@@ -95,6 +95,8 @@ const WorkWithUs = function () {
   const [loading, setLoading] = useState(false)
   const name = useRef()
   const surname = useRef()
+  const email = useRef()
+  const phone = useRef()
   const position = useRef()
   const msg = useRef()
 
@@ -111,6 +113,8 @@ const WorkWithUs = function () {
       html: `
       <p>Name: ${name.current.value}</p>
       <p>Surname: ${surname.current.value}</p>
+      <p>Email: ${email.current.value}</p>
+      <p>Phone: ${phone.current.value}</p>
       <p>Asking Position: ${position.current.value}</p>
       <p>Note: ${msg.current.value}</p>
       `
@@ -158,6 +162,8 @@ const WorkWithUs = function () {
               <form className="formcontact" onSubmit={sendEmail}>
                 <input ref={name} disabled={loading} type="text" className="form-control" name="name" placeholder="Name" required />
                 <input ref={surname} disabled={loading} type="text" className="form-control" name="surname" placeholder="Surname" required />
+                <input ref={email} disabled={loading} type="email" className="form-control" name="email" placeholder="Email" required />
+                <input ref={phone} disabled={loading} type="text" className="form-control" name="phone" placeholder="Phone" required />
                 <input ref={position} disabled={loading} type="text" className="form-control" name="position" placeholder="Asking Position" required />
                 <textarea ref={msg} disabled={loading} name="note" className="form-control" placeholder="Note" required />
                 <div id='success' className='hide'>Your message has been sent...</div>
