@@ -91,7 +91,7 @@ const StakingNft = () => {
       <StyledHeader theme={theme} />
       <div className="containerMain">
         <Reveal
-          className="onStep"
+          className="onStep marginTop10"
           keyframes={fadeInUp}
           delay={600}
           duration={900}
