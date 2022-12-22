@@ -3,6 +3,7 @@ import { StyledHeader } from "../../../components/Styles";
 import {
   connectWallet,
   switchNetwork,
+  reconnectWallet
 } from "./../../../components/menu/connectWallet";
 import Reveal from "react-awesome-reveal";
 import { keyframes } from "@emotion/react";
@@ -10,10 +11,15 @@ import auth from "../../../core/auth";
 import * as actions from "./../../../store/actions";
 import Footer from "./../../../components/components/footer";
 import { stakingData } from "./stakingData";
+import { useFetchNFT } from './hooks/useFetchNfts';
 import "./staking.css";
 import { useDispatch, useSelector } from "react-redux";
 import { InputGroup } from "react-bootstrap";
 import StakeTimerComponent from "./startDate";
+
+// helpers
+import { prepareNftPath } from './helpers/helpers'
+
 const theme = "GREY"; //LIGHT, GREY, RETRO
 
 const fadeInUp = keyframes`
@@ -44,9 +50,15 @@ const StakingNft = () => {
   const dispatch = useDispatch();
   const [islogin, setIsLogin] = useState(false);
   const [account, setAccount] = useState("");
+  const [mCursor, setMcursor] = useState('');
   const web3Store = useSelector((state) => state.web3);
+  const [fetchNFTs, setFetchNFTs] = useState(true);
+  const {nft: myNfts, cursor} = useFetchNFT(web3Store.account, fetchNFTs, setFetchNFTs, mCursor );
   const userData = auth.getUserInfo();
   const [selectedNFT, setSelectedNFT] = useState([]);
+
+  
+  console.log(myNfts)
   const handleLogout = () => {
     auth.clearAppStorage();
     dispatch(actions.delWeb3());
@@ -54,6 +66,7 @@ const StakingNft = () => {
   };
   const [stakedNft, setStakedNft] = useState([]);
   const [open, setOpen] = useState(false);
+
   useEffect(() => {
     if (userData && userData.address) {
       setIsLogin(true);
@@ -67,26 +80,42 @@ const StakingNft = () => {
     }
   }, [web3Store.account, account]);
 
-  const handleNFT = (id, image) => {
-    if (selectedNFT.map((item) => item.id).includes(id)) {
-      setSelectedNFT(selectedNFT.filter((item) => item.id !== id));
-      console.log(selectedNFT);
-      return;
+  useEffect(()=> {
+    setMcursor(cursor)
+  },[fetchNFTs])
+
+  const handleNFT = (e,tokenId, pid) => {
+    console.log(tokenId)
+    console.log(e.target.checked)
+    if(!e.target.checked) {
+      const selnft = []
+      selectedNFT.map(item => {
+        if(!(parseInt(item.pid) === parseInt(pid) && parseInt(item.tokenId) === parseInt(tokenId))) {
+          selnft.push(item)
+        } 
+      })
+      setSelectedNFT([...selnft])
+      
     } else {
-      setSelectedNFT([...selectedNFT, { id: id, image: image }]);
-      console.log(selectedNFT);
+      setSelectedNFT([...selectedNFT, {pid, tokenId}])
     }
-    console.log(selectedNFT);
+    
   };
 
   const stakedNFT = () => {
-    setStakedNft([...stakedNft, selectedNFT]);
-    console.log(stakedNft);
+    // setStakedNft([...stakedNft, selectedNFT]);
+    // console.log(stakedNft);
+    console.log(selectedNFT)
   };
+
+  const handleNext = () => {
+    window.scrollTo(0,0)
+    setFetchNFTs(true)
+  }
   return (
     <div
       className="greyscheme bg-dark"
-      style={{ background: "black", width: "100%", height: "100%" }}
+      style={{ background: "black", width: "100%", minHeight: "100vh" }}
     >
       <StyledHeader theme={theme} />
       <div className="containerMain">
@@ -97,15 +126,15 @@ const StakingNft = () => {
           duration={900}
           triggerOnce
         >
-          <div className="container_box">
+          <div className="container_box p-2">
             <h1>Stake and Earn</h1>
             <p>Stake your NFTs and earn rewards.</p>
             <div className="container_box_btn">
-              {!islogin ? (
+              {!account ? (
                 <>
                   <button
                     className="walletBtn"
-                    onClick={() => connectWallet(dispatch)}
+                    onClick={() => reconnectWallet(dispatch)}
                   >
                     Connect Wallet
                   </button>
@@ -133,12 +162,9 @@ const StakingNft = () => {
                                     />
                                     <div className="stakingCardImg">
                                       <img
-                                        src={item.image}
+                                        src={prepareNftPath(item?.normalized_metadata?.image)}
                                         alt="img"
                                         className=""
-                                        onClick={() =>
-                                          handleNFT(item.id, item.image)
-                                        }
                                       />
                                     </div>
                                     <div className="txt">
@@ -168,30 +194,28 @@ const StakingNft = () => {
                     ) : (
                       <div className="ContainerStakedMain">
                         <div className="containerStaked">
-                          {stakingData.map((item, index) => {
+                          {myNfts?.map((item, index) => {
                             return (
-                              <div className="stakingCard">
+                              <div key={index} className="stakingCard">
                                 <div className="InnerCard">
                                   <div className="stakingCardText">
                                     <input
                                       className="form-check-input checkBox"
                                       type="checkbox"
-                                      value=""
-                                      id="flexCheckDefault"
+                                      onClick={(e) =>
+                                        handleNFT(e, item.token_id, item.pid)
+                                      }
                                     />
                                     <div className="stakingCardImg">
                                       <img
-                                        src={item.image}
+                                        src={prepareNftPath(item?.normalized_metadata?.image)}
                                         alt="img"
                                         className=""
-                                        onClick={() =>
-                                          handleNFT(item.id, item.image)
-                                        }
                                       />
                                     </div>
                                     <div className="txt">
                                       <h3>
-                                        <span>{item.name}</span>
+                                        <span>{`${item.name}#${item.token_id}`}</span>
                                       </h3>
                                     </div>
                                   </div>
@@ -199,6 +223,9 @@ const StakingNft = () => {
                               </div>
                             );
                           })}
+                          <div className="mt-5 py-2 px-5 rounded border " style={{cursor: 'pointer'}} onClick={handleNext}>
+                            <span>{ myNfts?.length > 0 ? 'Next' : 'Reset' }</span>
+                          </div>
                         </div>
                         <div className="cnfrmStake">
                           <hr />

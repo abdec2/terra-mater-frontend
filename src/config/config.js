@@ -32,5 +32,12 @@ export const CONFIG = {
   CONTACT_EMAIL: 'info@terramaternfts.com'
 }
 
+export const STAKE_NFT_CONTRACTS = [
+  {
+    pid: 0,
+    tokenAddress: '0x4fc1fA447263D9154a7dbD43D9855Dd2B994d33d'
+  }
+]
+
 
 // REACT_APP_ALCHEMY_TEST_KEY="https://polygon-mumbai.g.alchemy.com/v2/O8JIBzfmoIBtG8UGWYcWtvhrv_sAeglX"

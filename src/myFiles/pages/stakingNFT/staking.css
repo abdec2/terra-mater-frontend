@@ -47,7 +47,6 @@
   align-items: center;
   justify-content: center;
   width: 55rem;
-  height: 35rem;
 }
 
 .walletBtn {
@@ -128,7 +127,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 10rem;
   width: 30rem;
 }
 .stakingCardImg {

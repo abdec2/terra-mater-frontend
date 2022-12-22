@@ -134,7 +134,7 @@ const Index = () => {
                                     <Dropdown.Menu variant="dark" className="bg-dark p-2" style={{border: '1px solid #333'}}>
                                         <Dropdown.Header>
                                             <h5 className="text-white mb-1">My Wallet</h5>
-                                            {`${account.slice(0,5)}....${account.slice(37,42)}`}
+                                            {`${userData.address.slice(0,5)}....${userData.address.slice(37,42)}`}
                                         </Dropdown.Header>
                                         <Dropdown.Divider  />
                                         <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate('/Profile')}>

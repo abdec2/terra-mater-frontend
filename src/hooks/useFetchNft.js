@@ -6,12 +6,6 @@ const useFetchNFT = (account, fetchNFTs, setFetchNFTs) => {
     const fetchWalletNFTs = async (account) => {
         try {
             if(account) {
-                // const endpoint = process.env.REACT_APP_ALCHEMY_KEY
-                // const nfts = await fetch(`${endpoint}/getNFTs/?owner=${account}&withMetadata=true` ,{
-                //     method: 'GET', 
-                //     redirect: 'follow'
-                // })
-                // const response = await nfts.json();
                 const options = {
                     method: 'GET',
                     url: `https://deep-index.moralis.io/api/v2/${account}/nft`,
