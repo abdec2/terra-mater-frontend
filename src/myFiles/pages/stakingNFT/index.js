@@ -12,6 +12,7 @@ import * as actions from "./../../../store/actions";
 import Footer from "./../../../components/components/footer";
 import { stakingData } from "./stakingData";
 import { useFetchNFT } from './hooks/useFetchNfts';
+import  useStakedNFT  from './hooks/useFetchStakedNft';
 import "./staking.css";
 import { useDispatch, useSelector } from "react-redux";
 import { InputGroup } from "react-bootstrap";
@@ -54,11 +55,12 @@ const StakingNft = () => {
   const web3Store = useSelector((state) => state.web3);
   const [fetchNFTs, setFetchNFTs] = useState(true);
   const {nft: myNfts, cursor} = useFetchNFT(web3Store.account, fetchNFTs, setFetchNFTs, mCursor );
+  const stakedNFTs = [] //useStakedNFT(web3Store.account, fetchNFTs, setFetchNFTs)
   const userData = auth.getUserInfo();
   const [selectedNFT, setSelectedNFT] = useState([]);
 
   
-  console.log(myNfts)
+  console.log(stakedNFTs)
   const handleLogout = () => {
     auth.clearAppStorage();
     dispatch(actions.delWeb3());
@@ -109,7 +111,13 @@ const StakingNft = () => {
   };
 
   const handleNext = () => {
-    window.scrollTo(0,0)
+    document.querySelector('.containerStaked').scrollTo(0,0)
+    setFetchNFTs(true)
+  }
+
+  const handleReset = () => {
+    document.querySelector('.containerStaked').scrollTo(0,0)
+    setMcursor('')
     setFetchNFTs(true)
   }
   return (
@@ -149,9 +157,9 @@ const StakingNft = () => {
                     {open ? (
                       <div className="ContainerStakedMain">
                         <div className="containerStaked">
-                          {stakingData.map((item, index) => {
+                          {stakedNFTs.map((item, index) => {
                             return (
-                              <div className="stakingCard">
+                              <div key={index} className="stakingCard">
                                 <div className="InnerCard">
                                   <div className="stakingCardText">
                                     <input
@@ -169,15 +177,15 @@ const StakingNft = () => {
                                     </div>
                                     <div className="txt">
                                       <h3>
-                                        <span>{item.name}</span>
+                                        <span>{`${item.name}#${item.token_id}`}</span>
                                       </h3>
                                     </div>
                                   </div>
-                                  <div className="txt">
+                                  {/* <div className="txt">
                                     <p>
                                       <StakeTimerComponent />
                                     </p>
-                                  </div>
+                                  </div> */}
                                 </div>
                               </div>
                             );
@@ -223,8 +231,15 @@ const StakingNft = () => {
                               </div>
                             );
                           })}
-                          <div className="mt-5 py-2 px-5 rounded border " style={{cursor: 'pointer'}} onClick={handleNext}>
-                            <span>{ myNfts?.length > 0 ? 'Next' : 'Reset' }</span>
+                          <div className="d-flex align-items-center justify-content-center w-100">
+                            <button disabled={myNfts?.length === 0} className="mt-5 me-3 py-2 px-5 rounded border " onClick={handleNext}>Next</button>
+                            {/* <div className="mt-5 me-3 py-2 px-5 rounded border " style={{cursor: 'pointer'}} onClick={handleNext}>
+                              <span>{ myNfts?.length > 0 ? 'Next' : 'Reset' }</span>
+                            </div> */}
+                            <button className="mt-5 me-3 py-2 px-5 rounded border text-white" style={{background: 'transparent'}} onClick={handleReset}>Reset</button>
+                            {/* <div className="mt-5 py-2 ms-3 px-5 rounded border " style={{cursor: 'pointer'}} onClick={handleNext}>
+                              <span>{ myNfts?.length > 0 ? 'Next' : 'Reset' }</span>
+                            </div> */}
                           </div>
                         </div>
                         <div className="cnfrmStake">

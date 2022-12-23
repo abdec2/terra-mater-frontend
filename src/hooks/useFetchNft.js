@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { CONFIG } from "../config/config";
 
 const useFetchNFT = (account, fetchNFTs, setFetchNFTs) => {
     const [nft, setNFT] = useState(null)
@@ -9,7 +10,7 @@ const useFetchNFT = (account, fetchNFTs, setFetchNFTs) => {
                 const options = {
                     method: 'GET',
                     url: `https://deep-index.moralis.io/api/v2/${account}/nft`,
-                    params: {chain: 'polygon', format: 'decimal', normalizeMetadata: 'true'},
+                    params: {chain: CONFIG.CHAIN_FOR_MORALIS, format: 'decimal', normalizeMetadata: 'true'},
                     headers: {accept: 'application/json', 'X-API-Key': process.env.REACT_APP_MORALIS_API_KEY}
                   };
                 

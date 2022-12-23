@@ -131,11 +131,11 @@ const app= () => (
       <Route element={<ItemDetailReduxgrey/>} path="/ItemDetail/:nftId" />
       {/* <Route element={<News />} path="/news" />
       <Route element={<NewsSingle />} path="/news/:postId" /> */}
-      <Route element={<Create />} path="/create" />
-      <Route element={<Creategrey />} path="/createGrey" />
-      <Route element={<Create2 />} path="/create2" />
-      <Route element={<Create3 />} path="/create3" />
-      <Route element={<Createoption />} path="/createOptions" />
+      {/* <Route element={<Create />} path="/create" /> */}
+      {/* <Route element={<Creategrey />} path="/createGrey" /> */}
+      {/* <Route element={<Create2 />} path="/create2" /> */}
+      {/* <Route element={<Create3 />} path="/create3" /> */}
+      {/* <Route element={<Createoption />} path="/createOptions" /> */}
       {/* <Route element={<Activity />} path="/activity" />
       <Route element={<Activitygrey />} path="/activityGrey" />
       <Route element={<Contact />} path="/contact" /> */}
@@ -143,16 +143,16 @@ const app= () => (
       <Route element={<ContactUS />} path="/contactus" />
       <Route element={<Contactgrey />} path="/haveproject" /> 
       <Route element={<About />} path="/about" />
-      <Route element={<ElegantIcons />} path="/elegantIcons" />
-      <Route element={<EtlineIcons />} path="/etlineIcons" />
-      <Route element={<FontAwesomeIcons />} path="/fontAwesomeIcons" />
-      <Route element={<Accordion />} path="/accordion" />
-      <Route element={<Alerts />} path="/alerts" />
-      <Route element={<Progressbar />} path="/progressbar" />
-      <Route element={<Tabs />} path="/tabs" />
-      <Route element={<Minter />} path="/mint" />
-      <Route element={<Mintergrey />} path="/minter" />
-      <Route element={<CreateNft />} path="/createNft" />
+      {/* <Route element={<ElegantIcons />} path="/elegantIcons" /> */}
+      {/* <Route element={<EtlineIcons />} path="/etlineIcons" /> */}
+      {/* <Route element={<FontAwesomeIcons />} path="/fontAwesomeIcons" /> */}
+      {/* <Route element={<Accordion />} path="/accordion" /> */}
+      {/* <Route element={<Alerts />} path="/alerts" /> */}
+      {/* <Route element={<Progressbar />} path="/progressbar" /> */}
+      {/* <Route element={<Tabs />} path="/tabs" /> */}
+      {/* <Route element={<Minter />} path="/mint" /> */}
+      {/* <Route element={<Mintergrey />} path="/minter" /> */}
+      {/* <Route element={<CreateNft />} path="/createNft" /> */}
     </Routes>
     <ScrollToTopBtn />
   </div>

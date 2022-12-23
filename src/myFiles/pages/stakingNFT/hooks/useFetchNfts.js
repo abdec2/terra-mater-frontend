@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { STAKE_NFT_CONTRACTS } from './../../../../config/config';
+import { CONFIG, STAKE_NFT_CONTRACTS } from './../../../../config/config';
 
 export const useFetchNFT = (account, fetchNFTs, setFetchNFTs, cursors = null) => {
     const [nft, setNFT] = useState(null)
@@ -9,23 +9,20 @@ export const useFetchNFT = (account, fetchNFTs, setFetchNFTs, cursors = null) =>
         try {
             console.log('useFetchNFT', account)
             if(account) {
-                let tokenAddress = STAKE_NFT_CONTRACTS[0].tokenAddress
+                const tokenAddress = [];
                 STAKE_NFT_CONTRACTS.map((item, i) => {
-                    if(i > 0) {
-                        tokenAddress += '&';
-                        tokenAddress += `token_addresses=${item.tokenAddress}`
-                    }
+                    tokenAddress.push(item.tokenAddress)
                 })
-
+                console.log(tokenAddress)
                 const options = {
                     method: 'GET',
                     url: `https://deep-index.moralis.io/api/v2/${account}/nft`,
                     params: {
                         cursor: cursors ? cursors : '',
-                        chain: 'mumbai', 
+                        chain: CONFIG.CHAIN_FOR_MORALIS, 
                         format: 'decimal', 
-                        limit: 10,
                         token_addresses: tokenAddress,
+                        limit: 10,
                         normalizeMetadata: 'true'
                     },
                     headers: {accept: 'application/json', 'X-API-Key': process.env.REACT_APP_MORALIS_API_KEY}
