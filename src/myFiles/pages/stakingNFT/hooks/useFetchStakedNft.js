@@ -37,7 +37,16 @@ const useStakedNFT = (account, fetchNFTs, setFetchNfts) => {
               axios
                 .request(options)
                 .then(function (response) {
-                    setStakedTokens(response.data)
+                  const res = response.data
+                  const result = STAKE_NFT_CONTRACTS.map(contract => {
+                    return res.map(item => {
+                      if(contract.tokenAddress.toLowerCase() === item.token_address.toLowerCase()) {
+                        item.pid = contract.pid
+                        return item
+                      }
+                    })
+                  })
+                    setStakedTokens(result[0])
                     setFetchNfts(false)
                 })
                 .catch(function (error) {

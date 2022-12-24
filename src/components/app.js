@@ -145,7 +145,7 @@ const app= () => (
       <Route element={<About />} path="/about" />
       {/* <Route element={<ElegantIcons />} path="/elegantIcons" /> */}
       {/* <Route element={<EtlineIcons />} path="/etlineIcons" /> */}
-      {/* <Route element={<FontAwesomeIcons />} path="/fontAwesomeIcons" /> */}
+      <Route element={<FontAwesomeIcons />} path="/fontAwesomeIcons" />
       {/* <Route element={<Accordion />} path="/accordion" /> */}
       {/* <Route element={<Alerts />} path="/alerts" /> */}
       {/* <Route element={<Progressbar />} path="/progressbar" /> */}

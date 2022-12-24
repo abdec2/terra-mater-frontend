@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { StyledHeader } from "../../../components/Styles";
 import {
-  connectWallet,
-  switchNetwork,
   reconnectWallet
 } from "./../../../components/menu/connectWallet";
 import Reveal from "react-awesome-reveal";
 import { keyframes } from "@emotion/react";
-import auth from "../../../core/auth";
-import * as actions from "./../../../store/actions";
 import Footer from "./../../../components/components/footer";
-import { stakingData } from "./stakingData";
 import { useFetchNFT } from './hooks/useFetchNfts';
-import  useStakedNFT  from './hooks/useFetchStakedNft';
+import useStakedNFT from './hooks/useFetchStakedNft';
 import "./staking.css";
 import { useDispatch, useSelector } from "react-redux";
-import { InputGroup } from "react-bootstrap";
-import StakeTimerComponent from "./startDate";
-
+import DropDownComponent from "./dropdown";
 // helpers
 import { prepareNftPath } from './helpers/helpers'
+import LoadingScreen from "./loadingScreen";
+import { CONFIG, STAKE_NFT_CONTRACTS } from "../../../config/config";
+import NFTABI from '../../../config/NftAbi.json'
+import StakingAbi from '../../../config/staking.json'
+
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
+
 
 const theme = "GREY"; //LIGHT, GREY, RETRO
 
@@ -49,74 +52,92 @@ const inline = keyframes`
 
 const StakingNft = () => {
   const dispatch = useDispatch();
-  const [islogin, setIsLogin] = useState(false);
   const [account, setAccount] = useState("");
   const [mCursor, setMcursor] = useState('');
   const web3Store = useSelector((state) => state.web3);
+  const web3 = web3Store.web3
   const [fetchNFTs, setFetchNFTs] = useState(true);
-  const {nft: myNfts, cursor} = useFetchNFT(web3Store.account, fetchNFTs, setFetchNFTs, mCursor );
-  const stakedNFTs = [] //useStakedNFT(web3Store.account, fetchNFTs, setFetchNFTs)
-  const userData = auth.getUserInfo();
-  const [selectedNFT, setSelectedNFT] = useState([]);
-
-  
-  console.log(stakedNFTs)
-  const handleLogout = () => {
-    auth.clearAppStorage();
-    dispatch(actions.delWeb3());
-    setIsLogin(false);
-  };
-  const [stakedNft, setStakedNft] = useState([]);
+  const { nft: myNfts, cursor } = useFetchNFT(web3Store.account, fetchNFTs, setFetchNFTs, mCursor);
+  const stakedNFTs = useStakedNFT(web3Store.account, fetchNFTs, setFetchNFTs)
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+
+  console.log(stakedNFTs)
 
   useEffect(() => {
-    if (userData && userData.address) {
-      setIsLogin(true);
-      //addLoginState(userData.address)
-    } else {
-      setIsLogin(false);
-    }
-    console.log(web3Store.account);
     if (typeof web3Store.account === "string") {
       setAccount(web3Store.account);
     }
   }, [web3Store.account, account]);
 
-  useEffect(()=> {
+  useEffect(() => {
     setMcursor(cursor)
-  },[fetchNFTs])
+  }, [fetchNFTs])
 
-  const handleNFT = (e,tokenId, pid) => {
-    console.log(tokenId)
-    console.log(e.target.checked)
-    if(!e.target.checked) {
-      const selnft = []
-      selectedNFT.map(item => {
-        if(!(parseInt(item.pid) === parseInt(pid) && parseInt(item.tokenId) === parseInt(tokenId))) {
-          selnft.push(item)
-        } 
+  const handleApprove = async (pid, tokenId) => {
+    const tokenAddress = STAKE_NFT_CONTRACTS.filter(item => item.pid === pid)
+    const nftContract = new web3.eth.Contract(NFTABI, tokenAddress[0].tokenAddress)
+    const estimateGas = await nftContract.methods.approve(CONFIG.STAKING_ADDRESS, tokenId.toString()).estimateGas({ from: web3Store.account })
+    const approve = await nftContract.methods.approve(CONFIG.STAKING_ADDRESS, tokenId.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString() })
+    console.log(approve)
+  }
+  const handleStakeTransaction = async (pid, tokenId) => {
+    const stakingContract = new web3.eth.Contract(StakingAbi, CONFIG.STAKING_ADDRESS)
+    const estimateGas = await stakingContract.methods.stake([pid], [tokenId]).estimateGas({ from: web3Store.account })
+    const staketx = await stakingContract.methods.stake([pid], [tokenId]).send({ from: web3Store.account, gasLimit: estimateGas.toString() }) 
+    console.log(staketx)
+  }
+
+  const handleStake = async (pid, tokenId) => {
+    try {
+      setIsLoading(true)
+      await handleApprove(pid, tokenId)
+      await handleStakeTransaction(pid, tokenId)
+      setIsLoading(false)
+      MySwal.fire({
+        title: 'Success!',
+        text: 'Your nft has been staked successfuly',
+        icon: 'success'
+        
       })
-      setSelectedNFT([...selnft])
+      setFetchNFTs(true)
       
-    } else {
-      setSelectedNFT([...selectedNFT, {pid, tokenId}])
+    } catch (e) {
+      console.log(e)
     }
-    
-  };
+  }
 
-  const stakedNFT = () => {
-    // setStakedNft([...stakedNft, selectedNFT]);
-    // console.log(stakedNft);
-    console.log(selectedNFT)
-  };
+  const handleUnstake = async (pid, tokenId) => {
+    try {
+      console.log(pid, tokenId)
+      setIsLoading(true)
+      const stakingContract = new web3.eth.Contract(StakingAbi, CONFIG.STAKING_ADDRESS)
+      const estimateGas = await stakingContract.methods._unstakeMany([pid], [tokenId]).estimateGas({ from: web3Store.account })
+      const unstaketx = await stakingContract.methods._unstakeMany([pid], [tokenId]).send({ from: web3Store.account, gasLimit: estimateGas.toString() }) 
+      console.log(unstaketx)
+      setIsLoading(false)
+      MySwal.fire({
+        title: 'Success!',
+        text: 'Your nft has been unstaked successfuly',
+        icon: 'success'
+        
+      })
+      setFetchNFTs(true)
+    } catch(e) {
+      setIsLoading(false)
+      console.log(e)
+    }
+  }
 
   const handleNext = () => {
-    document.querySelector('.containerStaked').scrollTo(0,0)
+    // document.querySelector('.containerStaked').scrollTo(0, 0)
+    window.scrollTo(0, 0)
     setFetchNFTs(true)
   }
 
   const handleReset = () => {
-    document.querySelector('.containerStaked').scrollTo(0,0)
+    // document.querySelector('.containerStaked').scrollTo(0, 0)
+    window.scrollTo(0, 0)
     setMcursor('')
     setFetchNFTs(true)
   }
@@ -126,137 +147,127 @@ const StakingNft = () => {
       style={{ background: "black", width: "100%", minHeight: "100vh" }}
     >
       <StyledHeader theme={theme} />
-      <div className="containerMain">
-        <Reveal
-          className="onStep marginTop10"
-          keyframes={fadeInUp}
-          delay={600}
-          duration={900}
-          triggerOnce
-        >
-          <div className="container_box p-2">
-            <h1>Stake and Earn</h1>
-            <p>Stake your NFTs and earn rewards.</p>
-            <div className="container_box_btn">
-              {!account ? (
-                <>
-                  <button
-                    className="walletBtn"
-                    onClick={() => reconnectWallet(dispatch)}
-                  >
-                    Connect Wallet
-                  </button>
-                </>
-              ) : (
-                <>
-                  <div className="containerOptionsParent">
-                    <div className="containerOptions">
-                      <h1 onClick={() => setOpen(false)}>MY NFTS</h1>
-                      <h1 onClick={() => setOpen(true)}>MY STAKED NFTS</h1>
-                    </div>
-                    {open ? (
-                      <div className="ContainerStakedMain">
-                        <div className="containerStaked">
-                          {stakedNFTs.map((item, index) => {
-                            return (
-                              <div key={index} className="stakingCard">
-                                <div className="InnerCard">
-                                  <div className="stakingCardText">
-                                    <input
-                                      className="form-check-input checkBox"
-                                      type="checkbox"
-                                      value=""
-                                      id="flexCheckDefault"
-                                    />
-                                    <div className="stakingCardImg">
-                                      <img
-                                        src={prepareNftPath(item?.normalized_metadata?.image)}
-                                        alt="img"
-                                        className=""
-                                      />
-                                    </div>
-                                    <div className="txt">
-                                      <h3>
-                                        <span>{`${item.name}#${item.token_id}`}</span>
-                                      </h3>
-                                    </div>
-                                  </div>
-                                  {/* <div className="txt">
-                                    <p>
-                                      <StakeTimerComponent />
-                                    </p>
-                                  </div> */}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                        <div className="cnfrmStake">
-                          <hr />
-                          <div>
-                            <button onClick={() => {}}>Unstake</button>
-                          </div>
-                          <hr />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="ContainerStakedMain">
-                        <div className="containerStaked">
-                          {myNfts?.map((item, index) => {
-                            return (
-                              <div key={index} className="stakingCard">
-                                <div className="InnerCard">
-                                  <div className="stakingCardText">
-                                    <input
-                                      className="form-check-input checkBox"
-                                      type="checkbox"
-                                      onClick={(e) =>
-                                        handleNFT(e, item.token_id, item.pid)
-                                      }
-                                    />
-                                    <div className="stakingCardImg">
-                                      <img
-                                        src={prepareNftPath(item?.normalized_metadata?.image)}
-                                        alt="img"
-                                        className=""
-                                      />
-                                    </div>
-                                    <div className="txt">
-                                      <h3>
-                                        <span>{`${item.name}#${item.token_id}`}</span>
-                                      </h3>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                          <div className="d-flex align-items-center justify-content-center w-100">
-                            <button disabled={myNfts?.length === 0} className="mt-5 me-3 py-2 px-5 rounded border " onClick={handleNext}>Next</button>
-                            {/* <div className="mt-5 me-3 py-2 px-5 rounded border " style={{cursor: 'pointer'}} onClick={handleNext}>
-                              <span>{ myNfts?.length > 0 ? 'Next' : 'Reset' }</span>
-                            </div> */}
-                            <button className="mt-5 me-3 py-2 px-5 rounded border text-white" style={{background: 'transparent'}} onClick={handleReset}>Reset</button>
-                            {/* <div className="mt-5 py-2 ms-3 px-5 rounded border " style={{cursor: 'pointer'}} onClick={handleNext}>
-                              <span>{ myNfts?.length > 0 ? 'Next' : 'Reset' }</span>
-                            </div> */}
-                          </div>
-                        </div>
-                        <div className="cnfrmStake">
-                          <hr />
-                          <div>
-                            <button onClick={stakedNFT}>Confirm Stake</button>
-                          </div>
-                          <hr />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
+      <div className="container">
+        <div className="" style={{ paddingTop: '100px' }}>
+          <Reveal
+            className=""
+            keyframes={fadeInUp}
+            delay={600}
+            duration={900}
+            triggerOnce
+          >
+            <div className="container_box p-2">
+              <h1 className="text-center">Stake and Earn</h1>
+              <p className="text-center">Stake your NFTs and earn rewards.</p>
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
+
+        <div className="container_box_btn">
+          {!account ? (
+            <>
+              <button
+                className="walletBtn"
+                onClick={() => reconnectWallet(dispatch)}
+              >
+                Connect Wallet
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="containerOptionsParent">
+                <div className="containerOptions">
+                  <h1 onClick={() => setOpen(false)}>MY NFTS</h1>
+                  <h1 onClick={() => setOpen(true)}>MY STAKED NFTS</h1>
+                </div>
+                {open ? (
+                  <div className="w-100" style={{ maxWidth: '500px' }}>
+                    <div className="">
+                      {stakedNFTs?.map((item, index) => {
+                        return (
+                          <div key={index} className="">
+                            <div className="">
+                              <div className="d-flex align-items-center justify-content-between py-3 border-bottom border-danger">
+                                <div className=" ">
+                                  <img width={90} height={90}
+                                    src={item?.normalized_metadata?.image ? prepareNftPath(item?.normalized_metadata?.image) : 'https://via.placeholder.com/90x90?text=NFT'}
+                                    alt="img"
+                                    className="rounded"
+                                  />
+                                </div>
+
+                                <div className="w-50 ms-2">
+                                  <h3 className="text-truncate" style={{ marginBottom: 0, textAlign: 'left', fontSize: '14px' }}>
+                                    <span className="">{`${item.name}#${item.token_id}`}</span>
+                                  </h3>
+                                </div>
+
+                                <div>
+                                  <DropDownComponent handleStake={handleUnstake} lbl1="Unstake" pid={item.pid} tokenId={item.token_id} />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                      {/* <div className="d-flex align-items-center justify-content-center w-100">
+                      <button disabled={myNfts?.length === 0} className="mt-5 me-3 py-2 px-5 rounded border " onClick={handleNext}>Next</button>
+                     
+                      <button className="mt-5 me-3 py-2 px-5 rounded border text-white" style={{ background: 'transparent' }} onClick={handleReset}>Reset</button>
+                  
+                    </div> */}
+                    </div>
+
+                  </div>
+                ) : (
+                  <div className="w-100" style={{ maxWidth: '500px' }}>
+                    <div className="">
+                      {myNfts?.map((item, index) => {
+                        return (
+                          <div key={index} className="">
+                            <div className="">
+                              <div className="d-flex align-items-center justify-content-between py-3 border-bottom border-danger">
+                                <div className=" ">
+                                  <img width={90} height={90}
+                                    src={item?.normalized_metadata?.image ? prepareNftPath(item?.normalized_metadata?.image) : 'https://via.placeholder.com/90x90?text=NFT'}
+                                    alt="img"
+                                    className="rounded"
+                                  />
+                                </div>
+
+                                <div className="w-50 ms-2">
+                                  <h3 className="text-truncate" style={{ marginBottom: 0, textAlign: 'left', fontSize: '14px' }}>
+                                    <span className="">{`${item.name}#${item.token_id}`}</span>
+                                  </h3>
+                                </div>
+
+                                <div>
+                                  <DropDownComponent handleStake={handleStake} lbl1="Stake" pid={item.pid} tokenId={item.token_id} />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                      <div className="d-flex align-items-center justify-content-center w-100">
+                        <button disabled={myNfts?.length === 0} className="mt-5 me-3 py-2 px-5 rounded border " onClick={handleNext}>Next</button>
+
+                        <button className="mt-5 me-3 py-2 px-5 rounded border text-white" style={{ background: 'transparent' }} onClick={handleReset}>Reset</button>
+
+                      </div>
+                    </div>
+
+                  </div>
+                )}
+              </div>
+              {
+                isLoading && (
+                  <LoadingScreen setIsLoading={setIsLoading} />
+                )
+              }
+            </>
+          )}
+        </div>
       </div>
       <div className="footer">
         <Footer />
