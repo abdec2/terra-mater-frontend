@@ -7,7 +7,7 @@ export const fetchHotCollections = (collectionId) => async (dispatch) => {
   console.log('bahr')
   try {
     const filter = collectionId ? `id=${collectionId}` : ''
-    let populate = `populate=*&filters[status]=active`;
+    let populate = `populate=*&filters[status]=active&filters[feature]=true`;
     const { data } = await Axios.get(`${api.baseUrl + api.collection}?${populate}&${filter}`, {
       cancelToken: Canceler.token,
       params: {}

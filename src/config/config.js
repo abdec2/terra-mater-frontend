@@ -15,7 +15,8 @@ export const providerOptions = {
 // export const CONFIG = {
 //   USDT_ADDRESS: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
 //   MARKETPLACE_ADDRESS: '0xaBfB6a3D21eB1ad803CC706BF2Fe955Ff5520E73',
-//   CHAIN_ID: 137, 
+//   CHAIN_ID: 137,
+//   CHAIN_ID_HEX: '0x89', 
 //   NETWORK: 'Polygon Mainnet',
 //   BLOCKCHAIN_EXPLORER: 'https://polygonscan.com/', 
 //   CONTACT_EMAIL: 'info@terramaternfts.com'
@@ -26,7 +27,8 @@ export const CONFIG = {
   MARKETPLACE_ADDRESS: '0xd213C6c0b5d50A9eC0600bFcf97BD5923301CA94',
   NATURA_TOKEN_ADDRESS: '0x22E2C2b5053BE2CE134218803418B862582cd6d9',
   STAKING_ADDRESS: '0xD00d43F0c223adc936D81d8926008a2552234f47',
-  CHAIN_ID: 80001, 
+  CHAIN_ID: 80001,
+  CHAIN_ID_HEX: '0x13881', 
   CHAIN_FOR_MORALIS: 'mumbai',
   NETWORK: 'Mumbai Testnet',
   BLOCKCHAIN_EXPLORER: 'https://mumbai.polygonscan.com/', 

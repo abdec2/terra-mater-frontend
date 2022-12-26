@@ -1,6 +1,7 @@
 const api = {
-    baseUrl: 'http://aholding.com.bh:5000', 
+    // baseUrl: 'http://aholding.com.bh:5000', 
     // baseUrl: 'https://api.terramaternfts.com',
+    baseUrl: 'http://localhost:5000',
     nfts: '/api/nfts',
     "nft-v1s": '/api/nft-v1s', 
     nftShowcases: '/api/nft_showcases',
@@ -14,7 +15,8 @@ const api = {
     comments: '/api/blog-posts/comments',
     tags: '/api/blog-posts/tags',
     categories: '/api/categories',
-    status: '/api/nft-statuses'
+    status: '/api/nft-statuses', 
+    transaction: '/api/transactions'
 }
 
 export const openseaApi = {
