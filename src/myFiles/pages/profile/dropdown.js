@@ -17,7 +17,7 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 ));
 
 
-function DropDownComponent() {
+function DropDownComponent({ handleClick, itemId, nft }) {
     return (
         <Dropdown>
             <Dropdown.Toggle as={CustomToggle} variant="success" id="dropdown-basic">
@@ -27,6 +27,7 @@ function DropDownComponent() {
             <Dropdown.Menu>
                 <Dropdown.Item onClick={(e) => {
                     e.preventDefault()
+                    handleClick(itemId, nft)
                 }}>Release from Sale</Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>

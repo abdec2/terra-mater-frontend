@@ -94,13 +94,14 @@ const StakingNft = () => {
       await handleApprove(pid, tokenId)
       await handleStakeTransaction(pid, tokenId)
       setIsLoading(false)
+      setFetchNFTs(true)
       MySwal.fire({
         title: 'Success!',
         text: 'Your nft has been staked successfuly',
         icon: 'success'
         
       })
-      setFetchNFTs(true)
+      
       
     } catch (e) {
       console.log(e)
@@ -116,13 +117,14 @@ const StakingNft = () => {
       const unstaketx = await stakingContract.methods._unstakeMany([pid], [tokenId]).send({ from: web3Store.account, gasLimit: estimateGas.toString() }) 
       console.log(unstaketx)
       setIsLoading(false)
+      setFetchNFTs(true)
       MySwal.fire({
         title: 'Success!',
         text: 'Your nft has been unstaked successfuly',
         icon: 'success'
         
       })
-      setFetchNFTs(true)
+      
     } catch(e) {
       setIsLoading(false)
       console.log(e)
