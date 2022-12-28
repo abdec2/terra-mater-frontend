@@ -4,7 +4,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 const CustomToggle = forwardRef(({ children, onClick }, ref) => (
     <button
-        className='text-white '
+        className='text-white border-0 '
         style={{background: 'transparent'}}
         ref={ref}
         onClick={(e) => {

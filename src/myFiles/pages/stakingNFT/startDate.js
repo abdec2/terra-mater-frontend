@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-const StakeTimerComponent = () => {
-var dateObj = new Date();
-var month = dateObj.getUTCMonth() + 1; //months from 1-12
-var day = dateObj.getUTCDate();
-var year = dateObj.getUTCFullYear();
+const StakeTimerComponent = ({startDate}) => {
 
- const startDate = year + month  + day;
   const startDate1 = new Date(parseInt(startDate)*1000)
   const currentDate = new Date();
   // console.log(currentDate);
@@ -42,8 +37,8 @@ var year = dateObj.getUTCFullYear();
 
   return (
     <div className="timer">
-        <p>
-            {days} D {hour} H {min} M {sec} S
+        <p className="mb-0 mt-1" style={{fontWeight: 'normal', color: '#555', fontSize: '12px'}}>
+            {days} Days {hour} Hour {min} Min {sec} Sec
         </p>
     </div>
   );

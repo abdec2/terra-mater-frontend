@@ -15,7 +15,19 @@ const useStakedNFT = (account, fetchNFTs, setFetchNfts) => {
       const contract = new web3.eth.Contract(ABI, CONFIG.STAKING_ADDRESS);
       const tokenArray = await Promise.all(STAKE_NFT_CONTRACTS.map(async item => {
         const staked_tokens = await contract.methods.getUserStakedTokens(item.pid, account).call()
-        const result = staked_tokens.map(token => ({ token_address: item.tokenAddress, token_id: token }))
+        const result =await Promise.all(
+          staked_tokens.map(async (token) => {
+            const stakeDetails = await contract.methods.vault(item.pid, token).call()
+            const poolInfo = await contract.methods.poolInfo(item.pid).call()
+            const costPerDay = (parseInt(poolInfo.cost)/365).toFixed(0);
+            let tokenPrice = await contract.methods.getNaturaPrice().call()
+            tokenPrice = (parseInt(tokenPrice) * Math.pow(10,6)) / 100
+            const tokenRate = (Math.pow(10,18) / tokenPrice).toFixed(0)
+            const rewardsPerDay = parseInt(tokenRate) * parseInt(costPerDay)
+            stakeDetails.rewardPerDay = rewardsPerDay
+            return { token_address: item.tokenAddress, token_id: token, stakeDetails: stakeDetails }
+          })
+        )
         return result
       }))
       console.log(tokenArray)
@@ -47,7 +59,18 @@ const useStakedNFT = (account, fetchNFTs, setFetchNfts) => {
                 }
               })
             })
-            setStakedTokens(result[0])
+
+            const resultWithST = tokenArray[0].map(item => {
+              return result[0].map(res => {
+                if (item.token_address.toLowerCase() === res.token_address.toLowerCase()) {
+                  res.stakeInfo = item.stakeDetails
+                  return res
+                }
+              })
+            })
+
+
+            setStakedTokens(resultWithST[0])
             setFetchNfts(false)
           })
           .catch(function (error) {

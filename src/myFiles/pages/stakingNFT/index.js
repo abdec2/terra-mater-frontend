@@ -17,6 +17,7 @@ import LoadingScreen from "./loadingScreen";
 import { CONFIG, STAKE_NFT_CONTRACTS } from "../../../config/config";
 import NFTABI from '../../../config/NftAbi.json'
 import StakingAbi from '../../../config/staking.json'
+import StakeTimerComponent from './startDate'
 
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -190,7 +191,7 @@ const StakingNft = () => {
                           <div key={index} className="">
                             <div className="">
                               <div className="d-flex align-items-center justify-content-between py-3 border-bottom border-danger">
-                                <div className=" ">
+                                <div className="">
                                   <img width={90} height={90}
                                     src={item?.normalized_metadata?.image ? prepareNftPath(item?.normalized_metadata?.image) : 'https://via.placeholder.com/90x90?text=NFT'}
                                     alt="img"
@@ -198,13 +199,15 @@ const StakingNft = () => {
                                   />
                                 </div>
 
-                                <div className="w-50 ms-2">
+                                <div className="ms-2">
                                   <h3 className="text-truncate" style={{ marginBottom: 0, textAlign: 'left', fontSize: '14px' }}>
-                                    <span className="">{`${item.name}#${item.token_id}`}</span>
+                                    <span>{`${item.name}#${item.token_id}`}</span>
+                                    <StakeTimerComponent startDate={item.stakeInfo.timestamp} />
+                                    <span style={{fontWeight: 'normal', color: '#555', fontSize: '12px'}}>Reward per day: {(item.stakeInfo.rewardPerDay / Math.pow(10,18)).toFixed(2)} Natura</span>
                                   </h3>
                                 </div>
 
-                                <div>
+                                <div className=""> 
                                   <DropDownComponent handleStake={handleUnstake} lbl1="Unstake" pid={item.pid} tokenId={item.token_id} />
                                 </div>
                               </div>
