@@ -105,6 +105,7 @@ const StakingNft = () => {
       
       
     } catch (e) {
+      setIsLoading(false)
       console.log(e)
     }
   }

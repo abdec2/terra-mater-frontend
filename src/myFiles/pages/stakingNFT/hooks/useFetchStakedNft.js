@@ -18,13 +18,8 @@ const useStakedNFT = (account, fetchNFTs, setFetchNfts) => {
         const result =await Promise.all(
           staked_tokens.map(async (token) => {
             const stakeDetails = await contract.methods.vault(item.pid, token).call()
-            const poolInfo = await contract.methods.poolInfo(item.pid).call()
-            const costPerDay = (parseInt(poolInfo.cost)/365).toFixed(0);
-            let tokenPrice = await contract.methods.getNaturaPrice().call()
-            tokenPrice = (parseInt(tokenPrice) * Math.pow(10,6)) / 100
-            const tokenRate = (Math.pow(10,18) / tokenPrice).toFixed(0)
-            const rewardsPerDay = parseInt(tokenRate) * parseInt(costPerDay)
-            stakeDetails.rewardPerDay = rewardsPerDay
+            const rewardsPerDay = await contract.methods.getRewardsPerDay(item.pid).call()
+            stakeDetails.rewardPerDay = parseInt(rewardsPerDay)
             return { token_address: item.tokenAddress, token_id: token, stakeDetails: stakeDetails }
           })
         )
