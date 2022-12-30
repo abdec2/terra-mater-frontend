@@ -1,6 +1,6 @@
 const api = {
-    baseUrl: 'http://aholding.com.bh:5000', 
-    // baseUrl: 'https://api.terramaternfts.com',
+    // baseUrl: 'http://aholding.com.bh:5000', 
+    baseUrl: 'https://api.terramaternfts.com',
     // baseUrl: 'http://localhost:5000',
     nfts: '/api/nfts',
     "nft-v1s": '/api/nft-v1s', 
