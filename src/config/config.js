@@ -41,7 +41,7 @@ export const CONFIG = {
 export const STAKE_NFT_CONTRACTS = [
   {
     pid: 0,
-    tokenAddress: '0x4fc1fA447263D9154a7dbD43D9855Dd2B994d33d'
+    tokenAddress: '0x73D953924A781EBc463fF5030df77316d19B4572'
   }
 ]
 
