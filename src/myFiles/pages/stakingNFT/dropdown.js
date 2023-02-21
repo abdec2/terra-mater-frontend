@@ -17,7 +17,7 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 ));
 
 
-function DropDownComponent({ handleStake, lbl1, pid, tokenId }) {
+function DropDownComponent({ handleStake, lbl1, pid, tokenId, options }) {
     return (
         <Dropdown>
             <Dropdown.Toggle as={CustomToggle} variant="success" id="dropdown-basic">
@@ -25,10 +25,15 @@ function DropDownComponent({ handleStake, lbl1, pid, tokenId }) {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-                <Dropdown.Item onClick={(e) => {
-                    e.preventDefault()
-                    handleStake(pid, tokenId)
-                }}>{lbl1}</Dropdown.Item>
+                {
+                    options.map((item, i) => (
+                        <Dropdown.Item key={i} onClick={(e) => {
+                            e.preventDefault()
+                            item.handler(item.pid, item.tokenId)
+                        }}>{item.label}</Dropdown.Item>
+                    ))
+                }
+                
             </Dropdown.Menu>
         </Dropdown>
     );

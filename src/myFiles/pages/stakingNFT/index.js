@@ -106,13 +106,45 @@ const StakingNft = () => {
       
     } catch (e) {
       setIsLoading(false)
+      MySwal.fire({
+        title: 'Oops!',
+        text: 'Something went wrong..',
+        icon: 'error'
+        
+      })
+      console.log(e)
+    }
+  }
+
+  const handleClaimRewards = async (pid, tokenId) => {
+    try {
+      setIsLoading(true)
+      const stakingContract = new web3.eth.Contract(StakingAbi, CONFIG.STAKING_ADDRESS)
+      const estimateGas = await stakingContract.methods.claimRewards([pid], [tokenId]).estimateGas({ from: web3Store.account })
+      const unstaketx = await stakingContract.methods.claimRewards([pid], [tokenId]).send({ from: web3Store.account, gasLimit: estimateGas.toString() }) 
+      console.log(unstaketx)
+      setIsLoading(false)
+      setFetchNFTs(true)
+      MySwal.fire({
+        title: 'Success!',
+        text: 'Your have claimed your rewards successfuly',
+        icon: 'success'
+        
+      })
+    } catch(e) {
+      setIsLoading(false)
+      MySwal.fire({
+        title: 'Oops!',
+        text: 'Something went wrong..',
+        icon: 'error'
+        
+      })
       console.log(e)
     }
   }
 
   const handleUnstake = async (pid, tokenId) => {
     try {
-      console.log(pid, tokenId)
       setIsLoading(true)
       const stakingContract = new web3.eth.Contract(StakingAbi, CONFIG.STAKING_ADDRESS)
       const estimateGas = await stakingContract.methods._unstakeMany([pid], [tokenId]).estimateGas({ from: web3Store.account })
@@ -129,6 +161,12 @@ const StakingNft = () => {
       
     } catch(e) {
       setIsLoading(false)
+      MySwal.fire({
+        title: 'Oops!',
+        text: 'Something went wrong..',
+        icon: 'error'
+        
+      })
       console.log(e)
     }
   }
@@ -209,7 +247,14 @@ const StakingNft = () => {
                                 </div>
 
                                 <div className=""> 
-                                  <DropDownComponent handleStake={handleUnstake} lbl1="Unstake" pid={item.pid} tokenId={item.token_id} />
+                                  <DropDownComponent options={[
+                                    {
+                                      handler: handleUnstake, label: 'Unstake', pid: item.pid, tokenId: item.token_id
+                                    },
+                                    {
+                                      handler: handleClaimRewards, label: 'Claim Rewards', pid: item.pid, tokenId: item.token_id
+                                    } 
+                                  ]} />
                                 </div>
                               </div>
                             </div>
@@ -248,7 +293,7 @@ const StakingNft = () => {
                                 </div>
 
                                 <div>
-                                  <DropDownComponent handleStake={handleStake} lbl1="Stake" pid={item.pid} tokenId={item.token_id} />
+                                  <DropDownComponent options={[{handler: handleStake, label: 'Stake', pid: item.pid, tokenId: item.token_id}]} />
                                 </div>
                               </div>
                             </div>

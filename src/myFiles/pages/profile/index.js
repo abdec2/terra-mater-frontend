@@ -47,11 +47,12 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 const Profile = function () {
   const userInfo = auth.getUserInfo()
   const [fetchNFTs, setFetchNfts] = useState(true)
+  const [page, setPage] = useState('');
   const [showUpload, setShowUpload] = useState(false);
   const [avatar, setAvatar] = useState('')
   const [loading, setLoading] = useState(false)
   const [fileInput, setFileInput] = useState()
-  const nfts = useFetchNFT(userInfo.address, fetchNFTs, setFetchNfts)
+  const nfts = useFetchNFT(userInfo.address, fetchNFTs, setFetchNfts, page, setPage)
   console.log(nfts)
 
   const handleUploadClose = () => setShowUpload(false);
@@ -150,88 +151,6 @@ const Profile = function () {
             </div>
             <div className="px-2 px-md-5 d-flex  align-items-start justify-content-between flex-column flex-md-row flex-md-row-reverse">
               <div className="d-flex align-items-center justify-content-center collection-social-icon-parent ms-auto">
-                {/* <div className="d-none d-md-flex social align-items-center justify-content-center mt-4">
-                  <TooltipIcon id='website' tooltipTxt='Website' placement='top' >
-                    <a className="website">
-                      <WebsiteIcon size={20} />
-                    </a>
-                  </TooltipIcon>
-                  <TooltipIcon id='etherscan' tooltipTxt='View on etherscan' placement='top' >
-                    <a className="etherscan">
-                      <EtherscanIcon size={20} />
-                    </a>
-                  </TooltipIcon>
-                  <TooltipIcon id='Discord' tooltipTxt='Discord' placement='top' >
-                    <a className="discord">
-                      <DiscordIcon size={20} />
-                    </a>
-                  </TooltipIcon>
-                  <TooltipIcon id='Twitter' tooltipTxt='Twitter' placement='top' >
-                    <a className="twitter">
-                      <TwitterIcon size={20} />
-                    </a>
-                  </TooltipIcon>
-
-                  <div style={{ height: '15px', width: '1px', background: '#ccc' }} className="mx-2"></div>
-                </div> */}
-
-                {/* <div className="share mt-4">
-                  <Dropdown>
-                    <Dropdown.Toggle as={CustomToggle} id="share-dd">
-                      <i className="fa fa-fw text-white" aria-hidden="true"></i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu variant="dark" className="bg-dark p-2" style={{ border: '1px solid #333' }}>
-                      <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <i className="fa fa-fw" aria-hidden="true"></i> Share on facebook
-                      </Dropdown.Item>
-                      <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <i className="fa fa-fw" aria-hidden="true" ></i> Share on Twitter
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div> */}
-
-                {/* <div className="d-md-none mobile-social mt-4">
-                  <Dropdown>
-                    <Dropdown.Toggle as={CustomToggle} id="share-dd">
-                      <i className="fa fa-fw text-white" aria-hidden="true"></i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu variant="dark" className="bg-dark p-2" style={{ border: '1px solid #333' }}>
-                      <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <TooltipIcon id='website' tooltipTxt='Website' placement='top' >
-                          <a className="website">
-                            <WebsiteIcon size={20} />
-                            <span className="ms-2">Website</span>
-                          </a>
-                        </TooltipIcon>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <TooltipIcon id='etherscan' tooltipTxt='View on etherscan' placement='top' >
-                          <a className="etherscan">
-                            <EtherscanIcon size={20} />
-                            <span className="ms-2">View on Etherscan</span>
-                          </a>
-                        </TooltipIcon>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <TooltipIcon id='Discord' tooltipTxt='Discord' placement='top' >
-                          <a className="discord">
-                            <DiscordIcon size={20} />
-                            <span className="ms-2">Discord</span>
-                          </a>
-                        </TooltipIcon>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="p-2 fw-normal text-white share-dd-item">
-                        <TooltipIcon id='Twitter' tooltipTxt='Twitter' placement='top' >
-                          <a className="twitter">
-                            <TwitterIcon size={20} />
-                            <span className="ms-2">Twitter</span>
-                          </a>
-                        </TooltipIcon>
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div> */}
 
               </div>
               <div className="mt-4 d-flex align-items-center">
