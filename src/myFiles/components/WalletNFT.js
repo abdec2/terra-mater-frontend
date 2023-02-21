@@ -241,11 +241,16 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
             {
                 nftdata && nftdata.normalized_metadata.image && (
                     <Card className='m-2' style={{ width: '18rem' }}>
-                        <Card.Img variant="top" src={transformImagePath(nftdata.normalized_metadata.image)} />
+                        <Card.Img variant="top" width={250} height={250} src={transformImagePath(nftdata.normalized_metadata.image)} />
                         <Card.Body>
                             <Card.Title>{nftdata.normalized_metadata.name}</Card.Title>
                             <p className="mb-3" style={{ fontSize: '14px' }}>{nftdata.name}</p>
-                            <button className='btn-custom-card' onClick={() => setOpenCheckout(true)}>List Now</button>
+                            <button className='btn-custom-card' onClick={async () => {
+                                if(!web3Store.account) {
+                                    await reconnectWallet(dispatch)
+                                }
+                                setOpenCheckout(true)
+                            }}>List Now</button>
                         </Card.Body>
                     </Card>
                 )

@@ -118,6 +118,7 @@ const Index = () => {
                     <Nav className="align-items-center w-100 justify-content-between m-auto ">
                         <NavLink className='p-3 p-lg-0 nav-link fw-normal' to="/explore">Collections</NavLink>
                         <NavLink className='p-3 p-lg-0 nav-link fw-normal' to="/about">About</NavLink>
+                        <NavLink className='p-3 p-lg-0 nav-link fw-normal' to="/nft-staking">NFT Staking</NavLink>
                         {
                             !islogin && (
                                 <Nav.Link className='p-3 p-lg-0 fw-normal' onClick={() => connectWallet(dispatch)}>Connect Wallet</Nav.Link>
@@ -133,7 +134,7 @@ const Index = () => {
                                     <Dropdown.Menu variant="dark" className="bg-dark p-2" style={{border: '1px solid #333'}}>
                                         <Dropdown.Header>
                                             <h5 className="text-white mb-1">My Wallet</h5>
-                                            {`${account.slice(0,5)}....${account.slice(37,42)}`}
+                                            {`${userData.address.slice(0,5)}....${userData.address.slice(37,42)}`}
                                         </Dropdown.Header>
                                         <Dropdown.Divider  />
                                         <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate('/Profile')}>

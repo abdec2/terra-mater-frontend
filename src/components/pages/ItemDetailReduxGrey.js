@@ -4,7 +4,7 @@ import Clock from "../components/Clock";
 import Footer from '../components/footer';
 //import { createGlobalStyle } from 'styled-components';
 import * as selectors from '../../store/selectors';
-import { fetchNftDetail, mintNFT } from "../../store/actions/thunks";
+import { fetchNftDetail, mintNFT, addTransaction } from "../../store/actions/thunks";
 /*import Checkout from "../components/Checkout";*/
 import api from "../../core/api";
 import moment from "moment";
@@ -25,6 +25,9 @@ import axios from "axios";
 import { useCallback } from "react";
 import { useState } from "react";
 import Accordian from "../../myFiles/components/Accordian";
+import PriceHistory from "../../myFiles/components/PriceHistory";
+
+
 //SWITCH VARIABLE FOR PAGE STYLE
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
@@ -47,31 +50,6 @@ const ItemDetailRedux = () => {
     console.log(web3Store)
 
     const { nftId } = useParams();
-
-    // const handleBtnClick0 = () => {
-    //     setOpenMenu0(!openMenu0);
-    //     setOpenMenu(false);
-    //     setOpenMenu1(false);
-    //     document.getElementById("Mainbtn0").classList.add("active");
-    //     document.getElementById("Mainbtn").classList.remove("active");
-    //     document.getElementById("Mainbtn1").classList.remove("active");
-    // };
-    // const handleBtnClick = () => {
-    //     setOpenMenu(!openMenu);
-    //     setOpenMenu1(false);
-    //     setOpenMenu0(false);
-    //     document.getElementById("Mainbtn").classList.add("active");
-    //     document.getElementById("Mainbtn1").classList.remove("active");
-    //     document.getElementById("Mainbtn0").classList.remove("active");
-    // };
-    // const handleBtnClick1 = () => {
-    //     setOpenMenu1(!openMenu1);
-    //     setOpenMenu(false);
-    //     setOpenMenu0(false);
-    //     document.getElementById("Mainbtn1").classList.add("active");
-    //     document.getElementById("Mainbtn").classList.remove("active");
-    //     document.getElementById("Mainbtn0").classList.remove("active");
-    // };
 
     const dispatch = useDispatch();
     const nftDetailState = useSelector(selectors.nftDetailState);
@@ -143,7 +121,7 @@ const ItemDetailRedux = () => {
             const estimateGas = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).estimateGas({ from: web3Store.account })
             const mintTx = await nftContract.methods.mint(nft.token_id, nftPrice.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString() })
             console.log(mintTx)
-            dispatch(mintNFT(nftId, web3Store.account))
+            dispatch(addTransaction(nftId, web3Store.account, nft.price.toString(), 'Mint'))
             setLoading(false)
             setOpenCheckout(false)
         } catch (e) {
@@ -162,7 +140,7 @@ const ItemDetailRedux = () => {
             console.log(estimateGas.toString())
             const createSaleTx = await mpContract.methods.createMarketSale(nft.collection.contract_address, nft.item_id, nftPrice.toString()).send({ from: web3Store.account, gasLimit: estimateGas.toString() })
             console.log(createSaleTx)
-            dispatch(mintNFT(nftId, web3Store.account))
+            dispatch(addTransaction(nftId, web3Store.account, nft.price.toString(), 'Buy'))
             setLoading(false)
             setOpenCheckout(false)
         } catch (e) {
@@ -370,10 +348,14 @@ const ItemDetailRedux = () => {
                     </div>
                 </div>
                 <div className="row mt-4">
-                    <div className="col-md-12">
+                    <div className="col-sm-12 col-md-6">
                         <Accordian nft={nft} />
                     </div>
+                    <div className="col-sm-12 col-md-6">
+                        <PriceHistory nft={nft} />
+                    </div>
                 </div>
+               
             </section>
             <Footer />
             {openCheckout && (

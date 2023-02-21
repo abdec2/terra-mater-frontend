@@ -47,7 +47,7 @@ export const switchNetwork = async (provider) => {
 
         await provider.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: '0x89' }],
+            params: [{ chainId: CONFIG.CHAIN_ID_HEX }],
         });
         console.log("You have switched to the right network")
 

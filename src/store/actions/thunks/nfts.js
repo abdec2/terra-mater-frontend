@@ -5,12 +5,12 @@ import auth from '../../../core/auth';
 
 
 
-export const fetchNftsBreakdown = (page=1, collectionId, isMusic = false) => async (dispatch) => {
+export const fetchNftsBreakdown = (page = 1, collectionId, isMusic = false) => async (dispatch) => {
 
   dispatch(actions.getNftBreakdown.request(Canceler.cancel));
 
   try {
-    const filters = collectionId ? `${'collectionId='+collectionId}` : ''
+    const filters = collectionId ? `${'collectionId=' + collectionId}` : ''
     const { data, meta } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}?page=${page}&${filters}`, {
       cancelToken: Canceler.token,
       params: {}
@@ -37,17 +37,48 @@ export const fetchNftShowcase = () => async (dispatch) => {
   }
 };
 
+export const addTransaction = (nftId, newOwner, price, desc) => async (dispatch) => {
+  try {
+    const token = auth.getToken()
+    const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}/${nftId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+    )
+    const res = await Axios.post(`${api.baseUrl+api.transaction}`, {
+      data: {
+        collection: data.collection.id,
+        nft_v_1: data.id, 
+        from_address: data.owner !== null && data.owner !== '' && data.owner !== undefined ? data.owner : '0x0000000000000000000000000000000000000000',
+        to_address: newOwner,
+        price: price,
+        desc: desc
+      }
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    dispatch(mintNFT(nftId, newOwner))
+
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export const mintNFT = (nftId, ownerAddress) => async (dispatch) => {
   console.log(nftId)
   try {
     const token = auth.getToken()
-    const {data} = await Axios.put(`${api.baseUrl}${api['nft-v1s']}/${nftId}`, 
-    {
-      data: {
-        owner: ownerAddress, 
-        nft_status: 3
-      }
-    }, {
+    const { data } = await Axios.put(`${api.baseUrl}${api['nft-v1s']}/${nftId}`,
+      {
+        data: {
+          owner: ownerAddress,
+          nft_status: 3
+        }
+      }, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -70,7 +101,8 @@ export const fetchNftDetail = (nftId) => async (dispatch) => {
     const relations = [
       'collection',
       'nft_status',
-      'collection.feature_img'
+      'collection.feature_img',
+      'transaction'
     ];
     let populate = `populate=${relations}`;
     const { data } = await Axios.get(`${api.baseUrl}${api['nft-v1s']}/${nftId}?${populate}`, {

@@ -41,6 +41,8 @@
     "sass": "^1.39.2",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.1",
+    "sweetalert2": "^11.6.16",
+    "sweetalert2-react-content": "^4.1.0",
     "typesafe-actions": "^5.1.0",
     "web-vitals": "^2.1.0",
     "web3": "^1.8.1",

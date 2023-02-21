@@ -5,6 +5,8 @@ import Row from 'react-bootstrap/Row';
 import Tab from 'react-bootstrap/Tab';
 import OnSaleItem from './OnSaleItem';
 import WalletNFT from './WalletNFT';
+import InfiniteScroll from "react-infinite-scroll-component";
+import Spinner from 'react-bootstrap/Spinner';
 
 function Tabs({ nfts, setFetchNfts }) {
   const [height, setHeight] = useState(0);
@@ -35,24 +37,25 @@ function Tabs({ nfts, setFetchNfts }) {
             <Tab.Pane eventKey="collected">
               <div className="row mt-5">
                   {
-                     (nfts && nfts.length > 0) ? (
-                        nfts.map((item, index) => (
-                          <WalletNFT setFetchNfts={setFetchNfts} nft={item} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4" />
-                        ))
+                     (nfts && nfts.result.length > 0) ? (
+                        <InfiniteScroll
+                          dataLength={nfts.result.length}
+                          next={() => setFetchNfts(true)}
+                          hasMore={nfts.result.length < nfts.total}
+                          loader={<Spinner animation="border" />}
+                          style={{ overflow: 'hidden' }}
+                        >
+                          <div className="row">
+                            {nfts.result.map((item, index) => (
+                              <WalletNFT setFetchNfts={setFetchNfts} nft={item} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4" />
+                            ))}
+                          </div>
+                        </InfiniteScroll>
                      ) : (
                       <h3 className='text-center fw-normal'>No items to display</h3>
                      )
                   }
-                  {/* {
-                    nfts && nfts.ownedNfts.length > 0 && nfts.ownedNfts.map((item, index) => (
-                      <WalletNFT setFetchNfts={setFetchNfts} nft={item} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-4 col-md-6 col-sm-6 col-xs-12 mb-4" />
-                    ))
-                  }
-                  {
-                    !nfts && (
-                      <h3 className='text-center fw-normal'>No items to display</h3>
-                    )
-                  } */}
+                  
                 
               </div>
             </Tab.Pane>

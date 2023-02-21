@@ -1,0 +1,29 @@
+.price_history{
+    max-height: 200px;
+    overflow: auto;
+}
+
+.price_history::-webkit-scrollbar {
+    width: 0.5rem;
+}
+.price_history::-webkit-scrollbar-thumb {
+    background-color: rgb(163, 154, 154);
+    border-radius: 12px;
+    display: none;
+}
+
+.price_history table {
+    border-collapse: collapse;
+    width: 100%;
+    color: white;
+  }
+  
+  .price_history td, th {
+    border: 1px solid #222;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  .price_history tr:nth-child(even) {
+    background-color: #111;
+  }

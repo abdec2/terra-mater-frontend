@@ -13,6 +13,9 @@ import auth from '../../core/auth';
 import axios from 'axios';
 import api from '../../core/api';
 
+import DropDownComponent from './../pages/profile/dropdown'
+import { reconnectWallet } from '../../components/menu/connectWallet';
+
 
 
 const Outer = styled.div`
@@ -27,6 +30,7 @@ const Outer = styled.div`
 //react functional component
 const OnSaleItem = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4', height, onImgLoad }) => {
     const [nftdata, setNftData] = useState(null)
+    const [fetch, setFetch] = useState(false)
     const [loading, setLoading] = useState(false)
     const [openCheckout, setOpenCheckout] = useState(false);
     const dispatch = useDispatch()
@@ -65,21 +69,56 @@ const OnSaleItem = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 c
         return res
     }
 
+    const releaseSale = async (itemId, nft) => {
+        try {
+            if(!web3Store.account) {
+                await reconnectWallet(dispatch)
+            }
+            const contract = new web3.eth.Contract(marketplaceAbi, CONFIG.MARKETPLACE_ADDRESS)
+            const estimateGas = await contract.methods.releaseSale(itemId).estimateGas({from: web3Store.account})
+            const releaseTx = await contract.methods.releaseSale(itemId).send({from: web3Store.account, gasLimit: estimateGas.toString()})
+            console.log(releaseTx)
+
+            const token = auth.getToken()
+            const res = axios.put(`${api.baseUrl+api['nft-v1s']}/${nft.id}`, {
+                data: {
+                    nft_status: 3
+                }
+            }, 
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            
+            )
+            setFetch(true)
+        } catch(e) {
+            console.log(e)
+        }
+    }
+
     const getUserOnSaleNFT = async () => {
+        console.log('in')
         try {
             const res = await axios.get(`${api.baseUrl}/api/nft?filters[$and][0][owner]=${userInfo.address}&filters[$and][1][nft_status]=2&populate=*`)
             console.log(res.data.data)
             setNftData(res.data.data)
+            setFetch(false)
         } catch (e) {
             console.log(e)
         }
     }
     console.log('nftdata', nftdata)
 
+    useEffect(()=>{
+        setFetch(true)
+    }, [])
+
     useEffect(() => {
         getUserOnSaleNFT()
         // setNftData(nft)
-    }, [])
+    }, [fetch])
 
     return (
         <>
@@ -88,11 +127,14 @@ const OnSaleItem = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 c
                     (nftdata && nftdata.length > 0) ? (
                         nftdata.map((nft, i) => (
                             <Card key={i} className='m-2 card' style={{ width: '18rem' }}>
-                                <Card.Img variant="top" src={(nft.attributes.img_url !== '') ? nft.attributes.img_url : 'https://via.placeholder.com/300x300.png?text=NFT Image'} />
+                                <Card.Img variant="top" width={250} height={250} src={(nft.attributes.img_url !== '') ? nft.attributes.img_url : 'https://via.placeholder.com/300x300.png?text=NFT Image'} />
                                 <Card.Body>
                                     <Card.Title>{nft.attributes.token_name}</Card.Title>
                                     <p className="mb-3" style={{ fontSize: '14px' }}>{nft.attributes.collection.data.attributes.name}</p>
-                                    <button className='btn-custom-card' onClick={() => navigateTo(`/ItemDetail/${nft.id}`)}>View</button>
+                                    <div className='d-flex align-items-center justify-content-between'>
+                                        <button className='btn-custom-card' onClick={() => navigateTo(`/ItemDetail/${nft.id}`)}>View</button>
+                                        <DropDownComponent handleClick={releaseSale} itemId={nft.attributes.item_id} nft={nft} />
+                                    </div>
                                 </Card.Body>
                             </Card>
                         ))
