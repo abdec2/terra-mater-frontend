@@ -12,6 +12,7 @@ import Form from 'react-bootstrap/Form';
 import auth from './../../../core/auth'
 import metrics from './../../../assets/metrics.png'
 import Card from 'react-bootstrap/Card';
+import axios from "axios";
 
 
 //IMPORT DYNAMIC STYLED COMPONENT
@@ -26,6 +27,8 @@ import { CONFIG } from "../../../config/config";
 import Web3 from "web3";
 import stakingAbi from './../../../config/staking.json'
 import tokenAbi from './../../../config/natura.json'
+import api from "../../../core/api";
+import nft_abi from '../../../config/NftAbi.json'
 
 //SWITCH VARIABLE FOR PAGE STYLE
 const theme = 'GREY'; //LIGHT, GREY, RETRO
@@ -55,11 +58,11 @@ const Dashboard = function () {
         naturaPrice: null,
         stakingRewards: null
     })
+    const [col, setCol] = useState([])
     const dispatch = useDispatch();
     const store = useSelector(state => state)
     const userInfo = auth.getUserInfo()
     const web3 = new Web3(process.env.REACT_APP_ALCHEMY_KEY)
-    console.log(web3)
 
     const fetchContractData = async () => {
         const stakingContract = new web3.eth.Contract(stakingAbi, CONFIG.STAKING_ADDRESS)
@@ -77,13 +80,64 @@ const Dashboard = function () {
             btcReserve: web3.utils.fromWei(btcReserve, 'ether'),
             miscReserve,
             otherNaturaReleased: web3.utils.fromWei(otherNaturaReleased, 'ether'),
-            naturaPrice: (parseFloat(naturaPrice.toString()) / Math.pow(10,6)),
+            naturaPrice: (parseFloat(naturaPrice.toString()) / Math.pow(10, 6)),
             stakingRewards: web3.utils.fromWei(stakingRewards, 'ether')
         })
     }
 
+    const getMarketPrice = async (collectionId) => {
+        const res = await axios.get(`${api.baseUrl}/api/transactions?filters[collection]=${collectionId}&sort[0]=publishedAt:desc&sort[1]=price:asc`)
+        const data = res.data.data
+        return data
+    }
+
+    const getCollections = async () => {
+        try {
+            const res = await axios.get(`${api.baseUrl}/api/collections?filters[status]=Active&filters[feature]=true`)
+            const collections = res.data.data
+            if (collections.length > 0) {
+                const collectionData = await Promise.all(collections.map(async (item) => {
+                    const contract = new web3.eth.Contract(nft_abi, item.attributes.contract_address)
+                    const stcontract = new web3.eth.Contract(stakingAbi, CONFIG.STAKING_ADDRESS)
+                    let stakingPoolLength = await stcontract.methods.poolLength().call().then(result => result)
+                    stakingPoolLength = parseInt(stakingPoolLength.toString())
+                    if (stakingPoolLength > 0) {
+                        for (let i = 0; i < stakingPoolLength; i++) {
+                            let pool = await stcontract.methods.poolInfo(i).call().then(result => result)
+                            if (pool.nftAddress.toLowerCase() === item.attributes.contract_address.toLowerCase()) {
+                                item.pid = i
+                                item.marketPrice = parseFloat(pool.cost) / Math.pow(10, 6)
+                            }
+                        }
+                    }
+                    const tradeData = await getMarketPrice(item.id);
+                    if (tradeData.length > 0) {
+                        item.ltp = tradeData[0].attributes.price
+                    } else {
+                        item.ltp = 0
+                    }
+                    let totalSupply = await contract.methods.maxSupply().call().then(result => result)
+                    totalSupply = parseFloat(totalSupply.toString())
+                    let cost = await contract.methods.cost().call().then(result => result)
+                    cost = parseFloat(cost) / Math.pow(10, 6)
+                    const totalValue = (item.marketPrice !== undefined && parseFloat(item.marketPrice) !== 0) ? totalSupply * parseFloat(item.marketPrice) : totalSupply * cost
+                    item.totalSupply = totalSupply
+                    item.totalValue = totalValue
+                    item.floorPrice = cost
+                    return item
+                }))
+                setCol(collectionData)
+                console.log(collectionData)
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     useEffect(() => {
         fetchContractData()
+        getCollections()
     }, [])
 
     return (
@@ -222,7 +276,7 @@ const Dashboard = function () {
                 <div className="row px-2 px-md-5 mt-5">
                     <div>
                         <h3>NFT Collections</h3>
-                        <Table className="border-0 rounded" style={{background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)'}}>
+                        <Table responsive className="border-0 rounded " style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                             <thead>
                                 <tr className="border-bottom border-dark">
                                     <th className="border-0 text-uppercase text-center">NFT Collection</th>
@@ -234,15 +288,25 @@ const Dashboard = function () {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td className="border-0 text-center">Anti Aging Center</td>
-                                    <td className="border-0 text-center">1155440</td>
-                                    <td className="border-0 text-center">8888</td>
-                                    <td className="border-0 text-center">USDT 130</td>
-                                    <td className="border-0 text-center">USDT 130.0</td>
-                                    <td className="border-0 text-center">USDT 0</td>
-                                </tr>
-                                
+                                {
+                                    col.length > 0 && (
+                                        <>
+                                            {
+                                                col.map((item, i) => (
+                                                    <tr key={i}>
+                                                        <td className="border-0 text-center">{item.attributes.name}</td>
+                                                        <td className="border-0 text-center">{item.totalValue}</td>
+                                                        <td className="border-0 text-center">{item.totalSupply}</td>
+                                                        <td className="border-0 text-center">USDT {item.floorPrice}</td>
+                                                        <td className="border-0 text-center">USDT {item.marketPrice}</td>
+                                                        <td className="border-0 text-center">USDT {item.ltp}</td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </>
+                                    )
+                                }
+
                             </tbody>
                         </Table>
                     </div>
