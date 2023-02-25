@@ -68,6 +68,7 @@ import Profile from '../myFiles/pages/profile';
 import CreateNft from './pages/Create/index.js';
 import About from './../myFiles/pages/about';
 import StakingNft from '../myFiles/pages/stakingNFT';
+import Dashboard from '../myFiles/pages/dashboard';
 
 import { createGlobalStyle } from 'styled-components';
 import WorkWithUs from './pages/workWithUs';
@@ -143,6 +144,7 @@ const app= () => (
       <Route element={<ContactUS />} path="/contactus" />
       <Route element={<Contactgrey />} path="/haveproject" /> 
       <Route element={<About />} path="/about" />
+      <Route element={<Dashboard />} path="/dashboard" />
       {/* <Route element={<ElegantIcons />} path="/elegantIcons" /> */}
       {/* <Route element={<EtlineIcons />} path="/etlineIcons" /> */}
       <Route element={<FontAwesomeIcons />} path="/fontAwesomeIcons" />
