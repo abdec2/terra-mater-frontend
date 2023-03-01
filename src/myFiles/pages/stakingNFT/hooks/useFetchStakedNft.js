@@ -4,12 +4,13 @@ import { useState } from "react"
 import ABI from './../../../../config/staking.json'
 import { useSelector } from "react-redux"
 import axios from "axios";
+import Web3 from "web3"
 
 
 const useStakedNFT = (account, fetchNFTs, setFetchNfts) => {
   const [stakedTokens, setStakedTokens] = useState([])
   const web3Store = useSelector(state => state.web3)
-  const web3 = web3Store.web3;
+  const web3 = new Web3(process.env.REACT_APP_ALCHEMY_KEY);
   const loadStakedNFT = async () => {
     if (account) {
       const contract = new web3.eth.Contract(ABI, CONFIG.STAKING_ADDRESS);
@@ -46,26 +47,22 @@ const useStakedNFT = (account, fetchNFTs, setFetchNfts) => {
           .request(options)
           .then(function (response) {
             const res = response.data
-            const result = STAKE_NFT_CONTRACTS.map(contract => {
-              return res.map(item => {
-                if (contract.tokenAddress.toLowerCase() === item.token_address.toLowerCase()) {
-                  item.pid = contract.pid
-                  return item
-                }
-              })
+            const result = res.map(item => {
+              const pidObj = STAKE_NFT_CONTRACTS.filter(contract => contract.tokenAddress.toLowerCase() === item.token_address.toLowerCase())
+              item.pid = pidObj[0].pid
+              return item
+            })
+            console.log(result)
+
+            const resultWithST = result.map(res => {
+              const filteredTokenArray = tokenArray[0].filter(item => (item.token_address.toLowerCase() === res.token_address.toLowerCase() && parseInt(item.token_id) === parseInt(res.token_id)) )
+              res.stakeInfo = filteredTokenArray[0].stakeDetails
+              return res
             })
 
-            const resultWithST = tokenArray[0].map(item => {
-              return result[0].map(res => {
-                if (item.token_address.toLowerCase() === res.token_address.toLowerCase()) {
-                  res.stakeInfo = item.stakeDetails
-                  return res
-                }
-              })
-            })
+            console.log(resultWithST)
 
-
-            setStakedTokens(resultWithST[0])
+            setStakedTokens(resultWithST)
             setFetchNfts(false)
           })
           .catch(function (error) {
