@@ -243,6 +243,7 @@ const StakingNft = () => {
                                     <span>{`${item.name}#${item.token_id}`}</span>
                                     <StakeTimerComponent startDate={item.stakeInfo.timestamp} />
                                     <span style={{fontWeight: 'normal', color: '#555', fontSize: '12px'}}>Reward per day: {(item.stakeInfo.rewardPerDay / Math.pow(10,18)).toFixed(2)} Natura</span>
+                                    <div style={{fontWeight: 'normal', color: '#555', fontSize: '12px'}}>Total Rewards: {(item.stakeInfo.totalRewards / Math.pow(10,18)).toFixed(2)} Natura</div>
                                   </h3>
                                 </div>
 

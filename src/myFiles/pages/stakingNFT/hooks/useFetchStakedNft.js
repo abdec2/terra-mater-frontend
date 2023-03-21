@@ -21,6 +21,12 @@ const useStakedNFT = (account, fetchNFTs, setFetchNfts) => {
             const stakeDetails = await contract.methods.vault(item.pid, token).call()
             const rewardsPerDay = await contract.methods.getRewardsPerDay(item.pid).call()
             stakeDetails.rewardPerDay = parseInt(rewardsPerDay)
+            const currentTimeStamp = new Date().getTime()
+            const stakeTimeStamp = parseInt(stakeDetails.timestamp)
+            const diff = (currentTimeStamp / 1000) - stakeTimeStamp
+            const days = Math.floor(diff / (60*60*24))
+            const totalRewards = days * rewardsPerDay
+            stakeDetails.totalRewards = totalRewards
             return { token_address: item.tokenAddress, token_id: token, stakeDetails: stakeDetails }
           })
         )
