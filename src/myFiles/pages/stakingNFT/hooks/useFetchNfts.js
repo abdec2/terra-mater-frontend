@@ -22,7 +22,7 @@ export const useFetchNFT = (account, fetchNFTs, setFetchNFTs, cursors = null) =>
                         chain: CONFIG.CHAIN_FOR_MORALIS, 
                         format: 'decimal', 
                         token_addresses: tokenAddress,
-                        limit: 10,
+                        limit: 20,
                         normalizeMetadata: 'true'
                     },
                     headers: {accept: 'application/json', 'X-API-Key': process.env.REACT_APP_MORALIS_API_KEY}
