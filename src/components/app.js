@@ -73,6 +73,12 @@ import Dashboard from '../myFiles/pages/dashboard';
 import { createGlobalStyle } from 'styled-components';
 import WorkWithUs from './pages/workWithUs';
 
+import Moralis from 'moralis';
+
+Moralis.start({
+    apiKey: process.env.REACT_APP_MORALIS_API_KEY
+});
+
 const GlobalStyles = createGlobalStyle`
   :root {
     scroll-behavior: unset;
