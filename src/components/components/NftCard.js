@@ -14,10 +14,15 @@ const Outer = styled.div`
 `;
 
 //react functional component
-const NftCard = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4', clockTop = true, height, onImgLoad }) => {
+const NftCard = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4', clockTop = true, height, onImgLoad, marketItems }) => {
     const navigate = useNavigate();
     const navigateTo = (link) => {
         navigate(link);
+    }
+
+    const checkBuyToken = () => {
+        const match = marketItems.filter(item => parseInt(item.tokenId) === parseInt(nft.token_id))
+        return match.length > 0 ? "Buy" : "View"
     }
 
     return (
@@ -46,7 +51,8 @@ const NftCard = ({ nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12
                         } */}
                     </div>
                     <div className="nft__item_action">
-                        <span>{nft.nft_status.Status === 'Mint' ? 'Mint Now' : nft.nft_status.Status === 'Buy Now' ? 'Buy Now' : 'View'}</span>
+                        {/* <span>{nft.nft_status.Status === 'Mint' ? 'Mint Now' : nft.nft_status.Status === 'Buy Now' ? 'Buy Now' : 'View'}</span> */}
+                        <span>{checkBuyToken()}</span>
                     </div>
                     <div className="nft__item_like">
                         <i className="fa fa-heart"></i><span>{nft.likes}</span>

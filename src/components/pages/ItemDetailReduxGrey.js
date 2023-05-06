@@ -284,7 +284,7 @@ const ItemDetailRedux = () => {
                             <h3 className="text-uppercase color mb-0">{nft.token_name}</h3>
                             <div className="mb-3">
                                 <span>Owner:</span>
-                                <span className="ms-3">{nft.owner && nft.owner !== '' ? `${formatOwner(nft.owner)}` : nft.collection && `${nft.collection.contract_address.slice(0, 5)}....${nft.collection.contract_address.slice(37, 42)}`}</span>
+                                <span className="ms-3">{nft.chain_data?.length > 0 ? `${nft.chain_data[0].owner_of.slice(0, 5)}....${nft.chain_data[0].owner_of.slice(37, 42)}`: ''}</span>
                             </div>
                             <p>{nft.description}</p>
 
@@ -321,7 +321,7 @@ const ItemDetailRedux = () => {
 
                                     }
                                     {
-                                        nft.nft_status && nft.nft_status.Status === 'Buy Now' && (
+                                        nft.chain_data && nft.chain_data.length > 0 && nft.chain_data[0].owner_of.toLowerCase() === CONFIG.MARKETPLACE_ADDRESS.toLowerCase() && (
                                             <button className='btn-main lead  mr15' onClick={handleOpenCheckout}>Buy Now</button>
                                         )
                                     }

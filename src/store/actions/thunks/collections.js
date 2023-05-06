@@ -2,6 +2,9 @@ import { Axios, Canceler } from '../../../core/axios';
 import * as actions from '../../actions';
 import api from '../../../core/api';
 import axios from 'axios';
+import ABI from './../../../config/Marketplace.json'
+import Web3 from "web3"
+import { CONFIG } from '../../../config/config';
 
 export const fetchCollections = (collectionId) => async (dispatch) => {
   dispatch(actions.getCollections.request(Canceler.cancel));
@@ -92,3 +95,10 @@ export const searchCollectionNFT = (collectionId, searchtxt) => async (dispatch)
       dispatch(actions.filterStatusUpdate.failure(err));
   }
 };
+
+export const fetchMarketItems = async () => {
+  const web3 = new Web3(process.env.REACT_APP_ALCHEMY_KEY);
+  const contract = new web3.eth.Contract(ABI, CONFIG.MARKETPLACE_ADDRESS);
+  const marketItems = await contract.methods.fetchMarketItems().call()
+  return marketItems
+}
