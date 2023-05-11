@@ -14,7 +14,7 @@ import nftAbi from './../../config/NftAbi.json'
 import { useNavigate } from 'react-router-dom';
 
 import { useParams } from "react-router-dom";
-import { reconnectWallet } from "../menu/connectWallet";
+import { connectWallet, reconnectWallet } from "../menu/connectWallet";
 
 //IMPORT DYNAMIC STYLED COMPONENT
 import { StyledHeader } from '../Styles';
@@ -60,7 +60,10 @@ const ItemDetailRedux = () => {
     const [openCheckoutbid, setOpenCheckoutbid] = React.useState(false);
 
     const handleOpenCheckout = async () => {
-        if (!web3Store.account) {
+        if(!userInfo) {
+            await connectWallet(dispatch)
+        }
+        if (userInfo && !web3Store.account) {
             await reconnectWallet(dispatch)
         }
         setOpenCheckout(true)
