@@ -137,7 +137,7 @@ const Colection = function () {
   return (
     <div className="greyscheme">
       <StyledHeader theme={theme} />
-      <section id='profile_banner' className='jumbotron breadcumb no-bg' style={{ backgroundImage: `url(${hotCollections.banner ? hotCollections.banner.url : 'https://via.placeholder.com/1920x380.png?text=Collection+Banner'})` }}>
+      <section id='profile_banner' className='jumbotron breadcumb no-bg' style={{ backgroundImage: `url(${hotCollections.banner ? hotCollections.banner.url : 'https://via.placeholder.com/1920x380.png?text=Collection+Banner'})`, backgroundPositionX: 'center' }}>
         <div className='mainbreadcumb'>
         </div>
       </section>

@@ -56,9 +56,7 @@ function CategoryTabs({ nfts }) {
                             categories && categories.data.map((item, index) => (
                                 <Tab.Pane eventKey={item.attributes.category.toLowerCase()} key={index}>
                                     <div className="row mt-5">
-                                        <div className="col-12">
-                                            <ListCollections categoryId={item.id} />
-                                        </div>
+                                        <ListCollections categoryId={item.id} />
                                     </div>
                                 </Tab.Pane>
                             ))

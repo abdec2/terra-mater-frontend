@@ -46,6 +46,14 @@ export const STAKE_NFT_CONTRACTS = [
   {
     pid: 1,
     tokenAddress: '0x0a898C1c6b9eD3859B5CE6670D0741C558F1AD6A'
+  },
+  {
+    pid: 2,
+    tokenAddress: '0x1e081B71BD2ad3f500FDc95e32Ee25fFD96fFb96'
+  },
+  {
+    pid: 3,
+    tokenAddress: '0xf3730AdC3c034791d096EaF9E457a061C44f2113'
   }
 ]
 
