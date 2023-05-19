@@ -17,6 +17,7 @@
     "font-awesome": "^4.7.0",
     "formik": "^2.2.9",
     "moment": "^2.29.1",
+    "moralis": "^2.19.0",
     "opensea-js": "^3.0.4",
     "react": "^16.8.0",
     "react-awesome-reveal": "^3.8.1",

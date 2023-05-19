@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ColumnNewRedux from '../components/ColumnNewRedux';
 import Footer from '../components/footer';
 import * as selectors from '../../store/selectors';
-import { fetchCollections, fetchCollectionNfts, searchCollectionNFT } from "../../store/actions/thunks";
+import { fetchCollections, fetchCollectionNfts, searchCollectionNFT, fetchMarketItems } from "../../store/actions/thunks";
 import api from "../../core/api";
 import { useParams } from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -55,6 +55,7 @@ const Colection = function () {
   const filteredNft = useSelector(state => state.filters.selectedStatus);
   const hotCollections = collectionState.data ? collectionState.data[0] : {};
   const nftItems = (filteredNft.data) ? filteredNft.data : collectionNft;
+  const [marketItems, setMarketItems] = useState([])
   console.log(filteredNft)
   console.log(nftItems)
   console.log('hotCollections', hotCollections)
@@ -96,6 +97,8 @@ const Colection = function () {
   const getNFTCount = async () => {
     const res = await axios.get(`${api.baseUrl}/api/nft?filters[collection]=${collectionId}`)
     console.log(res.data)
+    const items = await fetchMarketItems()
+    setMarketItems(items)
     setTotalItems(res.data.meta.pagination.total)
   }
 
@@ -134,7 +137,7 @@ const Colection = function () {
   return (
     <div className="greyscheme">
       <StyledHeader theme={theme} />
-      <section id='profile_banner' className='jumbotron breadcumb no-bg' style={{ backgroundImage: `url(${hotCollections.banner ? hotCollections.banner.url : 'https://via.placeholder.com/1920x380.png?text=Collection+Banner'})` }}>
+      <section id='profile_banner' className='jumbotron breadcumb no-bg' style={{ backgroundImage: `url(${hotCollections.banner ? hotCollections.banner.url : 'https://via.placeholder.com/1920x380.png?text=Collection+Banner'})`, backgroundPositionX: 'center' }}>
         <div className='mainbreadcumb'>
         </div>
       </section>
@@ -390,7 +393,7 @@ const Colection = function () {
                 >
                   <div className='row'>
                     {nftItems.data && nftItems.data.map((nft, index) => (
-                      <NftCard nft={nft} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4" />
+                      <NftCard nft={nft} key={index} onImgLoad={onImgLoad} height={height} className="d-item col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-4" marketItems={marketItems} />
                     ))}
                     <div className='col-lg-12'>
                       <div className="spacer-single"></div>

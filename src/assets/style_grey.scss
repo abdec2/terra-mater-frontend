@@ -2285,14 +2285,15 @@ $color_more: #FC202C;
     box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.3);
     cursor: pointer;
     &:hover{
-      box-shadow: 2px 2px 30px 0px rgba(10, 10, 10, 0.1);
+      // box-shadow: 2px 2px 30px 0px rgba(10, 10, 10, 0.1);
+      transform: scale(1.03);
       transition: .7s;
     }
 }
 .greyscheme .nft__item_info{
   cursor: pointer;
   line-height: 28px;
-  margin-bottom: -22px;
+  margin-bottom: auto;
 }
 .greyscheme .nft__item h4 {
     font-weight: 800;

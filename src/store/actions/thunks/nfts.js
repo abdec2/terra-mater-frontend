@@ -2,6 +2,8 @@ import { Axios, Canceler } from '../../../core/axios';
 import * as actions from '../../actions';
 import api from '../../../core/api';
 import auth from '../../../core/auth';
+import Moralis from 'moralis'
+import { CONFIG } from '../../../config/config';
 
 
 
@@ -109,8 +111,31 @@ export const fetchNftDetail = (nftId) => async (dispatch) => {
       cancelToken: Canceler.token,
       params: {}
     });
+    console.log("data", data)
+    const chaindata = await getNFTChainData(data.token_id, data.collection.contract_address)
+    data["chain_data"] = chaindata 
     dispatch(actions.getNftDetail.success(data));
   } catch (err) {
     dispatch(actions.getNftDetail.failure(err));
   }
 };
+
+export const getNFTChainData = async (token_id, contractAddress) => {
+  try {
+    console.log(token_id, contractAddress)
+    const response = await Moralis.EvmApi.nft.getNFTTokenIdOwners({
+      "chain": CONFIG.CHAIN_ID_HEX,
+      "format": "decimal",
+      "normalizeMetadata": true,
+      "disableTotal": true,
+      "mediaItems": true,
+      "address": contractAddress,
+      "tokenId": token_id
+    });
+
+    return response.raw.result
+  
+  } catch(e) {
+    console.log(e)
+  }
+}

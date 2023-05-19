@@ -36,7 +36,7 @@ const NavLink = (props) => {
 const CustomToggle = forwardRef(({ children, onClick }, ref) => (
     <a
         href=""
-        className="px-2"
+        className="p-3 p-lg-0 nav-link fw-normal text-truncate"
         ref={ref}
         onClick={(e) => {
             e.preventDefault();
@@ -89,7 +89,7 @@ const Index = () => {
             setIsLogin(false)
         }
         console.log(web3Store.account)
-        if(typeof web3Store.account === 'string') {
+        if (typeof web3Store.account === 'string') {
             setAccount(web3Store.account)
         }
     }, [web3Store.account, account]);
@@ -113,48 +113,49 @@ const Index = () => {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav" className='w-100'>
-                    <div className="d-none d-md-block ms-5 me-5"></div>
-                    <div className="d-none d-md-block ms-5 me-5"></div>
-                    <Nav className="align-items-center w-100 justify-content-between m-auto ">
-                        <NavLink className='p-3 p-lg-0 nav-link fw-normal' to="/explore">Collections</NavLink>
-                        <NavLink className='p-3 p-lg-0 nav-link fw-normal' to="/about">About</NavLink>
-                        <NavLink className='p-3 p-lg-0 nav-link fw-normal' to="/nft-staking">NFT Staking</NavLink>
+                    {/* <div className="d-none d-md-block ms-5 me-5"></div>
+                    <div className="d-none d-md-block ms-5 me-5"></div> */}
+                    <Nav className="align-items-center w-100 justify-content-center ">
+                        <div className="px-5 py-2"><NavLink className='p-3 p-lg-0 nav-link fw-normal text-truncate' to="/explore">Collections</NavLink></div>
+                        <div className="px-5 py-2"><NavLink className='p-3 p-lg-0 nav-link fw-normal text-truncate' to="/about">About</NavLink></div>
+                        <div className="px-5 py-2"><NavLink className='p-3 p-lg-0 nav-link fw-normal text-truncate' to="/dashboard">Dashboard</NavLink></div>
+                        <div className="px-5 py-2"><NavLink className='p-3 p-lg-0 nav-link fw-normal text-truncate' to="/nft-staking">NFT Staking</NavLink></div>
                         {
                             !islogin && (
-                                <Nav.Link className='p-3 p-lg-0 fw-normal' onClick={() => connectWallet(dispatch)}>Connect Wallet</Nav.Link>
+                                <div className="px-5 py-2"><Nav.Link className='p-3 p-lg-0 fw-normal' onClick={() => connectWallet(dispatch)}>Connect Wallet</Nav.Link></div>
                             )
                         }
                         {
                             islogin && (
-                                <Dropdown>
-                                    <Dropdown.Toggle as={CustomToggle} id="my-wallet-dd">
-                                        <span className="fw-normal me-2">My Wallet</span>
-                                    </Dropdown.Toggle>
+                                <div className="px-5 py-2">
+                                    <Dropdown>
+                                        <Dropdown.Toggle as={CustomToggle} id="my-wallet-dd">
+                                            <span className="fw-normal me-2">My Wallet</span>
+                                        </Dropdown.Toggle>
 
-                                    <Dropdown.Menu variant="dark" className="bg-dark p-2" style={{border: '1px solid #333'}}>
-                                        <Dropdown.Header>
-                                            <h5 className="text-white mb-1">My Wallet</h5>
-                                            {`${userData.address.slice(0,5)}....${userData.address.slice(37,42)}`}
-                                        </Dropdown.Header>
-                                        <Dropdown.Divider  />
-                                        <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate('/Profile')}>
-                                            My Profile
-                                        </Dropdown.Item>
-                                        <Dropdown.Item className="p-2 fw-normal" onClick={handleLogout}>Sign Out</Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
+                                        <Dropdown.Menu variant="dark" className="bg-dark p-2" style={{ border: '1px solid #333' }}>
+                                            <Dropdown.Header>
+                                                <h5 className="text-white mb-1">My Wallet</h5>
+                                                {`${userData.address.slice(0, 5)}....${userData.address.slice(37, 42)}`}
+                                            </Dropdown.Header>
+                                            <Dropdown.Divider />
+                                            <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate('/Profile')}>
+                                                My Profile
+                                            </Dropdown.Item>
+                                            <Dropdown.Item className="p-2 fw-normal" onClick={handleLogout}>Sign Out</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </div>
                             )
                         }
-                        <div className='p-3 p-lg-0'>
-                            <Form.Control as="select" className='px-5 py-1 mb-0 bg-dark text-white' style={{ color: 'rgba(255,255,255,.55)' }}>
-                                <option value="0">English</option>
-                                <option value="1">Italiano</option>
-                            </Form.Control>
-                        </div>
-                        {/* <div className='mb-4 mb-lg-0'>
-                            <Search />
-                        </div> */}
+
                     </Nav>
+                    <div className='p-3 p-lg-0 ms-lg-5 d-flex justify-content-center'>
+                        <Form.Control as="select" className='mb-0 bg-dark text-white text-center' style={{ color: 'rgba(255,255,255,.55)', width: '120px' }}>
+                            <option value="0">English</option>
+                            <option value="1">Italiano</option>
+                        </Form.Control>
+                    </div>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
