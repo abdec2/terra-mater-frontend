@@ -239,7 +239,7 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
     return (
         <>
             {
-                nftdata && nftdata.normalized_metadata.image && (
+                nftdata && nftdata.token_address.toLowerCase() !== String("0x5d90317b33da4464de99a1757be47af40a1ff002").toLowerCase() && nftdata.normalized_metadata.image && (
                     <Card className='m-2' style={{ width: '18rem' }}>
                         <Card.Img variant="top" width={250} height={250} src={transformImagePath(nftdata.normalized_metadata.image)} />
                         <Card.Body>

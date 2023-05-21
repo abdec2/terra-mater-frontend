@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { CONFIG, STAKE_NFT_CONTRACTS } from './../../../../config/config'
 import { useState } from "react"
 import ABI from './../../../../config/staking.json'
+import helperAbi from './../../../../config/helper.json'
 import { useSelector } from "react-redux"
 import axios from "axios";
 import Web3 from "web3"
@@ -14,8 +15,9 @@ const useStakedNFT = (account, fetchNFTs, setFetchNfts) => {
   const loadStakedNFT = async () => {
     if (account) {
       const contract = new web3.eth.Contract(ABI, CONFIG.STAKING_ADDRESS);
+      const helper = new web3.eth.Contract(helperAbi, CONFIG.HELPER_CONTRACT);
       const tokenArray = await Promise.all(STAKE_NFT_CONTRACTS.map(async item => {
-        const staked_tokens = await contract.methods.getUserStakedTokens(item.pid, account).call()
+        const staked_tokens = await helper.methods.getUserStakedTokens(item.pid, account).call()
         const result = await Promise.all(
           staked_tokens.map(async (token) => {
             const stakeDetails = await contract.methods.vault(item.pid, token).call()
@@ -64,7 +66,7 @@ const useStakedNFT = (account, fetchNFTs, setFetchNfts) => {
           const res = response.data
           const result = res.map(item => {
             const pidObj = STAKE_NFT_CONTRACTS.filter(contract => contract.tokenAddress.toLowerCase() === item.token_address.toLowerCase())
-            
+
             item.pid = pidObj[0].pid
             return item
           })
@@ -79,7 +81,7 @@ const useStakedNFT = (account, fetchNFTs, setFetchNfts) => {
           if (resultWithST.length > 0) {
             data = [...data, ...resultWithST]
           }
-          
+
         }
       }))
       setStakedTokens([...data])
