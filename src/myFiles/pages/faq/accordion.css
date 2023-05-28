@@ -1,0 +1,50 @@
+.accordion-item {
+  background-color: #0e0e0e !important;
+  color: white !important;
+  border: 1px solid #0e0e0e !important;
+}
+.accordion-button {
+  background-color: #0e0e0e !important;
+  color: white !important;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  color: white;
+}
+.accordion-body {
+  background-color: #0e0e0e !important;
+  color: white !important;
+}
+
+.accordion .card {
+  /* We do this because the css “+” combinator works only on the     
+    next sibling. Thus, <Accordion.Collapse> has to be placed before    
+    <Accordion.Toggle> in JSX
+    To avoid the odd situation where the accordion’s content shows   
+    up on top, this CSS reverses the order that  
+    shows up on screen with flexbox */
+  /* display: flex;
+  flex-direction: column-reverse;
+  border: 0px solid whitesmoke;
+  cursor: pointer;
+  background-color: rgb(200, 150, 100); */
+}
+/*card-header == <Accordion.Toggle/>*/
+/* div[class="”card-header”"] .accordion-arrow {
+  transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+} */
+/* When Accordion.Toggle is clicked, the class “show” is added to Accordion.Collapse when it opens */
+/* div[class~="”show”"] + div[class="”card-header”"] .accordion-arrow {
+  transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+} */

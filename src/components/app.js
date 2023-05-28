@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import ScrollToTopBtn from './menu/ScrollToTop';
-import Header from './../myFiles/components/header';
+import ScrollToTopBtn from "./menu/ScrollToTop";
+import Header from "./../myFiles/components/header";
 // import Home from './pages/home';
 // import HomeGrey from './pages/homeGrey';
 // import Home1 from './pages/home1';
 // import Home1grey from './pages/home1Grey';
 // import Home2 from './pages/home2';
-import Home2grey from './pages/home2Grey';
+import Home2grey from "./pages/home2Grey";
 // import Home3 from './pages/home3';
 // import Home4 from './pages/home4';
 // import Home5 from './pages/home5';
@@ -15,7 +15,7 @@ import Home2grey from './pages/home2Grey';
 // import Explore from './pages/explore';
 // import Exploregrey from './pages/exploreGrey';
 // import Explore2 from './pages/explore2';
-import Explore2grey from './pages/explore2Grey';
+import Explore2grey from "./pages/explore2Grey";
 // import ExploreOpensea from './pages/Opensea/explore';
 // import Rangking from './pages/rangking';
 // import RankingRedux from './pages/RankingRedux';
@@ -25,11 +25,11 @@ import Explore2grey from './pages/explore2Grey';
 // import Helpcenter from './pages/helpcenter';
 // import Helpcentergrey from './pages/helpcenterGrey';
 // import Colection from './pages/colection';
-import Colectiongrey from './pages/colectionGrey';
+import Colectiongrey from "./pages/colectionGrey";
 // import ItemDetail from './pages/ItemDetail';
 // import ItemDetailRedux from './pages/ItemDetailRedux';
-import ItemDetailReduxgrey from './pages/ItemDetailReduxGrey';
-import Author from './pages/Author';
+import ItemDetailReduxgrey from "./pages/ItemDetailReduxGrey";
+import Author from "./pages/Author";
 // import AuthorGrey from './pages/AuthorGrey';
 // import AuthorOpensea from './pages/Opensea/author';
 // import Wallet from './pages/wallet';
@@ -44,39 +44,40 @@ import Author from './pages/Author';
 // import Works from './pages/works';
 // import News from './pages/news';
 // import NewsSingle from './pages/newsSingle';
-import Create from './pages/create';
-import Creategrey from './pages/createGrey';
-import Create2 from './pages/create2';
-import Create3 from './pages/create3';
-import Createoption from './pages/createOptions';
+import Create from "./pages/create";
+import Creategrey from "./pages/createGrey";
+import Create2 from "./pages/create2";
+import Create3 from "./pages/create3";
+import Createoption from "./pages/createOptions";
 // import Activity from './pages/activity';
 // import Activitygrey from './pages/activityGrey';
 // import Contact from './pages/contact';
-import ContactUS from './pages/contactus';
-import Contactgrey from './pages/contactGrey';
-import ElegantIcons from './pages/elegantIcons';
-import EtlineIcons from './pages/etlineIcons';
-import FontAwesomeIcons from './pages/fontAwesomeIcons';
-import Accordion from './pages/accordion';
-import Alerts from './pages/alerts';
-import Progressbar from './pages/progressbar';
-import Tabs from './pages/tabs';
-import Minter from './pages/Minter';
-import Mintergrey from './pages/MinterGrey';
-import auth from '../core/auth';
-import Profile from '../myFiles/pages/profile';
-import CreateNft from './pages/Create/index.js';
-import About from './../myFiles/pages/about';
-import StakingNft from '../myFiles/pages/stakingNFT';
-import Dashboard from '../myFiles/pages/dashboard';
+import ContactUS from "./pages/contactus";
+import Contactgrey from "./pages/contactGrey";
+import ElegantIcons from "./pages/elegantIcons";
+import EtlineIcons from "./pages/etlineIcons";
+import FontAwesomeIcons from "./pages/fontAwesomeIcons";
+import Accordion from "./pages/accordion";
+import Alerts from "./pages/alerts";
+import Progressbar from "./pages/progressbar";
+import Tabs from "./pages/tabs";
+import Minter from "./pages/Minter";
+import Mintergrey from "./pages/MinterGrey";
+import auth from "../core/auth";
+import Profile from "../myFiles/pages/profile";
+import CreateNft from "./pages/Create/index.js";
+import About from "./../myFiles/pages/about";
+import StakingNft from "../myFiles/pages/stakingNFT";
+import Dashboard from "../myFiles/pages/dashboard";
 
-import { createGlobalStyle } from 'styled-components';
-import WorkWithUs from './pages/workWithUs';
+import { createGlobalStyle } from "styled-components";
+import WorkWithUs from "./pages/workWithUs";
 
-import Moralis from 'moralis';
+import Moralis from "moralis";
+import Swapping from "../myFiles/pages/swapping";
 
 Moralis.start({
-    apiKey: process.env.REACT_APP_MORALIS_API_KEY
+  apiKey: process.env.REACT_APP_MORALIS_API_KEY,
 });
 
 const GlobalStyles = createGlobalStyle`
@@ -89,53 +90,53 @@ const ProtectedRoute = ({ children }) => {
   let location = useLocation();
   const isAuth = auth.getToken() !== null;
 
-  return (
-      isAuth ? children : <Navigate to="/login" state={{ from: location }} replace />
-  )
+  return isAuth ? (
+    children
+  ) : (
+    <Navigate to="/login" state={{ from: location }} replace />
+  );
 };
 
-const app= () => (
+const app = () => (
   <div className="wraper">
-  <GlobalStyles />
-    <Header/>
+    <GlobalStyles />
+    <Header />
     <Routes>
       <Route path="*" element={<Navigate to="/home" replace />} />
       <Route path="/Author">
-        <Route 
-          path=":authorId" 
+        <Route
+          path=":authorId"
           element={
             <ProtectedRoute>
               <Author />
             </ProtectedRoute>
-          } 
+          }
         />
       </Route>
       <Route path="/Profile">
-        <Route 
-          path="/Profile" 
+        <Route
+          path="/Profile"
           element={
             <ProtectedRoute>
               <Profile />
             </ProtectedRoute>
-          } 
+          }
         />
       </Route>
       <Route path="/nft-staking">
-        <Route 
-          path="/nft-staking" 
-          element={
-              <StakingNft />
-          } 
-        />
+        <Route path="/nft-staking" element={<StakingNft />} />
+      </Route>
+      <Route path="/swapping">
+        <Route path="/swapping" element={<Swapping />} />
       </Route>
       <Route path="/home" element={<Home2grey />} />
-      <Route element={<Explore2grey/>} path="/explore" />
+      <Route element={<Explore2grey />} path="/explore" />
       {/* <Route element={<RankingRedux/>} path="/rangking" />
       <Route element={<RankingReduxgrey/>} path="/rangkingGrey" /> */}
       {/* <Route element={<Auction/>} path="/Auction" />
       <Route element={<Helpcenter/>} path="/helpcenter" /> */}
-      <Route element={<Colectiongrey/>} path="/colection/:collectionId" />
-      <Route element={<ItemDetailReduxgrey/>} path="/ItemDetail/:nftId" />
+      <Route element={<Colectiongrey />} path="/colection/:collectionId" />
+      <Route element={<ItemDetailReduxgrey />} path="/ItemDetail/:nftId" />
       {/* <Route element={<News />} path="/news" />
       <Route element={<NewsSingle />} path="/news/:postId" /> */}
       {/* <Route element={<Create />} path="/create" /> */}
@@ -148,7 +149,7 @@ const app= () => (
       <Route element={<Contact />} path="/contact" /> */}
       <Route element={<WorkWithUs />} path="/work" />
       <Route element={<ContactUS />} path="/contactus" />
-      <Route element={<Contactgrey />} path="/haveproject" /> 
+      <Route element={<Contactgrey />} path="/haveproject" />
       <Route element={<About />} path="/about" />
       <Route element={<Dashboard />} path="/dashboard" />
       {/* <Route element={<ElegantIcons />} path="/elegantIcons" /> */}
