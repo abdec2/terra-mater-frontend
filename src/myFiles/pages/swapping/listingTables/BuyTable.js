@@ -137,7 +137,8 @@ const TradeTable = (props) => {
     try {
       if (value === "buy") {
         if (currency === "Natura") {
-          const Amount = item.amountA * item.price;
+          const Amount = web3.utils.fromWei(item.amountA.toString(), "ether")* item.price;
+          console.log("AMOUNT", Amount);
           const AMOUNT = web3.utils.toWei(JSON.stringify(Amount), "lovelace");
           // console.log("AMOUNT", AMOUNT);
           // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
@@ -217,17 +218,99 @@ const TradeTable = (props) => {
       console.log(error);
     }
   };
-
+  const calculatePrice = (item) => {
+    if (value === "buy") {
+      if (currency === "Natura") {
+        console.log(item.price);
+        const AMOUNT = web3.utils.fromWei(item.price, "lovelace");
+        console.log(AMOUNT);
+        const PRICE = web3.utils.fromWei(item.price, "ether");
+        // const plateformFee = AMOUNT * 0.05;
+        // const amountToTransfer = AMOUNT - plateformFee;
+        // const am = amountToTransfer;
+        return AMOUNT;
+      } else if (currency === "USDT") {
+        const AMOUNT = web3.utils.fromWei(item.amountA, "lovelace");
+        const PRICE = web3.utils.fromWei(item.price, "ether");
+        // const Burnfee = AMOUNT * 0.04;
+        // const amountToTransfer = AMOUNT - Burnfee;
+        // const am = amountToTransfer * PRICE;
+        return AMOUNT;
+      }
+    }
+  };
+  const calculateAmount = (item) => {
+    if (value === "buy") {
+      if (currency === "Natura") {
+        const AMOUNT = web3.utils.fromWei(item.amountA, "ether");
+        const PRICE = web3.utils.fromWei(item.price, "lovelace");
+        const Burnfee = AMOUNT * 0.04;
+        const amountToTransfer = AMOUNT - Burnfee;
+        const am = amountToTransfer * PRICE;
+        return am;
+      } else if (currency === "USDT") {
+        const AMOUNT = web3.utils.fromWei(item.amountA, "lovelace");
+        const PRICE = web3.utils.fromWei(item.price, "ether");
+        const Burnfee = AMOUNT * 0.04;
+        const amountToTransfer = AMOUNT - Burnfee;
+        const am = amountToTransfer * PRICE;
+        return am;
+      }
+    }
+  };
+  const calculateTotal = (item) => {
+    if (value === "sell") {
+      if (currency === "Natura") {
+        const AMOUNT = web3.utils.fromWei(item.amountA, "ether");
+        const PRICE = web3.utils.fromWei(item.price, "lovelace");
+        const Burnfee = AMOUNT * 0.04;
+        const amountToTransfer = AMOUNT - Burnfee;
+        const am = amountToTransfer * PRICE;
+        return am;
+      } else {
+        if (currency === "USDT") {
+          const AMOUNT = web3.utils.fromWei(item.amountA, "lovelace");
+          const PRICE = web3.utils.fromWei(item.price, "ether");
+          const PlateformFee = AMOUNT * 0.04;
+          const amountToTransfer = AMOUNT - PlateformFee;
+          const am = amountToTransfer * PRICE;
+          return am;
+        }
+      }
+    } else {
+      if (currency === "Natura") {
+        const AMOUNT = web3.utils.fromWei(item.amountA, "ether");
+        console.log(AMOUNT);
+        const PRICE = web3.utils.fromWei(item.price, "lovelace");
+        console.log(PRICE);
+        const Burnfee = AMOUNT * 0.04;
+        console.log(Burnfee);
+        const amountToTransfer = AMOUNT - Burnfee;
+        console.log(amountToTransfer);
+        const am = amountToTransfer * PRICE;
+        return am;
+      } else {
+        if (currency === "USDT") {
+          const AMOUNT = web3.utils.fromWei(item.amountA, "lovelace");
+          const PRICE = web3.utils.fromWei(item.price, "ether");
+          const BurnFee = AMOUNT * 0.04;
+          const amountToTransfer = AMOUNT - BurnFee;
+          const am = amountToTransfer;
+          return am;
+        }
+      }
+    }
+  };
   return (
     <>
       <Table responsive hover>
         <thead>
           <tr>
             <th>Owner</th>
-            <th>Price</th>
+            <th>Price/Token</th>
             <th>Token</th>
-            <th>Amount</th>
-            <th>Listing Type</th>
+            {value === "buy" ? <th>Selling</th> : <th>Buying</th>}
+            <th>Payable Amount</th>
             <th>Trade</th>
           </tr>
         </thead>
@@ -240,14 +323,14 @@ const TradeTable = (props) => {
                     item.tokenA === CONFIG.NaturaAddress ? (
                       <tr key={item.id}>
                         <td>{item.owner}</td>
-                        <td>{item.price}</td>
+                        <td>{`${calculatePrice(item)} USDT`}</td>
                         {item.tokenA === CONFIG.NaturaAddress ? (
                           <td>Natura</td>
                         ) : (
                           <td>USDT</td>
                         )}
-                        <td>{item.amountA}</td>
-                        <td>Selling</td>
+                        <td>{`${calculateAmount(item)} NAT`}</td>
+                        <td>{`${calculateTotal(item)} USDT`}</td>
                         <td>
                           <Button
                             onClick={() =>
