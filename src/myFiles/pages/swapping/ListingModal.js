@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { RxCross1 } from "react-icons/rx";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -33,8 +33,30 @@ const Modal_inner = styled.div`
   margin: 0 auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid gray;
-  width: 45%; /* Could be more or less, depending on screen size */
+  width: 50%; /* Could be more or less, depending on screen size */
   border-radius: 10px;
+  overflow: auto;
+  max-height: calc(100vh - 100px);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.5) rgba(0, 0, 0, 0.3);
+
+  /* Customize scroll bars */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+  }
   @media (max-width: 768px) {
     width: 90%;
     background-color: black;
@@ -48,6 +70,7 @@ const Modal_header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   //   height: 30px;
   border-bottom: 1px solid #878787;
 `;
@@ -122,6 +145,55 @@ const Modal_form = styled.div`
     }
   }
 `;
+const Modal_heaDer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+`;
+const Modal_header_inner = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  gap: 5px;
+  width: 100%;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+const Modal_header_inner_left = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  gap: 5px;
+`;
+const Modal_header_inner_right = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: nowrap;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: start;
+  }
+`;
+const Modal_header_inner_right_inner_left = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  flex-direction: column;
+`;
+const Modal_header_inner_right_inner_right = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  flex-direction: column;
+`;
 const MySwal = withReactContent(Swal);
 const ListingModal = (props) => {
   const dispatch = useDispatch();
@@ -132,6 +204,10 @@ const ListingModal = (props) => {
   const [selectedTokenOne, setSelectedTokenOne] = useState("Select your Token");
   const [amount, setAmount] = useState(0);
   const [price, setPrice] = useState(0);
+  const [offeringOne, setOfferingOne] = useState("");
+  const [offeringTwo, setOfferingTwo] = useState("");
+  const [gettingOne, setGettingOne] = useState("");
+  const [gettingTwo, setGettingTwo] = useState("");
   const closeModal = () => {
     setModal(false);
   };
@@ -199,7 +275,7 @@ const ListingModal = (props) => {
   // ---------------- >
   // creating listing |
   // ---------------- >
-  const CreateListing = async () => {
+  const CreateListing = async (PRICE) => {
     let tokenA;
     if (listingType === "sell") {
       tokenA =
@@ -212,16 +288,16 @@ const ListingModal = (props) => {
     }
     const tokenContract = CONFIG.SwapContractAddress;
     const tokenContractInstance = new web3.eth.Contract(SwapAbi, tokenContract);
-    // const AMOUNT =
-    //   tokenA === CONFIG.NaturaAddress
-    //     ? web3.utils.toWei(amount, "ether")
-    //     : web3.utils.toWei(amount, "lovelace");
-    console.log(amount);
+    const AMOUNT =
+      tokenA === CONFIG.NaturaAddress
+        ? web3.utils.toWei(amount, "ether")
+        : web3.utils.toWei(amount, "lovelace");
+
     const estimateGas = await tokenContractInstance.methods
-      .createOrder(tokenA, amount, price, listingType.toString())
+      .createOrder(tokenA, AMOUNT, PRICE, listingType.toString())
       .estimateGas({ from: web3Store.account });
     const createOrder = await tokenContractInstance.methods
-      .createOrder(tokenA, amount, price, listingType.toString())
+      .createOrder(tokenA, AMOUNT, PRICE, listingType.toString())
       .send({ from: web3Store.account, gasLimit: estimateGas.toString() });
     console.log(createOrder);
   };
@@ -236,19 +312,24 @@ const ListingModal = (props) => {
         if (selectedTokenOne === "Natura") {
           console.log("natura");
           await handleApproveNatura();
-          await CreateListing();
+          const PRICE = web3.utils.toWei(price, "lovelace");
+
+          await CreateListing(PRICE);
         } else {
           console.log("usdt");
           await handleApproveUSDT();
-          await CreateListing();
+          const PRICE = web3.utils.toWei(price, "ether");
+          await CreateListing(PRICE);
         }
       } else if (listingType === "buy") {
         if (selectedTokenOne === "Natura") {
           await handleApproveUSDT();
-          await CreateListing();
+          const PRICE = web3.utils.toWei(price, "lovelace");
+          await CreateListing(PRICE);
         } else {
           await handleApproveNatura();
-          await CreateListing();
+          const PRICE = web3.utils.toWei(price, "ether");
+          await CreateListing(PRICE);
         }
       }
       setRefetch(true);
@@ -268,6 +349,84 @@ const ListingModal = (props) => {
   };
   console.log(listingType);
   useFetchUserData(account);
+  const calculateGettingPrice = () => {
+    if (listingType === "sell") {
+      if (selectedTokenOne === "Natura") {
+        const Burnfee = amount * 0.04;
+        const amountToTransfer = amount - Burnfee;
+        const am = amountToTransfer * price;
+        const number = am.toFixed(3);
+        const PlateformFee = number * 0.05;
+        const finalAmount = number - PlateformFee;
+        setGettingOne(finalAmount);
+      } else {
+        if (selectedTokenOne === "USDT") {
+          const PlateformFee = amount * 0.05;
+          const amountToTransfer = amount - PlateformFee;
+          const am = amountToTransfer * price;
+          const number = am.toFixed(3);
+          const cutNatura = number * 0.04;
+          const finalAmount = number - cutNatura;
+          setGettingOne(finalAmount);
+        }
+      }
+    } else {
+      if (selectedTokenOne === "Natura") {
+        const PlateformFee = amount * 0.05;
+        const amountToTransfer = amount - PlateformFee;
+        const am = amountToTransfer / price;
+        const number = am.toFixed(3);
+        const Burnfee = number * 0.04;
+        const finalAmount = number - Burnfee;
+        setGettingTwo(finalAmount);
+      } else {
+        if (selectedTokenOne === "USDT") {
+          const Burnfee = amount * 0.04;
+          const amountToTransfer = amount - Burnfee;
+          const am = amountToTransfer / price;
+          const number = am.toFixed(3);
+          const PlateformFee = number * 0.05;
+          const finalAmount = number - PlateformFee;
+          setGettingTwo(finalAmount);
+        }
+      }
+    }
+  };
+  const CalculateOfferingPrice = () => {
+    if (listingType === "sell") {
+      if (selectedTokenOne === "Natura") {
+        const Burnfee = amount * 0.04;
+        const amountToTransfer = amount - Burnfee;
+        const am = amountToTransfer * price;
+        setOfferingOne(am);
+      } else {
+        if (selectedTokenOne === "USDT") {
+          const PlateformFee = amount * 0.04;
+          const amountToTransfer = amount - PlateformFee;
+          const am = amountToTransfer * price;
+          setOfferingOne(am);
+        }
+      }
+    } else {
+      if (selectedTokenOne === "Natura") {
+        const plateformFee = amount * 0.05;
+        const amountToTransfer = amount - plateformFee;
+        const am = amountToTransfer;
+        setOfferingTwo(am);
+      } else {
+        if (selectedTokenOne === "USDT") {
+          const BurnFee = amount * 0.04;
+          const amountToTransfer = amount - BurnFee;
+          const am = amountToTransfer;
+          setOfferingTwo(am);
+        }
+      }
+    }
+  };
+  useEffect(() => {
+    calculateGettingPrice();
+    CalculateOfferingPrice();
+  }, [price, amount, selectedTokenOne]);
   return (
     <>
       <Modal>
@@ -296,33 +455,70 @@ const ListingModal = (props) => {
             {listingType === "sell" ? (
               <>
                 <Modal_form>
-                  <label>Select which token you want to sell</label>
-                  <Dropdown
-                    style={{
-                      width: "100%",
-                    }}
-                  >
-                    <Dropdown.Toggle
-                      as={CustomToggle}
-                      variant="success"
-                      id="dropdown-basic"
-                    >
-                      {selectedTokenOne}
-                    </Dropdown.Toggle>
+                  <Modal_heaDer>
+                    <Modal_header_inner>
+                      <Modal_header_inner_left>
+                        <label>You want to Sell?</label>
+                        <Dropdown
+                          style={{
+                            width: "100%",
+                          }}
+                        >
+                          <Dropdown.Toggle
+                            as={CustomToggle}
+                            variant="success"
+                            id="dropdown-basic"
+                          >
+                            {selectedTokenOne}
+                          </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={() => handleTokenSelection("Natura")}
-                      >
-                        Natura
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={() => handleTokenSelection("USDT")}
-                      >
-                        USDT
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              onClick={() => handleTokenSelection("Natura")}
+                            >
+                              Natura
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={() => handleTokenSelection("USDT")}
+                            >
+                              USDT
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Modal_header_inner_left>
+                      <Modal_header_inner_right>
+                        <Modal_header_inner_right_inner_left>
+                          <label>You'r getting</label>
+
+                          <input
+                            type="text"
+                            placeholder={
+                              selectedTokenOne === "Natura"
+                                ? `${gettingOne} USDT`
+                                : selectedTokenOne === "USDT"
+                                ? `${gettingOne} NAT`
+                                : "0"
+                            }
+                            disabled
+                          />
+                        </Modal_header_inner_right_inner_left>
+                        <Modal_header_inner_right_inner_right>
+                          <label>You'r offering</label>
+                          <input
+                            type="text"
+                            placeholder={
+                              selectedTokenOne === "Natura"
+                                ? `${offeringOne} NAT`
+                                : selectedTokenOne === "USDT"
+                                ? `${offeringOne} USDT`
+                                : "0"
+                            }
+                            disabled
+                          />
+                        </Modal_header_inner_right_inner_right>
+                      </Modal_header_inner_right>
+                    </Modal_header_inner>
+                  </Modal_heaDer>
                   <label>
                     Enter the price at which you want your single token to be
                     sold at{" "}
@@ -360,35 +556,73 @@ const ListingModal = (props) => {
             ) : listingType === "buy" ? (
               <>
                 <Modal_form>
-                  <label>Select which token you want to buy</label>
-                  <Dropdown
-                    style={{
-                      width: "100%",
-                    }}
-                  >
-                    <Dropdown.Toggle
-                      as={CustomToggle}
-                      variant="success"
-                      id="dropdown-basic"
-                    >
-                      {selectedTokenOne}
-                    </Dropdown.Toggle>
+                  <Modal_heaDer>
+                    <Modal_header_inner>
+                      <Modal_header_inner_left>
+                        <label>You want to Buy?</label>
+                        <Dropdown
+                          style={{
+                            width: "100%",
+                          }}
+                        >
+                          <Dropdown.Toggle
+                            as={CustomToggle}
+                            variant="success"
+                            id="dropdown-basic"
+                          >
+                            {selectedTokenOne}
+                          </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={() => handleTokenSelection("Natura")}
-                      >
-                        Natura
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={() => handleTokenSelection("USDT")}
-                      >
-                        USDT
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              onClick={() => handleTokenSelection("Natura")}
+                            >
+                              Natura
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={() => handleTokenSelection("USDT")}
+                            >
+                              USDT
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Modal_header_inner_left>
+                      <Modal_header_inner_right>
+                        <Modal_header_inner_right_inner_left>
+                          <label>You'r getting</label>
+
+                          <input
+                            type="text"
+                            placeholder={
+                              selectedTokenOne === "Natura"
+                                ? `${gettingTwo} NAT`
+                                : selectedTokenOne === "USDT"
+                                ? `${gettingTwo} USDT`
+                                : "0"
+                            }
+                            disabled
+                          />
+                        </Modal_header_inner_right_inner_left>
+                        <Modal_header_inner_right_inner_right>
+                          <label>You'r offering</label>
+                          <input
+                            type="text"
+                            placeholder={
+                              selectedTokenOne === "Natura"
+                                ? `${offeringTwo} USDT`
+                                : selectedTokenOne === "USDT"
+                                ? `${offeringTwo} NAT`
+                                : "0"
+                            }
+                            disabled
+                          />
+                        </Modal_header_inner_right_inner_right>
+                      </Modal_header_inner_right>
+                    </Modal_header_inner>
+                  </Modal_heaDer>
                   <label>
-                    Enter your price you want to pay per token{" "}
+                    Enter the price at which you want your single token to be
+                    bought at{" "}
                     {selectedTokenOne === "Natura"
                       ? "in USDT"
                       : selectedTokenOne === "USDT"
@@ -407,7 +641,14 @@ const ListingModal = (props) => {
                     onChange={handleChange}
                     value={price}
                   />
-                  <label>Enter the amount of tokens you want to buy</label>
+                  <label>
+                    Enter the amount of tokens you are willing to spend{" "}
+                    {selectedTokenOne === "Natura"
+                      ? "in USDT"
+                      : selectedTokenOne === "USDT"
+                      ? "in Natura"
+                      : null}
+                  </label>
                   <input
                     type="text"
                     placeholder="Enter the amount"

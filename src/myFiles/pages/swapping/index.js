@@ -217,7 +217,9 @@ const Swapping = () => {
           </div>
         </div>
       </section>
-      <Footer />
+      <div className="footer">
+        <Footer />
+      </div>
     </div>
   );
 };

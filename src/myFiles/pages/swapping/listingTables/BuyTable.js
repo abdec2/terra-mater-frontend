@@ -49,7 +49,7 @@ const TradeTable = (props) => {
   // ----------------------------- >
   // approving natura for contract |
   // ----------------------------- >
-  const handleApproveNatura = async (finalAmount, currentAcc, web3) => {
+  const handleApproveNatura = async (AMOUNT, currentAcc, web3) => {
     console.log("approve");
     const tokenContract = CONFIG.NaturaAddress;
     const tokenContractInstance = new web3.eth.Contract(
@@ -57,11 +57,11 @@ const TradeTable = (props) => {
       tokenContract
     );
     const estimateGas = await tokenContractInstance.methods
-      .approve(CONFIG.SwapContractAddress, finalAmount)
+      .approve(CONFIG.SwapContractAddress, AMOUNT)
       .estimateGas({ from: currentAcc });
 
     const approve = await tokenContractInstance.methods
-      .approve(CONFIG.SwapContractAddress, finalAmount)
+      .approve(CONFIG.SwapContractAddress, AMOUNT)
       .send({ from: currentAcc, gasLimit: estimateGas.toString() });
   };
   // --------------------------- >
@@ -157,24 +157,60 @@ const TradeTable = (props) => {
           );
         } else if (currency === "USDT") {
           const Amount = item.amountA * item.price;
-          const AMOUNT = web3.utils.fromWei(JSON.stringify(Amount), "lovelace");
-          console.log(AMOUNT);
-          const finalAmount = web3.utils.toWei(AMOUNT, "ether");
-          handleApproveNatura(finalAmount, currentAcc, web3);
+          const AMOUNT = web3.utils.fromWei(JSON.stringify(Amount), "ether");
+          // console.log(AMOUNT);
+          // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
+          handleApproveNatura(AMOUNT, currentAcc, web3);
+          const tokenAddress = CONFIG.NaturaAddress;
+          const tokenAbi = NaturaAbi;
+          await handleSwap(
+            tokenAddress,
+            tokenAbi,
+            item,
+            currency,
+            value,
+            index,
+            currentAcc,
+            web3
+          );
         }
       } else if (value === "sell") {
         if (currency === "Natura") {
           const Amount = item.amountA * item.price;
           const AMOUNT = web3.utils.fromWei(JSON.stringify(Amount), "ether");
-          console.log(AMOUNT);
-          const finalAmount = web3.utils.toWei(AMOUNT, "ether");
-          handleApproveNatura(finalAmount, currentAcc, web3);
+          // console.log(AMOUNT);
+          // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
+          handleApproveNatura(AMOUNT, currentAcc, web3);
+          const tokenAddress = CONFIG.NaturaAddress;
+          const tokenAbi = NaturaAbi;
+          await handleSwap(
+            tokenAddress,
+            tokenAbi,
+            item,
+            currency,
+            value,
+            index,
+            currentAcc,
+            web3
+          );
         } else if (currency === "USDT") {
           const Amount = item.amountA * item.price;
           const AMOUNT = web3.utils.fromWei(JSON.stringify(Amount), "lovelace");
-          console.log(AMOUNT);
-          const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
-          handleApproveUSDT(finalAmount, currentAcc, web3);
+          // console.log(AMOUNT);
+          // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
+          handleApproveUSDT(AMOUNT, currentAcc, web3);
+          const tokenAddress = CONFIG.USDTAddress;
+          const tokenAbi = USDTAbi;
+          await handleSwap(
+            tokenAddress,
+            tokenAbi,
+            item,
+            currency,
+            value,
+            index,
+            currentAcc,
+            web3
+          );
         }
       }
     } catch (error) {
