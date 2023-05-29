@@ -19,7 +19,6 @@ const useFetchListings = () => {
 
     const resp = await contract.methods.getOrders().call();
     setListings(resp);
-    console.log(resp);
   };
 
   useEffect(() => {

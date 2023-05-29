@@ -10,6 +10,8 @@ import USDTAbi from "../abi/USDTAbi.json";
 import SwapAbi from "../abi/SwapAbi.json";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 const Button = styled.button`
   background: #ff343f;
   color: #fff;
@@ -23,6 +25,7 @@ const Button = styled.button`
     transition: 0.3s;
   }
 `;
+
 const providerOptions = {
   /* See Provider Options Section */
   walletconnect: {
@@ -35,22 +38,39 @@ const providerOptions = {
   },
 };
 
+const MySwal = withReactContent(Swal);
+
 const TradeTable = (props) => {
   const { currency, Listings, value } = props;
-  const [account, setAccount] = useState("");
+  console.log(Listings);
+  const [currentAcc, setCurrentAcc] = useState("");
   // const web3Store = useSelector((state) => state.web3);
   const web3 = new Web3(process.env.REACT_APP_ALCHEMY_TEST_KEY);
   // ----------------------------- >
   // approving natura for contract |
   // ----------------------------- >
-  const handleApproveNatura = async (item, currentAcc) => {
+  const handleApproveNatura = async (finalAmount, currentAcc, web3) => {
     console.log("approve");
     const tokenContract = CONFIG.NaturaAddress;
     const tokenContractInstance = new web3.eth.Contract(
       NaturaAbi,
       tokenContract
     );
-    const AMOUNT = web3.utils.toWei(item.amountA, "ether");
+    const estimateGas = await tokenContractInstance.methods
+      .approve(CONFIG.SwapContractAddress, finalAmount)
+      .estimateGas({ from: currentAcc });
+
+    const approve = await tokenContractInstance.methods
+      .approve(CONFIG.SwapContractAddress, finalAmount)
+      .send({ from: currentAcc, gasLimit: estimateGas.toString() });
+  };
+  // --------------------------- >
+  // approving USDT for contract |
+  // --------------------------- >
+  const handleApproveUSDT = async (AMOUNT, currentAcc, web3) => {
+    console.log("approve");
+    const tokenContract = CONFIG.USDTAddress;
+    const tokenContractInstance = new web3.eth.Contract(USDTAbi, tokenContract);
     const estimateGas = await tokenContractInstance.methods
       .approve(CONFIG.SwapContractAddress, AMOUNT)
       .estimateGas({ from: currentAcc });
@@ -58,61 +78,110 @@ const TradeTable = (props) => {
       .approve(CONFIG.SwapContractAddress, AMOUNT)
       .send({ from: currentAcc, gasLimit: estimateGas.toString() });
   };
-  // --------------------------- >
-  // approving USDT for contract |
-  // --------------------------- >
-  // const handleApproveUSDT = async () => {
-  //   console.log("approve");
-  //   const tokenContract = CONFIG.USDTAddress;
-  //   const tokenContractInstance = new web3.eth.Contract(USDTAbi, tokenContract);
-  //   const AMOUNT = web3.utils.toWei(amount, "lovelace");
-  //   const estimateGas = await tokenContractInstance.methods
-  //     .approve(CONFIG.SwapContractAddress, AMOUNT)
-  //     .estimateGas({ from: web3Store.account });
-  //   const approve = await tokenContractInstance.methods
-  //     .approve(CONFIG.SwapContractAddress, AMOUNT)
-  //     .send({ from: web3Store.account, gasLimit: estimateGas.toString() });
-  // };
-
-  const handleTransaction = async (item, currency, value) => {
-    if (account === "" || account === null) {
-      const web3Modal = new Web3Modal({
-        providerOptions, // required
+  // ----------------------------- >
+  // Swapping with the  contract   |
+  // ----------------------------- >
+  const handleSwap = async (
+    tokenAddress,
+    tokenAbi,
+    item,
+    currency,
+    value,
+    index,
+    currentAcc,
+    web3
+  ) => {
+    try {
+      const contract = new web3.eth.Contract(
+        SwapAbi,
+        CONFIG.SwapContractAddress
+      );
+      const estimateGas = await contract.methods
+        .swap(index)
+        .estimateGas({ from: currentAcc });
+      const swap = await contract.methods
+        .swap(index)
+        .send({ from: currentAcc, gasLimit: estimateGas.toString() });
+      console.log(swap);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Transaction Successfull",
+        timer: 2000,
       });
-      const provider = await web3Modal.connect();
-      const web3 = new Web3(provider);
-      const accounts = await web3.eth.getAccounts();
-      console.log(accounts);
-      const currentAcc = accounts[0];
-      setAccount(currentAcc);
-      console.log(account);
-      try {
-        if (value === "buy") {
-          if (currency === "Natura") {
-            console.log("buy");
-            handleApproveNatura(item, currentAcc);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        console.log(account);
-        if (value === "buy") {
-          if (currency === "Natura") {
-            console.log("buy");
-            handleApproveNatura(item, account);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        timer: 2000,
+      });
     }
   };
-  useEffect(() => {
-    console.log("account", account);
-  }, [account]);
+
+  // ----------------------------- >
+  // Calling the main function    |
+  // ----------------------------- >
+  const handleTransaction = async (item, currency, value, index) => {
+    const web3Modal = new Web3Modal({
+      providerOptions, // required
+    });
+    const provider = await web3Modal.connect();
+    const web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+    console.log(accounts);
+    const currentAcc = accounts[0];
+    setCurrentAcc(currentAcc);
+    console.log(currentAcc);
+    try {
+      if (value === "buy") {
+        if (currency === "Natura") {
+          const Amount = item.amountA * item.price;
+          const AMOUNT = web3.utils.toWei(JSON.stringify(Amount), "lovelace");
+          // console.log("AMOUNT", AMOUNT);
+          // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
+          console.log("AMOUNT", AMOUNT);
+          await handleApproveUSDT(AMOUNT, currentAcc, web3);
+          const tokenAddress = CONFIG.USDTAddress;
+          const tokenAbi = USDTAbi;
+          await handleSwap(
+            tokenAddress,
+            tokenAbi,
+            item,
+            currency,
+            value,
+            index,
+            currentAcc,
+            web3
+          );
+        } else if (currency === "USDT") {
+          const Amount = item.amountA * item.price;
+          const AMOUNT = web3.utils.fromWei(JSON.stringify(Amount), "lovelace");
+          console.log(AMOUNT);
+          const finalAmount = web3.utils.toWei(AMOUNT, "ether");
+          handleApproveNatura(finalAmount, currentAcc, web3);
+        }
+      } else if (value === "sell") {
+        if (currency === "Natura") {
+          const Amount = item.amountA * item.price;
+          const AMOUNT = web3.utils.fromWei(JSON.stringify(Amount), "ether");
+          console.log(AMOUNT);
+          const finalAmount = web3.utils.toWei(AMOUNT, "ether");
+          handleApproveNatura(finalAmount, currentAcc, web3);
+        } else if (currency === "USDT") {
+          const Amount = item.amountA * item.price;
+          const AMOUNT = web3.utils.fromWei(JSON.stringify(Amount), "lovelace");
+          console.log(AMOUNT);
+          const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
+          handleApproveUSDT(finalAmount, currentAcc, web3);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Table responsive hover>
@@ -130,8 +199,8 @@ const TradeTable = (props) => {
           currency === "Natura" ? (
             <>
               <tbody>
-                {Listings.map((item) =>
-                  item.orderType === "buy" ? (
+                {Listings.map((item, index) =>
+                  item.orderType === "sell" ? (
                     item.tokenA === CONFIG.NaturaAddress ? (
                       <tr key={item.id}>
                         <td>{item.owner}</td>
@@ -141,18 +210,12 @@ const TradeTable = (props) => {
                         ) : (
                           <td>USDT</td>
                         )}
-                        {item.tokenA === CONFIG.NaturaAddress ? (
-                          <td>{web3.utils.fromWei(item.amountA, "ether")}</td>
-                        ) : (
-                          <td>
-                            {web3.utils.fromWei(item.amountA, "lovelace")}
-                          </td>
-                        )}
-                        <td>{item.orderType}</td>
+                        <td>{item.amountA}</td>
+                        <td>Selling</td>
                         <td>
                           <Button
                             onClick={() =>
-                              handleTransaction(item, currency, value)
+                              handleTransaction(item, currency, value, index)
                             }
                           >
                             Buy
@@ -167,8 +230,8 @@ const TradeTable = (props) => {
           ) : currency === "USDT" ? (
             <>
               <tbody>
-                {Listings.map((item) =>
-                  item.orderType === "buy" ? (
+                {Listings.map((item, index) =>
+                  item.orderType === "sell" ? (
                     item.tokenA === CONFIG.USDTAddress ? (
                       <tr key={item.id}>
                         <td>{item.owner}</td>
@@ -178,18 +241,14 @@ const TradeTable = (props) => {
                         ) : (
                           <td>USDT</td>
                         )}
-                        {item.tokenA === CONFIG.NaturaAddress ? (
-                          <td>{web3.utils.fromWei(item.amountA, "ether")}</td>
-                        ) : (
-                          <td>
-                            {web3.utils.fromWei(item.amountA, "lovelace")}
-                          </td>
-                        )}
-                        <td>{item.orderType}</td>
+
+                        <td>{item.amountA}</td>
+
+                        <td>Selling</td>
                         <td>
                           <Button
                             onClick={() =>
-                              handleTransaction(item, currency, value)
+                              handleTransaction(item, currency, value, index)
                             }
                           >
                             Buy
@@ -206,8 +265,8 @@ const TradeTable = (props) => {
           currency === "Natura" ? (
             <>
               <tbody>
-                {Listings.map((item) =>
-                  item.orderType === "sell" ? (
+                {Listings.map((item, index) =>
+                  item.orderType === "buy" ? (
                     item.tokenA === CONFIG.NaturaAddress ? (
                       <tr key={item.id}>
                         <td>{item.owner}</td>
@@ -217,18 +276,14 @@ const TradeTable = (props) => {
                         ) : (
                           <td>USDT</td>
                         )}
-                        {item.tokenA === CONFIG.NaturaAddress ? (
-                          <td>{web3.utils.fromWei(item.amountA, "ether")}</td>
-                        ) : (
-                          <td>
-                            {web3.utils.fromWei(item.amountA, "lovelace")}
-                          </td>
-                        )}
-                        <td>{item.orderType}</td>
+
+                        <td>{item.amountA}</td>
+
+                        <td>Buying</td>
                         <td>
                           <Button
                             onClick={() =>
-                              handleTransaction(item, currency, value)
+                              handleTransaction(item, currency, value, index)
                             }
                           >
                             Sell
@@ -243,8 +298,8 @@ const TradeTable = (props) => {
           ) : currency === "USDT" ? (
             <>
               <tbody>
-                {Listings.map((item) =>
-                  item.orderType === "sell" ? (
+                {Listings.map((item, index) =>
+                  item.orderType === "buy" ? (
                     item.tokenA === CONFIG.USDTAddress ? (
                       <tr key={item.id}>
                         <td>{item.owner}</td>
@@ -254,18 +309,14 @@ const TradeTable = (props) => {
                         ) : (
                           <td>USDT</td>
                         )}
-                        {item.tokenA === CONFIG.NaturaAddress ? (
-                          <td>{web3.utils.fromWei(item.amountA, "ether")}</td>
-                        ) : (
-                          <td>
-                            {web3.utils.fromWei(item.amountA, "lovelace")}
-                          </td>
-                        )}
-                        <td>{item.orderType}</td>
+
+                        <td>{item.amountA}</td>
+
+                        <td>Buying</td>
                         <td>
                           <Button
                             onClick={() =>
-                              handleTransaction(item, currency, value)
+                              handleTransaction(item, currency, value, index)
                             }
                           >
                             Sell

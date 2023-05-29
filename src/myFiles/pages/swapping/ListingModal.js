@@ -212,16 +212,16 @@ const ListingModal = (props) => {
     }
     const tokenContract = CONFIG.SwapContractAddress;
     const tokenContractInstance = new web3.eth.Contract(SwapAbi, tokenContract);
-    const AMOUNT =
-      tokenA === CONFIG.NaturaAddress
-        ? web3.utils.toWei(amount, "ether")
-        : web3.utils.toWei(amount, "lovelace");
-
+    // const AMOUNT =
+    //   tokenA === CONFIG.NaturaAddress
+    //     ? web3.utils.toWei(amount, "ether")
+    //     : web3.utils.toWei(amount, "lovelace");
+    console.log(amount);
     const estimateGas = await tokenContractInstance.methods
-      .createOrder(tokenA, AMOUNT, price, listingType.toString())
+      .createOrder(tokenA, amount, price, listingType.toString())
       .estimateGas({ from: web3Store.account });
     const createOrder = await tokenContractInstance.methods
-      .createOrder(tokenA, AMOUNT, price, listingType.toString())
+      .createOrder(tokenA, amount, price, listingType.toString())
       .send({ from: web3Store.account, gasLimit: estimateGas.toString() });
     console.log(createOrder);
   };
