@@ -40,7 +40,7 @@ const UserTable = (props) => {
   return (
     <>
       {OpenModal ? <EditModal setOpenModal={setOpenModal} /> : null}
-      <Table responsive hover>
+      <Table responsive>
         <thead>
           <tr>
             <th>Owner</th>
@@ -67,33 +67,34 @@ const UserTable = (props) => {
           ) : (
             <>
               {userListings.map(
-                (item, index) => (
-                  <>
-                    <tbody>
-                      <tr key={index}>
-                        <td>{item.owner}</td>
+                (item, index) =>
+                  parseInt(item.status) !== 0 ? (
+                    <>
+                      <tbody>
+                        <tr key={index}>
+                          <td>{item.owner}</td>
 
-                        <td>{item.price}</td>
-                        {item.tokenA === CONFIG.NaturaAddress ? (
-                          <td>Natura</td>
-                        ) : (
-                          <td>USDT</td>
-                        )}
-                        {item.tokenA === CONFIG.NaturaAddress ? (
-                          <td>{web3.utils.fromWei(item.amountA, "ether")}</td>
-                        ) : (
-                          <td>
-                            {web3.utils.fromWei(item.amountA, "lovelace")}
-                          </td>
-                        )}
-                        <td>{item.orderType}</td>
-                        {/* <td>
+                          <td>{item.price}</td>
+                          {item.tokenA === CONFIG.NaturaAddress ? (
+                            <td>Natura</td>
+                          ) : (
+                            <td>USDT</td>
+                          )}
+                          {item.tokenA === CONFIG.NaturaAddress ? (
+                            <td>{web3.utils.fromWei(item.amountA, "ether")}</td>
+                          ) : (
+                            <td>
+                              {web3.utils.fromWei(item.amountA, "lovelace")}
+                            </td>
+                          )}
+                          <td>{item.orderType}</td>
+                          {/* <td>
                           <Button onClick={modalHandle}>Edit</Button>
                         </td> */}
-                      </tr>
-                    </tbody>
-                  </>
-                )
+                        </tr>
+                      </tbody>
+                    </>
+                  ) : null
 
                 // <>
                 //   <tbody>

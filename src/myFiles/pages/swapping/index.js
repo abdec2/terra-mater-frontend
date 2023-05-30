@@ -15,6 +15,7 @@ import useFetchUserData from "./hooks/useFetchUserData";
 import useFetchListings from "./hooks/useFetchAllListings";
 import { reconnectWallet } from "../../../components/menu/connectWallet";
 import TradeTable from "./listingTables/BuyTable";
+import LoadingScreen from "../stakingNFT/loadingScreen";
 const Container_header = styled.div`
   display: flex;
   justify-content: start;
@@ -64,6 +65,7 @@ const Swapping = () => {
   const dispatch = useDispatch();
   const [account, setAccount] = useState("");
   const [currency, setCurrency] = useState("USDT");
+  const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState("buy");
   const [modal, setModal] = useState(false);
   const [refetch, setRefetch] = useState(true);
@@ -110,118 +112,125 @@ const Swapping = () => {
   };
 
   return (
-    <div className="greyscheme">
-      <StyledHeader theme={theme} />
-      {modal ? (
-        <ListingModal
-          setModal={setModal}
-          account={account}
-          setRefetch={setRefetch}
-        />
-      ) : null}
-      <section
-        id="profile_banner"
-        className="jumbotron breadcumb "
-        style={{ background: 'url("./img/background/6.jpg")' }}
-      >
-        <div className="mainbreadcumb">
-          <h1 className="text-center">Swap your tokens</h1>
-        </div>
-      </section>
-      <section className="container-fluid d_coll no-top no-bottom pb-5 mb-5">
-        <div className="row">
-          <div className="col-md-12">
-            <Contained className="mx-2 mx-md-5">
-              <Container_header>
-                <Switch value={value} setValue={setValue} />
-                <CurrencyOptions>
-                  <CurrencyOption
-                    selected={currency === "USDT"}
-                    onClick={() => selectCurrency("USDT")}
-                  >
-                    USDT
-                  </CurrencyOption>
-                  <CurrencyOption
-                    selected={currency === "Natura"}
-                    onClick={() => selectCurrency("Natura")}
-                  >
-                    Natura
-                  </CurrencyOption>
-                </CurrencyOptions>
-              </Container_header>
-              <div>
-                {!account ? (
-                  <HighlightedHeading
-                    className="text-center"
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    onClick={() => reconnectWallet(dispatch)}
-                  >
-                    Connect your wallet to create listings
-                  </HighlightedHeading>
-                ) : (
-                  <>
-                    <Dropdown
-                      style={{
-                        width: "100%",
-                      }}
+    <>
+      <div className="greyscheme">
+        <StyledHeader theme={theme} />
+        {isLoading && <LoadingScreen setIsLoading={setIsLoading} />}
+        {modal ? (
+          <ListingModal
+            setModal={setModal}
+            account={account}
+            setRefetch={setRefetch}
+            setIsLoading={setIsLoading}
+          />
+        ) : null}
+        <section
+          id="profile_banner"
+          className="jumbotron breadcumb "
+          style={{ background: 'url("./img/background/6.jpg")' }}
+        >
+          <div className="mainbreadcumb">
+            <h1 className="text-center">Swap your tokens</h1>
+          </div>
+        </section>
+        <section className="container-fluid d_coll no-top no-bottom pb-5 mb-5">
+          <div className="row">
+            <div className="col-md-12">
+              <Contained className="mx-2 mx-md-5">
+                <Container_header>
+                  <Switch value={value} setValue={setValue} />
+                  <CurrencyOptions>
+                    <CurrencyOption
+                      selected={currency === "USDT"}
+                      onClick={() => selectCurrency("USDT")}
                     >
-                      <Dropdown.Toggle
-                        as={CustomToggle}
-                        variant="success"
-                        id="dropdown-basic"
+                      USDT
+                    </CurrencyOption>
+                    <CurrencyOption
+                      selected={currency === "Natura"}
+                      onClick={() => selectCurrency("Natura")}
+                    >
+                      Natura
+                    </CurrencyOption>
+                  </CurrencyOptions>
+                </Container_header>
+                <div>
+                  {!account ? (
+                    <HighlightedHeading
+                      className="text-center"
+                      style={{
+                        cursor: "pointer",
+                      }}
+                      onClick={() => reconnectWallet(dispatch)}
+                    >
+                      Connect your wallet to create listings
+                    </HighlightedHeading>
+                  ) : (
+                    <>
+                      <Dropdown
+                        style={{
+                          width: "100%",
+                        }}
                       >
-                        Manage your listings
-                      </Dropdown.Toggle>
-
-                      <Dropdown.Menu>
-                        <Dropdown.Item>
-                          <ListingBtn onClick={OpenModal}>
-                            Create your own listing
-                          </ListingBtn>
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => setCondition("userListings")}
+                        <Dropdown.Toggle
+                          as={CustomToggle}
+                          variant="success"
+                          id="dropdown-basic"
                         >
-                          Your Listings
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={() => setCondition("buy")}>
-                          Back
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </>
-                )}
-              </div>
-            </Contained>
-            {condition === "buy" ? (
-              <div className="mx-2 mx-md-5 mt-4">
-                <TradeTable
-                  currency={currency}
-                  Listings={Listings}
-                  value={value}
-                  setRefetch = {setRefetch}
-                />
-              </div>
-            ) : condition === "userListings" ? (
-              <>
+                          Manage your listings
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item>
+                            <ListingBtn onClick={OpenModal}>
+                              Create your own listing
+                            </ListingBtn>
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => setCondition("userListings")}
+                          >
+                            Your Listings
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => setCondition("buy")}>
+                            Back
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </>
+                  )}
+                </div>
+              </Contained>
+              {condition === "buy" ? (
                 <div className="mx-2 mx-md-5 mt-4">
-                  <UserTable
+                  <TradeTable
                     currency={currency}
-                    account={account}
-                    userListings={userListings}
+                    Listings={Listings}
+                    value={value}
+                    setRefetch={setRefetch}
+                    setIsLoading={setIsLoading}
                   />
                 </div>
-              </>
-            ) : null}
+              ) : condition === "userListings" ? (
+                <>
+                  <div className="mx-2 mx-md-5 mt-4">
+                    <UserTable
+                      currency={currency}
+                      account={account}
+                      userListings={userListings}
+                      setRefetch={setRefetch}
+                      setIsLoading={setIsLoading}
+                    />
+                  </div>
+                </>
+              ) : null}
+            </div>
           </div>
+        </section>
+        <div className="footer">
+          <Footer />
         </div>
-      </section>
-      <div className="footer">
-        <Footer />
       </div>
-    </div>
+    </>
   );
 };
 

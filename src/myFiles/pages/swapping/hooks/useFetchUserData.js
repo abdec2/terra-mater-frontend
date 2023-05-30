@@ -25,6 +25,7 @@ const useFetchUserData = (account, refetch, setRefetch) => {
         // call the ordersCount function from the smart contract
         const resp = await contract.methods.getOrderByUser(account).call();
         setUserListings(resp);
+        console.log(resp);
         setRefetch(false);
       }
     }

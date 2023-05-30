@@ -157,6 +157,9 @@ const Modal_header_inner = styled.div`
 
   gap: 5px;
   width: 100%;
+  @media (max-width: 1000px) {
+    flex-direction: column;
+  }
   @media (max-width: 768px) {
     flex-direction: column;
   }
@@ -199,7 +202,7 @@ const ListingModal = (props) => {
   const dispatch = useDispatch();
   const web3Store = useSelector((state) => state.web3);
   const web3 = web3Store.web3;
-  const { setModal, account, setRefetch } = props;
+  const { setModal, account, setRefetch, setIsLoading } = props;
   const [listingType, setListingType] = useState("");
   const [selectedTokenOne, setSelectedTokenOne] = useState("Select your Token");
   const [amount, setAmount] = useState(0);
@@ -306,8 +309,9 @@ const ListingModal = (props) => {
   // ---------------------------------- >
   const handleCreateListing = async () => {
     console.log("create listing");
-
     try {
+      setModal(false);
+      setIsLoading(true);
       if (listingType === "sell") {
         if (selectedTokenOne === "Natura") {
           console.log("natura");
@@ -333,18 +337,24 @@ const ListingModal = (props) => {
         }
       }
       setRefetch(true);
+      setIsLoading(false);
       MySwal.fire({
         title: "Success!",
         text: "You have created a listing",
         icon: "success",
       });
-      setModal(false);
       setListingType("");
       setSelectedTokenOne("Select your Token");
       setAmount(0);
       setPrice(0);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
+      MySwal.fire({
+        title: "Error!",
+        text: "Something went wrong",
+        icon: "error",
+      });
     }
   };
   console.log(listingType);
@@ -372,13 +382,12 @@ const ListingModal = (props) => {
       }
     } else {
       if (selectedTokenOne === "Natura") {
-        const PlateformFee = amount * 0.05;
+        const PlateformFee = amount * 0.04;
         const amountToTransfer = amount - PlateformFee;
         const am = amountToTransfer / price;
         const number = am.toFixed(3);
-        const Burnfee = number * 0.04;
-        const finalAmount = number - Burnfee;
-        setGettingTwo(finalAmount);
+
+        setGettingTwo(number);
       } else {
         if (selectedTokenOne === "USDT") {
           const Burnfee = amount * 0.04;
@@ -621,21 +630,21 @@ const ListingModal = (props) => {
                     </Modal_header_inner>
                   </Modal_heaDer>
                   <label>
-                    Enter the price at which you want your single token to be
-                    bought at{" "}
+                    Enter the price at which you want your single USDT to be
+                    sold at{" "}
                     {selectedTokenOne === "Natura"
-                      ? "in USDT"
-                      : selectedTokenOne === "USDT"
                       ? "in Natura"
+                      : selectedTokenOne === "USDT"
+                      ? "in USDT"
                       : null}
                   </label>
                   <input
                     type="text"
                     placeholder={
                       selectedTokenOne === "Natura"
-                        ? "Enter the amount in USDT"
-                        : selectedTokenOne === "USDT"
                         ? "Enter the amount in Natura"
+                        : selectedTokenOne === "USDT"
+                        ? "Enter the amount in USDT"
                         : "Enter the amount"
                     }
                     onChange={handleChange}
