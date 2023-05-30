@@ -166,29 +166,32 @@ const Index = () => {
                   className="bg-dark p-2"
                   style={{ border: "1px solid #333" }}
                 >
-                  <Dropdown.Item className="p-2 fw-normal">
-                    <NavLink
+                  <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate("/swapping")}>
+                    Swapping
+                    {/* <NavLink
                       className="p-3 p-lg-0 nav-link fw-normal text-truncate"
                       to="/swapping"
                     >
-                      Swapping
-                    </NavLink>
+                      
+                    </NavLink> */}
                   </Dropdown.Item>
-                  <Dropdown.Item className="p-2 fw-normal">
-                    <NavLink
+                  <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate("/nft-staking")}>
+                    NFT Staking
+                    {/* <NavLink
                       className="p-3 p-lg-0 nav-link fw-normal text-truncate"
                       to="/nft-staking"
                     >
-                      NFT Staking
-                    </NavLink>
+                      
+                    </NavLink> */}
                   </Dropdown.Item>
-                  <Dropdown.Item className="p-2 fw-normal">
-                    <NavLink
+                  <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate("/dashboard")}>
+                    Dashboard
+                    {/* <NavLink
                       className="p-3 p-lg-0 nav-link fw-normal text-truncate"
                       to="/dashboard"
                     >
-                      Dashboard
-                    </NavLink>
+                      
+                    </NavLink> */}
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

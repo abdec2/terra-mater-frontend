@@ -41,9 +41,9 @@ const providerOptions = {
 const MySwal = withReactContent(Swal);
 
 const TradeTable = (props) => {
-  const { currency, Listings, value } = props;
+  const { currency, Listings, value, setRefetch } = props;
   console.log(Listings);
-  const [currentAcc, setCurrentAcc] = useState("");
+  const [currentAcc, setCurrentAcc] = useState(null);
   // const web3Store = useSelector((state) => state.web3);
   const web3 = new Web3(process.env.REACT_APP_ALCHEMY_TEST_KEY);
   // ----------------------------- >
@@ -82,16 +82,12 @@ const TradeTable = (props) => {
   // Swapping with the  contract   |
   // ----------------------------- >
   const handleSwap = async (
-    tokenAddress,
-    tokenAbi,
-    item,
-    currency,
-    value,
     index,
     currentAcc,
     web3
   ) => {
     try {
+      console.log(index)
       const contract = new web3.eth.Contract(
         SwapAbi,
         CONFIG.SwapContractAddress
@@ -137,21 +133,14 @@ const TradeTable = (props) => {
     try {
       if (value === "buy") {
         if (currency === "Natura") {
-          const Amount = web3.utils.fromWei(item.amountA.toString(), "ether")* item.price;
+          const Amount = web3.utils.fromWei(item.amountA.toString(), "ether") * item.price;
           console.log("AMOUNT", Amount);
-          const AMOUNT = web3.utils.toWei(JSON.stringify(Amount), "lovelace");
+          // const AMOUNT = web3.utils.toWei(JSON.stringify(Amount), "lovelace");
           // console.log("AMOUNT", AMOUNT);
           // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
-          console.log("AMOUNT", AMOUNT);
-          await handleApproveUSDT(AMOUNT, currentAcc, web3);
-          const tokenAddress = CONFIG.USDTAddress;
-          const tokenAbi = USDTAbi;
+          // console.log("AMOUNT", AMOUNT);
+          await handleApproveUSDT(Amount, currentAcc, web3);
           await handleSwap(
-            tokenAddress,
-            tokenAbi,
-            item,
-            currency,
-            value,
             index,
             currentAcc,
             web3
@@ -165,11 +154,6 @@ const TradeTable = (props) => {
           const tokenAddress = CONFIG.NaturaAddress;
           const tokenAbi = NaturaAbi;
           await handleSwap(
-            tokenAddress,
-            tokenAbi,
-            item,
-            currency,
-            value,
             index,
             currentAcc,
             web3
@@ -185,11 +169,6 @@ const TradeTable = (props) => {
           const tokenAddress = CONFIG.NaturaAddress;
           const tokenAbi = NaturaAbi;
           await handleSwap(
-            tokenAddress,
-            tokenAbi,
-            item,
-            currency,
-            value,
             index,
             currentAcc,
             web3
@@ -203,17 +182,13 @@ const TradeTable = (props) => {
           const tokenAddress = CONFIG.USDTAddress;
           const tokenAbi = USDTAbi;
           await handleSwap(
-            tokenAddress,
-            tokenAbi,
-            item,
-            currency,
-            value,
             index,
             currentAcc,
             web3
           );
         }
       }
+      setRefetch(true)
     } catch (error) {
       console.log(error);
     }
@@ -243,17 +218,17 @@ const TradeTable = (props) => {
     if (value === "buy") {
       if (currency === "Natura") {
         const AMOUNT = web3.utils.fromWei(item.amountA, "ether");
-        const PRICE = web3.utils.fromWei(item.price, "lovelace");
+        // const PRICE = web3.utils.fromWei(item.price, "lovelace");
         const Burnfee = AMOUNT * 0.04;
         const amountToTransfer = AMOUNT - Burnfee;
-        const am = amountToTransfer * PRICE;
+        const am = amountToTransfer ;
         return am;
       } else if (currency === "USDT") {
         const AMOUNT = web3.utils.fromWei(item.amountA, "lovelace");
-        const PRICE = web3.utils.fromWei(item.price, "ether");
+        //const PRICE = web3.utils.fromWei(item.price, "ether");
         const Burnfee = AMOUNT * 0.04;
         const amountToTransfer = AMOUNT - Burnfee;
-        const am = amountToTransfer * PRICE;
+        const am = amountToTransfer;
         return am;
       }
     }
@@ -303,15 +278,15 @@ const TradeTable = (props) => {
   };
   return (
     <>
-      <Table responsive hover>
+      <Table responsive hover className="text-center">
         <thead>
           <tr>
-            <th>Owner</th>
-            <th>Price/Token</th>
-            <th>Token</th>
-            {value === "buy" ? <th>Selling</th> : <th>Buying</th>}
-            <th>Payable Amount</th>
-            <th>Trade</th>
+            <th className="text-center">Owner</th>
+            <th className="text-center">Price/Token</th>
+            <th className="text-center">Token</th>
+            {value === "buy" ? <th className="text-center">Selling</th> : <th className="text-center">Buying</th>}
+            <th className="text-center">Payable Amount</th>
+            <th className="text-center">Trade</th>
           </tr>
         </thead>
         {value === "buy" ? (
@@ -320,17 +295,17 @@ const TradeTable = (props) => {
               <tbody>
                 {Listings.map((item, index) =>
                   item.orderType === "sell" ? (
-                    item.tokenA === CONFIG.NaturaAddress ? (
-                      <tr key={item.id}>
-                        <td>{item.owner}</td>
-                        <td>{`${calculatePrice(item)} USDT`}</td>
-                        {item.tokenA === CONFIG.NaturaAddress ? (
+                    item.tokenA.toLowerCase() === CONFIG.NaturaAddress.toLowerCase() && parseInt(item.status) !== 0 ? (
+                      <tr key={index}>
+                        <td>{item.owner.slice(0,5) + "...." + item.owner.slice(37, 42)}</td>
+                        <td>{`${web3.utils.fromWei(item.price, "mwei")} USDT`}</td>
+                        {item.tokenA.toLowerCase() === CONFIG.NaturaAddress.toLowerCase() ? (
                           <td>Natura</td>
                         ) : (
                           <td>USDT</td>
                         )}
-                        <td>{`${calculateAmount(item)} NAT`}</td>
-                        <td>{`${calculateTotal(item)} USDT`}</td>
+                        <td>{`${web3.utils.fromWei(item.amountA, "ether")} NAT`}</td>
+                        <td>{`${parseFloat(web3.utils.fromWei(item.price, "mwei")) * parseFloat(web3.utils.fromWei(item.amountA, "ether"))} USDT`}</td>
                         <td>
                           <Button
                             onClick={() =>
@@ -351,19 +326,19 @@ const TradeTable = (props) => {
               <tbody>
                 {Listings.map((item, index) =>
                   item.orderType === "sell" ? (
-                    item.tokenA === CONFIG.USDTAddress ? (
-                      <tr key={item.id}>
-                        <td>{item.owner}</td>
-                        <td>{item.price}</td>
+                    item.tokenA.toLowerCase() === CONFIG.USDTAddress.toLowerCase() && parseInt(item.status) !== 0 ? (
+                      <tr key={index}>
+                        <td>{item.owner.slice(0,5) + "...." + item.owner.slice(37, 42)}</td>
+                        <td>{web3.utils.fromWei(item.price, "ether")} NATURA</td>
                         {item.tokenA === CONFIG.NaturaAddress ? (
                           <td>Natura</td>
                         ) : (
                           <td>USDT</td>
                         )}
 
-                        <td>{item.amountA}</td>
+                        <td>{web3.utils.fromWei(item.amountA, "mwei")}</td>
 
-                        <td>Selling</td>
+                        <td>{`${parseFloat(web3.utils.fromWei(item.price, "ether")) * parseFloat(web3.utils.fromWei(item.amountA, "mwei"))} NATURA`}</td>
                         <td>
                           <Button
                             onClick={() =>
@@ -386,11 +361,11 @@ const TradeTable = (props) => {
               <tbody>
                 {Listings.map((item, index) =>
                   item.orderType === "buy" ? (
-                    item.tokenA === CONFIG.NaturaAddress ? (
-                      <tr key={item.id}>
-                        <td>{item.owner}</td>
+                    item.tokenA.toLowerCase() === CONFIG.NaturaAddress.toLowerCase() && parseInt(item.status) !== 0 ? (
+                      <tr key={index}>
+                        <td>{item.owner.slice(0,5) + "...." + item.owner.slice(37, 42)}</td>
                         <td>{item.price}</td>
-                        {item.tokenA === CONFIG.NaturaAddress ? (
+                        {item.tokenA.toLowerCase() === CONFIG.NaturaAddress.toLowerCase() ? (
                           <td>Natura</td>
                         ) : (
                           <td>USDT</td>
@@ -419,8 +394,8 @@ const TradeTable = (props) => {
               <tbody>
                 {Listings.map((item, index) =>
                   item.orderType === "buy" ? (
-                    item.tokenA === CONFIG.USDTAddress ? (
-                      <tr key={item.id}>
+                    item.tokenA.toLowerCase() === CONFIG.USDTAddress.toLowerCase() && parseInt(item.status) !== 0 ? (
+                      <tr key={index}>
                         <td>{item.owner}</td>
                         <td>{item.price}</td>
                         {item.tokenA === CONFIG.NaturaAddress ? (

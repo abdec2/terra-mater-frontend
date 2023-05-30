@@ -80,7 +80,7 @@ const Faq = () => {
         <Heading>Frequently Asked Questions</Heading>
         <ContainerInner className="mt-5">
           {data.map((item, index) => (
-            <Accordion className="accordion-item">
+            <Accordion key={index} className="accordion-item">
               <Accordion.Item eventKey={`${index}`}>
                 <Accordion.Header>{item.Question}</Accordion.Header>
                 <Accordion.Body>{item.Answer}</Accordion.Body>

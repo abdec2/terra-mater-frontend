@@ -201,6 +201,7 @@ const Swapping = () => {
                   currency={currency}
                   Listings={Listings}
                   value={value}
+                  setRefetch = {setRefetch}
                 />
               </div>
             ) : condition === "userListings" ? (

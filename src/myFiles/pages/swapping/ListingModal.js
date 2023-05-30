@@ -324,11 +324,11 @@ const ListingModal = (props) => {
       } else if (listingType === "buy") {
         if (selectedTokenOne === "Natura") {
           await handleApproveUSDT();
-          const PRICE = web3.utils.toWei(price, "lovelace");
+          const PRICE = web3.utils.toWei(price, "ether");
           await CreateListing(PRICE);
         } else {
           await handleApproveNatura();
-          const PRICE = web3.utils.toWei(price, "ether");
+          const PRICE = web3.utils.toWei(price, "lovelace");
           await CreateListing(PRICE);
         }
       }
