@@ -6,6 +6,7 @@ import EditModal from "./EditModal";
 import useFetchUserData from "../hooks/useFetchUserData";
 import { CONFIG } from "../abi/Config";
 import { useSelector } from "react-redux";
+import Web3 from "web3";
 const Button = styled.button`
   background: #ff343f;
   color: #fff;
@@ -21,12 +22,12 @@ const Button = styled.button`
 `;
 
 const UserTable = (props) => {
-  const { currency, account, userListings } = props;
+  const { currency, account, userListings, provider } = props;
+  const web3 = new Web3(process.env.REACT_APP_ALCHEMY_TEST_KEY);
   const [OpenModal, setOpenModal] = useState(false);
   const [refetch, setRefetch] = useState(true);
   const [loading, setLoading] = useState(true);
-  const web3Store = useSelector((state) => state.web3);
-  const web3 = web3Store.web3;
+
   const modalHandle = () => {
     setOpenModal(true);
   };
@@ -44,7 +45,7 @@ const UserTable = (props) => {
         <thead>
           <tr>
             <th>Owner</th>
-            <th>Price</th>
+            <th>Price/Token</th>
             <th>Token</th>
             <th>Amount</th>
             <th>Listing Type</th>
@@ -66,7 +67,7 @@ const UserTable = (props) => {
             </tr>
           ) : (
             <>
-              {userListings.map(
+              {userListings?.map(
                 (item, index) =>
                   parseInt(item.status) !== 0 ? (
                     <>
@@ -74,17 +75,35 @@ const UserTable = (props) => {
                         <tr key={index}>
                           <td>{item.owner}</td>
 
-                          <td>{item.price}</td>
                           {item.tokenA === CONFIG.NaturaAddress ? (
-                            <td>Natura</td>
+                            <td>
+                              {web3.utils.fromWei(item.price, "lovelace")}
+                            </td>
                           ) : (
-                            <td>USDT</td>
+                            <td>{web3.utils.fromWei(item.price, "ether")}</td>
+                          )}
+                          {item.orderType === "sell" ? (
+                            <>
+                              {item.tokenA === CONFIG.NaturaAddress ? (
+                                <td>Natura</td>
+                              ) : (
+                                <td>USDT</td>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {item.tokenA === CONFIG.NaturaAddress ? (
+                                <td>Natura</td>
+                              ) : (
+                                <td>USDT</td>
+                              )}
+                            </>
                           )}
                           {item.tokenA === CONFIG.NaturaAddress ? (
                             <td>{web3.utils.fromWei(item.amountA, "ether")}</td>
                           ) : (
                             <td>
-                              {web3.utils.fromWei(item.amountA, "lovelace")}
+                              {web3.utils.fromWei(item.amountA, "lovelace")}{" "}
                             </td>
                           )}
                           <td>{item.orderType}</td>

@@ -200,9 +200,11 @@ const Modal_header_inner_right_inner_right = styled.div`
 const MySwal = withReactContent(Swal);
 const ListingModal = (props) => {
   const dispatch = useDispatch();
-  const web3Store = useSelector((state) => state.web3);
-  const web3 = web3Store.web3;
-  const { setModal, account, setRefetch, setIsLoading } = props;
+  // const web3Store = useSelector((state) => state.web3);
+  // const web3 = web3Store.web3;
+
+  const { setModal, account, setRefetch, setIsLoading, web3, currentAcc } =
+    props;
   const [listingType, setListingType] = useState("");
   const [selectedTokenOne, setSelectedTokenOne] = useState("Select your Token");
   const [amount, setAmount] = useState(0);
@@ -255,10 +257,10 @@ const ListingModal = (props) => {
     const AMOUNT = web3.utils.toWei(amount, "ether");
     const estimateGas = await tokenContractInstance.methods
       .approve(CONFIG.SwapContractAddress, AMOUNT)
-      .estimateGas({ from: web3Store.account });
+      .estimateGas({ from: currentAcc });
     const approve = await tokenContractInstance.methods
       .approve(CONFIG.SwapContractAddress, AMOUNT)
-      .send({ from: web3Store.account, gasLimit: estimateGas.toString() });
+      .send({ from: currentAcc, gasLimit: estimateGas.toString() });
   };
   // --------------------------- >
   // approving USDT for contract |
@@ -270,10 +272,10 @@ const ListingModal = (props) => {
     const AMOUNT = web3.utils.toWei(amount, "lovelace");
     const estimateGas = await tokenContractInstance.methods
       .approve(CONFIG.SwapContractAddress, AMOUNT)
-      .estimateGas({ from: web3Store.account });
+      .estimateGas({ from: currentAcc });
     const approve = await tokenContractInstance.methods
       .approve(CONFIG.SwapContractAddress, AMOUNT)
-      .send({ from: web3Store.account, gasLimit: estimateGas.toString() });
+      .send({ from: currentAcc, gasLimit: estimateGas.toString() });
   };
   // ---------------- >
   // creating listing |
@@ -298,17 +300,43 @@ const ListingModal = (props) => {
 
     const estimateGas = await tokenContractInstance.methods
       .createOrder(tokenA, AMOUNT, PRICE, listingType.toString())
-      .estimateGas({ from: web3Store.account });
+      .estimateGas({ from: currentAcc });
     const createOrder = await tokenContractInstance.methods
       .createOrder(tokenA, AMOUNT, PRICE, listingType.toString())
-      .send({ from: web3Store.account, gasLimit: estimateGas.toString() });
+      .send({ from: currentAcc, gasLimit: estimateGas.toString() });
     console.log(createOrder);
   };
   // ---------------------------------- >
   // calling approve and create listing |
   // ---------------------------------- >
   const handleCreateListing = async () => {
-    console.log("create listing");
+    const network = await web3.eth.getChainId();
+    console.log(network);
+    if (
+      amount === "" ||
+      price === "" ||
+      selectedTokenOne === "Select your Token" ||
+      amount === 0 ||
+      price === 0 ||
+      amount === "0" ||
+      price === "0" ||
+      amount === null ||
+      price === null
+    ) {
+      MySwal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please fill all the fields",
+      });
+      return;
+    } else if (network.toString() !== CONFIG.Chain_Id) {
+      MySwal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please connect to Polygon mumbai network",
+      });
+      return;
+    }
     try {
       setModal(false);
       setIsLoading(true);
@@ -323,6 +351,7 @@ const ListingModal = (props) => {
           console.log("usdt");
           await handleApproveUSDT();
           const PRICE = web3.utils.toWei(price, "ether");
+
           await CreateListing(PRICE);
         }
       } else if (listingType === "buy") {
@@ -362,22 +391,18 @@ const ListingModal = (props) => {
   const calculateGettingPrice = () => {
     if (listingType === "sell") {
       if (selectedTokenOne === "Natura") {
-        const Burnfee = amount * 0.04;
+        const Burnfee = amount * 0.05;
         const amountToTransfer = amount - Burnfee;
         const am = amountToTransfer * price;
-        const number = am.toFixed(3);
-        const PlateformFee = number * 0.05;
-        const finalAmount = number - PlateformFee;
-        setGettingOne(finalAmount);
+        const number = am;
+        setGettingOne(number.toFixed(3));
       } else {
         if (selectedTokenOne === "USDT") {
-          const PlateformFee = amount * 0.05;
+          const PlateformFee = amount * 0.04;
           const amountToTransfer = amount - PlateformFee;
           const am = amountToTransfer * price;
-          const number = am.toFixed(3);
-          const cutNatura = number * 0.04;
-          const finalAmount = number - cutNatura;
-          setGettingOne(finalAmount);
+          const number = am;
+          setGettingOne(number.toFixed(3));
         }
       }
     } else {
@@ -390,13 +415,12 @@ const ListingModal = (props) => {
         setGettingTwo(number);
       } else {
         if (selectedTokenOne === "USDT") {
-          const Burnfee = amount * 0.04;
+          const Burnfee = amount * 0.05;
           const amountToTransfer = amount - Burnfee;
           const am = amountToTransfer / price;
-          const number = am.toFixed(3);
-          const PlateformFee = number * 0.05;
-          const finalAmount = number - PlateformFee;
-          setGettingTwo(finalAmount);
+          const number = am;
+
+          setGettingTwo(number.toFixed(3));
         }
       }
     }
@@ -406,14 +430,12 @@ const ListingModal = (props) => {
       if (selectedTokenOne === "Natura") {
         const Burnfee = amount * 0.04;
         const amountToTransfer = amount - Burnfee;
-        const am = amountToTransfer * price;
-        setOfferingOne(am);
+        setOfferingOne(amountToTransfer.toFixed(3));
       } else {
         if (selectedTokenOne === "USDT") {
-          const PlateformFee = amount * 0.04;
+          const PlateformFee = amount * 0.05;
           const amountToTransfer = amount - PlateformFee;
-          const am = amountToTransfer * price;
-          setOfferingOne(am);
+          setOfferingOne(amountToTransfer.toFixed(3));
         }
       }
     } else {
@@ -421,13 +443,13 @@ const ListingModal = (props) => {
         const plateformFee = amount * 0.05;
         const amountToTransfer = amount - plateformFee;
         const am = amountToTransfer;
-        setOfferingTwo(am);
+        setOfferingTwo(am.toFixed(3));
       } else {
         if (selectedTokenOne === "USDT") {
           const BurnFee = amount * 0.04;
           const amountToTransfer = amount - BurnFee;
           const am = amountToTransfer;
-          setOfferingTwo(am);
+          setOfferingTwo(am.toFixed(3));
         }
       }
     }

@@ -47,6 +47,7 @@ const TradeTable = (props) => {
   console.log(Listings);
 
   const [currentAcc, setCurrentAcc] = useState(null);
+  const [provider, setProvider] = useState(null);
   // const web3Store = useSelector((state) => state.web3);
   const web3 = new Web3(process.env.REACT_APP_ALCHEMY_TEST_KEY);
   // ----------------------------- >
@@ -119,16 +120,31 @@ const TradeTable = (props) => {
   // Calling the main function    |
   // ----------------------------- >
   const handleTransaction = async (item, currency, value, index) => {
-    const web3Modal = new Web3Modal({
-      providerOptions, // required
-    });
-    const provider = await web3Modal.connect();
-    const web3 = new Web3(provider);
-    const accounts = await web3.eth.getAccounts();
-    console.log(accounts);
-    const currentAcc = accounts[0];
-    setCurrentAcc(currentAcc);
+    if (currentAcc === null || currentAcc === "") {
+      const web3Modal = new Web3Modal({
+        providerOptions, // required
+      });
+      const provider = await web3Modal.connect();
+      const web3 = new Web3(provider);
+      const accounts = await web3.eth.getAccounts();
+      console.log(accounts);
+      const currentAcc = accounts[0];
+      setCurrentAcc(currentAcc);
+      setProvider(web3);
+
+      return;
+    }
     console.log(currentAcc);
+    const network = await provider.eth.getChainId();
+    if (network.toString() !== CONFIG.Chain_Id) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please connect to Polygon mumbai network",
+        timer: 2000,
+      });
+      return;
+    }
     try {
       setIsLoading(true);
       if (value === "buy") {
@@ -140,8 +156,8 @@ const TradeTable = (props) => {
           // console.log("AMOUNT", AMOUNT);
           // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
           // console.log("AMOUNT", AMOUNT);
-          await handleApproveUSDT(AMOUNT, currentAcc, web3);
-          await handleSwap(index, currentAcc, web3);
+          await handleApproveUSDT(AMOUNT, currentAcc, provider);
+          await handleSwap(index, currentAcc, provider);
         } else if (currency === "USDT") {
           console.log(item.price);
           console.log(item.amountA);
@@ -150,30 +166,36 @@ const TradeTable = (props) => {
           );
           console.log(AMOUNT);
           // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
-          await handleApproveNatura(AMOUNT, currentAcc, web3);
+          await handleApproveNatura(AMOUNT, currentAcc, provider);
           const tokenAddress = CONFIG.NaturaAddress;
           const tokenAbi = NaturaAbi;
-          await handleSwap(index, currentAcc, web3);
+          await handleSwap(index, currentAcc, provider);
         }
       } else if (value === "sell") {
         if (currency === "Natura") {
-          const Amount = item.amountA * item.price;
-          const AMOUNT = web3.utils.fromWei(JSON.stringify(Amount), "ether");
-          // console.log(AMOUNT);
+          // console.log(item.amountA);
+          // console.log(item.price);
+          console.log(item.amountA);
+          console.log(item.price);
+          const AMOUNT = JSON.stringify(
+            web3.utils.fromWei(item.amountA.toString(), "lovelace") * item.price
+          );
+
           // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
-          await handleApproveNatura(AMOUNT, currentAcc, web3);
+          await handleApproveNatura(AMOUNT, currentAcc, provider);
           const tokenAddress = CONFIG.NaturaAddress;
           const tokenAbi = NaturaAbi;
-          await handleSwap(index, currentAcc, web3);
+          await handleSwap(index, currentAcc, provider);
         } else if (currency === "USDT") {
-          const Amount = item.amountA * item.price;
-          const AMOUNT = web3.utils.fromWei(JSON.stringify(Amount), "lovelace");
-          // console.log(AMOUNT);
+          const AMOUNT = JSON.stringify(
+            web3.utils.fromWei(item.amountA.toString(), "ether") * item.price
+          );
+          console.log(AMOUNT);
           // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
-          await handleApproveUSDT(AMOUNT, currentAcc, web3);
+          await handleApproveUSDT(AMOUNT, currentAcc, provider);
           const tokenAddress = CONFIG.USDTAddress;
           const tokenAbi = USDTAbi;
-          await handleSwap(index, currentAcc, web3);
+          await handleSwap(index, currentAcc, provider);
         }
       }
       setRefetch(true);
@@ -283,9 +305,13 @@ const TradeTable = (props) => {
             {value === "buy" ? (
               <th className="text-center">Selling</th>
             ) : (
-              <th className="text-center">Buying</th>
+              <th className="text-center">Purchasing</th>
             )}
-            <th className="text-center">Payable Amount</th>
+            {value === "buy" ? (
+              <th className="text-center">Purchasing</th>
+            ) : (
+              <th className="text-center">Selling</th>
+            )}
             <th className="text-center">Trade</th>
           </tr>
         </thead>
@@ -328,7 +354,9 @@ const TradeTable = (props) => {
                               handleTransaction(item, currency, value, index)
                             }
                           >
-                            Buy
+                            {currentAcc === "" || currentAcc === null
+                              ? "Connect Wallet"
+                              : "Trade"}
                           </Button>
                         </td>
                       </tr>
@@ -351,9 +379,7 @@ const TradeTable = (props) => {
                             "...." +
                             item.owner.slice(37, 42)}
                         </td>
-                        <td>
-                          {web3.utils.fromWei(item.price, "ether")} NATURA
-                        </td>
+                        <td>{web3.utils.fromWei(item.price, "ether")} NAT</td>
                         {item.tokenA === CONFIG.NaturaAddress ? (
                           <td>Natura</td>
                         ) : (
@@ -365,14 +391,16 @@ const TradeTable = (props) => {
                         <td>{`${
                           parseFloat(web3.utils.fromWei(item.price, "ether")) *
                           parseFloat(web3.utils.fromWei(item.amountA, "mwei"))
-                        } NATURA`}</td>
+                        } NAT`}</td>
                         <td>
                           <Button
                             onClick={() =>
                               handleTransaction(item, currency, value, index)
                             }
                           >
-                            Buy
+                            {currentAcc === "" || currentAcc === null
+                              ? "Connect Wallet"
+                              : "Trade"}
                           </Button>
                         </td>
                       </tr>
@@ -383,7 +411,7 @@ const TradeTable = (props) => {
             </>
           ) : null
         ) : value === "sell" ? (
-          currency === "Natura" ? (
+          currency === "USDT" ? (
             <>
               <tbody>
                 {Listings.map((item, index) =>
@@ -397,7 +425,9 @@ const TradeTable = (props) => {
                             "...." +
                             item.owner.slice(37, 42)}
                         </td>
-                        <td>{web3.utils.fromWei(item.price, "ether")} USDT</td>
+                        <td>
+                          {web3.utils.fromWei(item.price, "lovelace")} NAT
+                        </td>
                         {item.tokenA.toLowerCase() ===
                         CONFIG.NaturaAddress.toLowerCase() ? (
                           <td>Natura</td>
@@ -406,7 +436,11 @@ const TradeTable = (props) => {
                         )}
 
                         <td>
-                          {web3.utils.fromWei(item.amountA, "ether")} NAT{" "}
+                          {parseFloat(web3.utils.fromWei(item.price, "ether")) *
+                            parseFloat(
+                              web3.utils.fromWei(item.amountA, "mwei")
+                            )}{" "}
+                          USDT
                         </td>
 
                         <td>
@@ -414,7 +448,7 @@ const TradeTable = (props) => {
                             parseFloat(
                               web3.utils.fromWei(item.amountA, "mwei")
                             )}{" "}
-                          USDT
+                          NAT
                         </td>
                         <td>
                           <Button
@@ -422,7 +456,9 @@ const TradeTable = (props) => {
                               handleTransaction(item, currency, value, index)
                             }
                           >
-                            Sell
+                            {currentAcc === "" || currentAcc === null
+                              ? "Connect Wallet"
+                              : "Trade"}
                           </Button>
                         </td>
                       </tr>
@@ -431,7 +467,7 @@ const TradeTable = (props) => {
                 )}
               </tbody>
             </>
-          ) : currency === "USDT" ? (
+          ) : currency === "Natura" ? (
             <>
               <tbody>
                 {Listings.map((item, index) =>
@@ -452,16 +488,30 @@ const TradeTable = (props) => {
                           <td>USDT</td>
                         )}
 
-                        <td>{web3.utils.fromWei(item.amountA, "mwei")} USDT</td>
+                        <td>
+                          {parseFloat(web3.utils.fromWei(item.price, "ether")) *
+                            parseFloat(
+                              web3.utils.fromWei(item.amountA, "mwei")
+                            )}{" "}
+                          NAT
+                        </td>
 
-                        <td>Buying</td>
+                        <td>
+                          {parseFloat(web3.utils.fromWei(item.price, "ether")) *
+                            parseFloat(
+                              web3.utils.fromWei(item.amountA, "mwei")
+                            )}{" "}
+                          USDT
+                        </td>
                         <td>
                           <Button
                             onClick={() =>
                               handleTransaction(item, currency, value, index)
                             }
                           >
-                            Sell
+                            {currentAcc === "" || currentAcc === null
+                              ? "Connect Wallet"
+                              : "Trade"}
                           </Button>
                         </td>
                       </tr>

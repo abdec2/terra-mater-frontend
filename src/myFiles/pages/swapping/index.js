@@ -16,6 +16,9 @@ import useFetchListings from "./hooks/useFetchAllListings";
 import { reconnectWallet } from "../../../components/menu/connectWallet";
 import TradeTable from "./listingTables/BuyTable";
 import LoadingScreen from "../stakingNFT/loadingScreen";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import Web3 from "web3";
+import Web3Modal from "web3modal";
 const Container_header = styled.div`
   display: flex;
   justify-content: start;
@@ -60,6 +63,18 @@ const Contained = styled.div`
     padding-right: 20px;
   }
 `;
+
+const providerOptions = {
+  /* See Provider Options Section */
+  walletconnect: {
+    package: WalletConnectProvider, // required
+    options: {
+      rpc: {
+        80001: process.env.REACT_APP_ALCHEMY_TEST_KEY,
+      },
+    },
+  },
+};
 const theme = "GREY"; //LIGHT, GREY, RETRO
 const Swapping = () => {
   const dispatch = useDispatch();
@@ -75,10 +90,27 @@ const Swapping = () => {
   const selectCurrency = (props) => {
     setCurrency(props);
   };
+  const [currentAcc, setCurrentAcc] = useState(null);
+  const [provider, setProvider] = useState(null);
 
-  const { userListings } = useFetchUserData(account, refetch, setRefetch);
-  const { Listings } = useFetchListings();
+  const { userListings } = useFetchUserData(currentAcc, refetch, setRefetch);
+  const { Listings } = useFetchListings(refetch, setRefetch);
 
+  const connectWallet = async () => {
+    const web3Modal = new Web3Modal({
+      providerOptions, // required
+    });
+    const provider = await web3Modal.connect();
+    const web3 = new Web3(provider);
+    const accounts = await web3.eth.getAccounts();
+    console.log(accounts);
+    const currentAcc = accounts[0];
+    setCurrentAcc(currentAcc);
+    setProvider(web3);
+    setRefetch(true);
+    console.log(web3);
+    console.log(currentAcc);
+  };
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <a
       href=""
@@ -93,14 +125,10 @@ const Swapping = () => {
       &#x25bc;
     </a>
   ));
-  useEffect(() => {
-    if (typeof web3Store.account === "string") {
-      setAccount(web3Store.account);
-    }
-  }, [web3Store.account, account]);
+
   useFetchUserData(account);
   const OpenModal = () => {
-    if (!account) {
+    if (!currentAcc) {
       Swal.fire({
         title: "Please login to create listing",
         icon: "warning",
@@ -122,6 +150,8 @@ const Swapping = () => {
             account={account}
             setRefetch={setRefetch}
             setIsLoading={setIsLoading}
+            web3={provider}
+            currentAcc={currentAcc}
           />
         ) : null}
         <section
@@ -155,13 +185,13 @@ const Swapping = () => {
                   </CurrencyOptions>
                 </Container_header>
                 <div>
-                  {!account ? (
+                  {!currentAcc ? (
                     <HighlightedHeading
                       className="text-center"
                       style={{
                         cursor: "pointer",
                       }}
-                      onClick={() => reconnectWallet(dispatch)}
+                      onClick={() => connectWallet()}
                     >
                       Connect your wallet to create listings
                     </HighlightedHeading>
@@ -219,6 +249,7 @@ const Swapping = () => {
                       userListings={userListings}
                       setRefetch={setRefetch}
                       setIsLoading={setIsLoading}
+                      provider={provider}
                     />
                   </div>
                 </>
