@@ -9,7 +9,7 @@ import withReactContent from "sweetalert2-react-content";
 import { useDispatch, useSelector } from "react-redux";
 import BuyTable from "./listingTables/BuyTable";
 import Dropdown from "react-bootstrap/Dropdown";
-import SellTable from "./listingTables/SellTable";
+import RecordTable from "./listingTables/RecordTable";
 import UserTable from "./userListings";
 import useFetchUserData from "./hooks/useFetchUserData";
 import useFetchListings from "./hooks/useFetchAllListings";
@@ -19,6 +19,8 @@ import LoadingScreen from "../stakingNFT/loadingScreen";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
+import { CiFilter } from "react-icons/ci";
+import { Button } from "bootstrap";
 const Container_header = styled.div`
   display: flex;
   justify-content: start;
@@ -37,7 +39,18 @@ const CurrencyOption = styled.div`
     background: #ff343f;
     color: #fff;
   }
+  :hover {
+    background: #ff343f;
+    color: #fff;
+  }
   ${({ selected }) => selected && "background-color: #ff343f; color: #fff;"}
+`;
+const BUTTON = styled.div`
+  padding: 10px;
+  border-radius: 5px;
+  background: #ff343f;
+  color: #fff;
+  cursor: pointer;
 `;
 const ListingBtn = styled.div`
   cursor: pointer;
@@ -55,12 +68,15 @@ const Contained = styled.div`
   border-bottom: 0.5px solid #1a1b1e;
   height: 70px;
   flex-wrap: nowrap;
-  @media (max-width: 500px) {
+  @media (max-width: 670px) {
     flex-wrap: wrap;
-    height: 100px;
     justify-content: start;
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-left: 20px;
     padding-right: 20px;
+    gap: 20px;
+    height: 130px;
   }
 `;
 
@@ -70,7 +86,7 @@ const providerOptions = {
     package: WalletConnectProvider, // required
     options: {
       rpc: {
-        80001: process.env.REACT_APP_ALCHEMY_TEST_KEY,
+        137: process.env.REACT_APP_ALCHEMY_KEY,
       },
     },
   },
@@ -95,7 +111,7 @@ const Swapping = () => {
 
   const { userListings } = useFetchUserData(currentAcc, refetch, setRefetch);
   const { Listings } = useFetchListings(refetch, setRefetch);
-
+  const [filterType, setFilterType] = useState("all");
   const connectWallet = async () => {
     const web3Modal = new Web3Modal({
       providerOptions, // required
@@ -107,6 +123,7 @@ const Swapping = () => {
     const currentAcc = accounts[0];
     setCurrentAcc(currentAcc);
     setProvider(web3);
+    setCondition("userListings");
     setRefetch(true);
     console.log(web3);
     console.log(currentAcc);
@@ -123,6 +140,20 @@ const Swapping = () => {
     >
       {children}
       &#x25bc;
+    </a>
+  ));
+
+  const TOGGLE = React.forwardRef(({ children, onClick }, ref) => (
+    <a
+      href=""
+      ref={ref}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(e);
+      }}
+      className="dropdown-toggle"
+    >
+      {children}
     </a>
   ));
 
@@ -184,50 +215,116 @@ const Swapping = () => {
                     </CurrencyOption>
                   </CurrencyOptions>
                 </Container_header>
-                <div>
-                  {!currentAcc ? (
-                    <HighlightedHeading
-                      className="text-center"
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <HighlightedHeading
+                    onClick={() => {
+                      setCondition("record");
+                      setFilterType("all");
+                    }}
+                  >
+                    Record
+                  </HighlightedHeading>{" "}
+                  {condition === "record" ? (
+                    <span
                       style={{
-                        cursor: "pointer",
+                        color: "#ff343f",
                       }}
-                      onClick={() => connectWallet()}
                     >
-                      Connect your wallet to create listings
-                    </HighlightedHeading>
-                  ) : (
-                    <>
                       <Dropdown
                         style={{
                           width: "100%",
                         }}
                       >
                         <Dropdown.Toggle
-                          as={CustomToggle}
+                          as={TOGGLE}
                           variant="success"
                           id="dropdown-basic"
                         >
-                          Manage your listings
+                          <CiFilter
+                            style={{
+                              color: "#ff343f",
+                              height: "20px",
+                              width: "20px",
+                              cursor: "pointer",
+                            }}
+                          />
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                          <Dropdown.Item>
-                            <ListingBtn onClick={OpenModal}>
-                              Create your own listing
-                            </ListingBtn>
+                          <Dropdown.Item
+                            onClick={() => setFilterType("cancelled")}
+                          >
+                            Cancelled Listings
                           </Dropdown.Item>
                           <Dropdown.Item
-                            onClick={() => setCondition("userListings")}
+                            onClick={() => setFilterType("successful")}
                           >
-                            Your Listings
-                          </Dropdown.Item>
-                          <Dropdown.Item onClick={() => setCondition("buy")}>
-                            Back
+                            Successful Listings
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
-                    </>
-                  )}
+                    </span>
+                  ) : null}
+                  <span
+                    style={{
+                      color: "#ff343f",
+                    }}
+                  >
+                    &#124;
+                  </span>
+                  <div>
+                    {!currentAcc ? (
+                      <HighlightedHeading
+                        className="text-center"
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        onClick={() => connectWallet()}
+                      >
+                        Connect your wallet to create listings
+                      </HighlightedHeading>
+                    ) : (
+                      <>
+                        <Dropdown
+                          style={{
+                            width: "100%",
+                          }}
+                        >
+                          <Dropdown.Toggle
+                            as={CustomToggle}
+                            variant="success"
+                            id="dropdown-basic"
+                          >
+                            Manage your listings
+                          </Dropdown.Toggle>
+
+                          <Dropdown.Menu>
+                            <Dropdown.Item>
+                              <ListingBtn onClick={OpenModal}>
+                                Create new listing
+                              </ListingBtn>
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={() => setCondition("userListings")}
+                            >
+                              Your Listings
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </>
+                    )}
+                  </div>
+                  {condition === "userListings" ||
+                  (condition === "record" && condition !== "buy") ? (
+                    <BUTTON onClick={() => setCondition("buy")}>Back</BUTTON>
+                  ) : null}
                 </div>
               </Contained>
               {condition === "buy" ? (
@@ -245,11 +342,24 @@ const Swapping = () => {
                   <div className="mx-2 mx-md-5 mt-4">
                     <UserTable
                       currency={currency}
-                      account={account}
-                      userListings={userListings}
+                      currentAcc={currentAcc}
+                      Listings={Listings}
                       setRefetch={setRefetch}
                       setIsLoading={setIsLoading}
                       provider={provider}
+                    />
+                  </div>
+                </>
+              ) : condition === "record" ? (
+                <>
+                  <div className="mx-2 mx-md-5 mt-4">
+                    <RecordTable
+                      currency={currency}
+                      Listings={Listings}
+                      value={value}
+                      setRefetch={setRefetch}
+                      setIsLoading={setIsLoading}
+                      filterType={filterType}
                     />
                   </div>
                 </>

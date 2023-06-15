@@ -10,7 +10,7 @@ import Web3 from "web3";
 
 const useFetchListings = (refetch, setRefetch) => {
   const [Listings, setListings] = useState([]);
-  const web3 = new Web3(process.env.REACT_APP_ALCHEMY_TEST_KEY);
+  const web3 = new Web3(process.env.REACT_APP_ALCHEMY_KEY);
   //   const web3Store = useSelector((state) => state.web3);
   //   const web3 = web3Store.web3;
   const loadData = async () => {
@@ -25,8 +25,8 @@ const useFetchListings = (refetch, setRefetch) => {
         CONFIG.SwapContractAddress
       );
       // call the ordersCount function from the smart contract
-
       const resp = await contract.methods.getOrders().call();
+      
       setListings(resp);
       setRefetch(false);
     }

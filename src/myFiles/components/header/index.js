@@ -131,7 +131,7 @@ const Index = () => {
                 About
               </NavLink>
             </div>
-            {/* <div className="px-4 py-2">
+            <div className="px-4 py-2">
               <NavLink
                 className="p-3 p-lg-0 nav-link fw-normal text-truncate"
                 to="/dashboard"
@@ -154,8 +154,8 @@ const Index = () => {
               >
                 Swapping
               </NavLink>
-            </div> */}
-            <div className="px-4">
+            </div>
+            {/* <div className="px-4">
               <Dropdown>
                 <Dropdown.Toggle as={CustomToggle} id="my-wallet-dd">
                   <span className="fw-normal me-2">Features</span>
@@ -166,36 +166,36 @@ const Index = () => {
                   className="bg-dark p-2"
                   style={{ border: "1px solid #333" }}
                 >
-                  <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate("/swapping")}>
-                    Swapping
-                    {/* <NavLink
+                  <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate("/swapping")}> */}
+            {/* Swapping */}
+            {/* <NavLink
                       className="p-3 p-lg-0 nav-link fw-normal text-truncate"
                       to="/swapping"
                     >
                       
                     </NavLink> */}
-                  </Dropdown.Item>
+            {/* </Dropdown.Item>
                   <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate("/nft-staking")}>
-                    NFT Staking
-                    {/* <NavLink
+                    NFT Staking */}
+            {/* <NavLink
                       className="p-3 p-lg-0 nav-link fw-normal text-truncate"
                       to="/nft-staking"
                     >
                       
                     </NavLink> */}
-                  </Dropdown.Item>
+            {/* </Dropdown.Item>
                   <Dropdown.Item className="p-2 fw-normal" onClick={() => navigate("/dashboard")}>
-                    Dashboard
-                    {/* <NavLink
+                    Dashboard */}
+            {/* <NavLink
                       className="p-3 p-lg-0 nav-link fw-normal text-truncate"
                       to="/dashboard"
                     >
                       
                     </NavLink> */}
-                  </Dropdown.Item>
+            {/* </Dropdown.Item>
                 </Dropdown.Menu>
-              </Dropdown>
-            </div>
+              </Dropdown> */}
+            {/* </div> */}
             {!islogin && (
               <div className="px-4 py-2">
                 <Nav.Link

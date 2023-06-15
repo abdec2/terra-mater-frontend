@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { RxCross1 } from "react-icons/rx";
 import Dropdown from "react-bootstrap/Dropdown";
-
+import { CONFIG } from "../abi/Config";
+import SwapAbi from "../abi/SwapAbi.json";
+import NaturaAbi from "../abi/NaturaAbi.json";
+import USDTAbi from "../abi/USDTAbi.json";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 const Modal = styled.div`
   display: flex;
   align-items: center;
@@ -114,11 +119,22 @@ const Modal_form = styled.div`
     }
   }
 `;
+const MySwal = withReactContent(Swal);
 const EditModal = (props) => {
-  const { setOpenModal } = props;
+  const {
+    setOpenModal,
+    updateData,
+    provider,
+    currentAcc,
+    currenctIndex,
+    setRefetch,
+    setIsLoading,
+  } = props;
   const [listingType, setListingType] = useState("");
   const [selectedTokenOne, setSelectedTokenOne] = useState("Select your Token");
   const [selectedTokenTwo, setSelectedTokenTwo] = useState("Select your Token");
+  const [price, setPrice] = useState(0);
+  const [amount, setAmount] = useState(0);
   const closeModal = () => {
     setOpenModal(false);
   };
@@ -131,6 +147,7 @@ const EditModal = (props) => {
   const handleTokenSelectionTwo = (token) => {
     setSelectedTokenTwo(token);
   };
+
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <a
       href=""
@@ -145,7 +162,336 @@ const EditModal = (props) => {
       &#x25bc;
     </a>
   ));
+  const handleApproveNatura = async (updatedAMOUNT, currentAcc, provider) => {
+    console.log("approve");
+    const tokenContract = CONFIG.NaturaAddress;
+    const tokenContractInstance = new provider.eth.Contract(
+      NaturaAbi,
+      tokenContract
+    );
+    const estimateGas = await tokenContractInstance.methods
+      .approve(CONFIG.SwapContractAddress, updatedAMOUNT)
+      .estimateGas({ from: currentAcc });
 
+    const approve = await tokenContractInstance.methods
+      .approve(CONFIG.SwapContractAddress, updatedAMOUNT)
+      .send({ from: currentAcc, gasLimit: estimateGas.toString() });
+  };
+  // --------------------------- >
+  // approving USDT for contract |
+  // --------------------------- >
+  const handleApproveUSDT = async (updatedAMOUNT, currentAcc, provider) => {
+    console.log("approve");
+    const tokenContract = CONFIG.USDTAddress;
+    const tokenContractInstance = new provider.eth.Contract(
+      USDTAbi,
+      tokenContract
+    );
+    const estimateGas = await tokenContractInstance.methods
+      .approve(CONFIG.SwapContractAddress, updatedAMOUNT)
+      .estimateGas({ from: currentAcc });
+    const approve = await tokenContractInstance.methods
+      .approve(CONFIG.SwapContractAddress, updatedAMOUNT)
+      .send({ from: currentAcc, gasLimit: estimateGas.toString() });
+  };
+  // --------------------------- >
+  // order update function       |
+  // --------------------------- >
+  const UpdateOrder = async (AMOUNT, PRICE) => {
+    const contract = new provider.eth.Contract(
+      SwapAbi,
+      CONFIG.SwapContractAddress
+    );
+    const estimateGas = await contract.methods
+      .updateOrder(currenctIndex, AMOUNT, PRICE)
+      .estimateGas({ from: currentAcc });
+    const update = await contract.methods
+      .updateOrder(currenctIndex, AMOUNT, PRICE)
+      .send({ from: currentAcc, gasLimit: estimateGas.toString() });
+  };
+  // --------------------------- >
+  // order update caller function|
+  // --------------------------- >
+  const edit = async () => {
+    console.log("edit");
+
+    if (parseInt(updateData.status) === 1) {
+      if (updateData.orderType === "sell") {
+        if (updateData.tokenA === CONFIG.NaturaAddress) {
+          const AMOUNT =
+            amount === 0 || amount === "" || amount === null
+              ? updateData.amountA
+              : provider.utils.toWei(amount.toString(), "ether");
+
+          const PRICE =
+            price === 0 || price === "" || price === null
+              ? updateData.price
+              : provider.utils.toWei(price.toString(), "lovelace");
+
+          if (parseInt(AMOUNT) > parseInt(updateData.amountA)) {
+            try {
+              setIsLoading(true);
+              setOpenModal(false);
+              const updatedamount = AMOUNT - updateData.amountA;
+              const updatedAMOUNT = JSON.stringify(updatedamount);
+              console.log("updatedAMOUNT", updatedAMOUNT);
+              await handleApproveNatura(updatedAMOUNT, currentAcc, provider);
+              await UpdateOrder(AMOUNT, PRICE);
+              setRefetch(true);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "success",
+                title: "Your order has been updated",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setAmount(0);
+              setPrice(0);
+            } catch (error) {
+              console.log(error);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
+            }
+          } else {
+            try {
+              setIsLoading(true);
+              setOpenModal(false);
+              await UpdateOrder(AMOUNT, PRICE);
+              setRefetch(true);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "success",
+                title: "Your order has been updated",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setAmount(0);
+              setPrice(0);
+            } catch (error) {
+              console.log(error);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
+            }
+          }
+        } else {
+          const AMOUNT =
+            amount === 0 || amount === "" || amount === null
+              ? updateData.amountA
+              : provider.utils.toWei(amount.toString(), "lovelace");
+
+          const PRICE =
+            price === 0 || price === "" || price === null
+              ? updateData.price
+              : provider.utils.toWei(price.toString(), "ether");
+          if (parseInt(AMOUNT) > parseInt(updateData.amountA)) {
+            try {
+              setIsLoading(true);
+              setOpenModal(false);
+              const updatedamount = AMOUNT - updateData.amountA;
+              const updatedAMOUNT = JSON.stringify(updatedamount);
+              await handleApproveUSDT(updatedAMOUNT, currentAcc, provider);
+              await UpdateOrder(AMOUNT, PRICE);
+              setRefetch(true);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "success",
+                title: "Your order has been updated",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setAmount(0);
+              setPrice(0);
+            } catch (error) {
+              console.log(error);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
+            }
+          } else {
+            try {
+              setIsLoading(true);
+              setOpenModal(false);
+              await UpdateOrder(AMOUNT, PRICE);
+              setRefetch(true);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "success",
+                title: "Your order has been updated",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setAmount(0);
+              setPrice(0);
+            } catch (error) {
+              console.log(error);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
+            }
+          }
+        }
+      } else {
+        if (updateData.tokenA === CONFIG.NaturaAddress) {
+          const AMOUNT =
+            amount === 0 || amount === "" || amount === null
+              ? updateData.amountA
+              : provider.utils.toWei(amount.toString(), "ether");
+
+          const PRICE =
+            price === 0 || price === "" || price === null
+              ? updateData.price
+              : provider.utils.toWei(price.toString(), "lovelace");
+
+          console.log("here");
+          console.log("AMOUNT", AMOUNT);
+          console.log("PRICE", PRICE);
+          console.log("updateData.amountA", updateData.amountA);
+          if (parseInt(AMOUNT) > parseInt(updateData.amountA)) {
+            try {
+              setIsLoading(true);
+              setOpenModal(false);
+              const updatedamount =
+                parseInt(AMOUNT) - parseInt(updateData.amountA);
+              console.log("updatedamount", updatedamount);
+              const updatedAMOUNT = JSON.stringify(updatedamount);
+              await handleApproveNatura(updatedAMOUNT, currentAcc, provider);
+              await UpdateOrder(AMOUNT, PRICE);
+              setRefetch(true);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "success",
+                title: "Your order has been updated",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setAmount(0);
+              setPrice(0);
+            } catch (error) {
+              console.log(error);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
+            }
+          } else {
+            try {
+              console.log("here");
+              console.log("AMOUNT", AMOUNT);
+              console.log("PRICE", PRICE);
+              setIsLoading(true);
+              setOpenModal(false);
+              await UpdateOrder(AMOUNT, PRICE);
+              setRefetch(true);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "success",
+                title: "Your order has been updated",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setAmount(0);
+              setPrice(0);
+            } catch (error) {
+              console.log(error);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
+            }
+          }
+        } else {
+          const AMOUNT =
+            amount === 0 || amount === "" || amount === null
+              ? updateData.amountA
+              : provider.utils.toWei(amount.toString(), "lovelace");
+
+          const PRICE =
+            price === 0 || price === "" || price === null
+              ? updateData.price
+              : provider.utils.toWei(price.toString(), "ether");
+          console.log("here");
+          console.log("AMOUNT", typeof AMOUNT);
+          console.log("PRICE", typeof PRICE);
+          console.log("updateData.amountA", typeof updateData.amountA);
+          if (parseInt(AMOUNT) > parseInt(updateData.amountA)) {
+            console.log("here in if", AMOUNT > updateData.amountA);
+
+            try {
+              setIsLoading(true);
+              setOpenModal(false);
+              const updatedamount =
+                parseInt(AMOUNT) - parseInt(updateData.amountA);
+              const updatedAMOUNT = JSON.stringify(updatedamount);
+              await handleApproveUSDT(updatedAMOUNT, currentAcc, provider);
+              await UpdateOrder(AMOUNT, PRICE);
+              setRefetch(true);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "success",
+                title: "Your order has been updated",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setAmount(0);
+              setPrice(0);
+            } catch (error) {
+              console.log(error);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
+            }
+          } else {
+            console.log("here in else", AMOUNT < updateData.amountA);
+            try {
+              console.log("here in other");
+              setIsLoading(true);
+              setOpenModal(false);
+              await UpdateOrder(AMOUNT, PRICE);
+              setRefetch(true);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "success",
+                title: "Your order has been updated",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setAmount(0);
+              setPrice(0);
+            } catch (error) {
+              console.log(error);
+              setIsLoading(false);
+              MySwal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+              });
+            }
+          }
+        }
+      }
+    }
+  };
   return (
     <>
       <Modal>
@@ -160,93 +506,57 @@ const EditModal = (props) => {
             />
           </Modal_header>
           <Modal_body>
-            {listingType === "sell" ? (
-              <>
-                <Modal_form>
-                  <label>Select which token you want to sell</label>
-                  <Dropdown
-                    style={{
-                      width: "100%",
-                    }}
-                  >
-                    <Dropdown.Toggle
-                      as={CustomToggle}
-                      variant="success"
-                      id="dropdown-basic"
-                    >
-                      {selectedTokenOne}
-                    </Dropdown.Toggle>
+            <Modal_form>
+              <label>Update price*</label>
+              <input
+                type="text"
+                placeholder={
+                  updateData.tokenA === CONFIG.USDTAddress &&
+                  updateData.orderType === "sell"
+                    ? provider.utils.fromWei(updateData.price, "ether") + " NAT"
+                    : updateData.tokenA === CONFIG.NaturaAddress &&
+                      updateData.orderType === "sell"
+                    ? provider.utils.fromWei(updateData.price, "lovelace") +
+                      " USDT"
+                    : updateData.orderType === "buy" &&
+                      updateData.tokenA === CONFIG.USDTAddress
+                    ? provider.utils.fromWei(updateData.price, "ether") + " NAT"
+                    : updateData.orderType === "buy" &&
+                      updateData.tokenA === CONFIG.NaturaAddress
+                    ? provider.utils.fromWei(updateData.price, "lovelace") +
+                      " USDT"
+                    : null
+                }
+                onChange={(e) => setPrice(e.target.value)}
+              />
 
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={() => handleTokenSelection("Natura")}
-                      >
-                        Natura
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={() => handleTokenSelection("USDT")}
-                      >
-                        USDT
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <label>
-                    Enter the amount at which you want your single token to be
-                    sold at
-                  </label>
-                  <input type="text" placeholder="Enter the amount" />
-                  <label>Enter the amount of tokens you want to sell</label>
-                  <input type="text" placeholder="Enter the amount" />
-
-                  <button>
-                    <span>Edit listing</span>
-                  </button>
-                </Modal_form>
-              </>
-            ) : listingType === "buy" ? (
-              <>
-                <Modal_form>
-                  <label>Select which token you want to buy</label>
-                  <Dropdown
-                    style={{
-                      width: "100%",
-                    }}
-                  >
-                    <Dropdown.Toggle
-                      as={CustomToggle}
-                      variant="success"
-                      id="dropdown-basic"
-                    >
-                      {selectedTokenTwo}
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={() => handleTokenSelectionTwo("Natura")}
-                      >
-                        Natura
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={() => handleTokenSelectionTwo("USDT")}
-                      >
-                        USDT
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <label>
-                    Enter your preferred price at which you want to buy the
-                    token
-                  </label>
-                  <input type="text" placeholder="Enter the amount" />
-                  <label>Enter the amount of tokens you want to buy</label>
-                  <input type="text" placeholder="Enter the amount" />
-
-                  <button>
-                    <span>Edit listing</span>
-                  </button>
-                </Modal_form>
-              </>
-            ) : null}
+              <label>Update quantity*</label>
+              <input
+                type="text"
+                placeholder={
+                  updateData.orderType === "sell" &&
+                  updateData.tokenA === CONFIG.USDTAddress
+                    ? provider.utils.fromWei(updateData.amountA, "lovelace") +
+                      " USDT"
+                    : updateData.orderType === "sell" &&
+                      updateData.tokenA === CONFIG.NaturaAddress
+                    ? provider.utils.fromWei(updateData.amountA, "ether") +
+                      " NAT"
+                    : updateData.orderType === "buy" &&
+                      updateData.tokenA === CONFIG.USDTAddress
+                    ? provider.utils.fromWei(updateData.amountA, "lovelace") +
+                      " USDT"
+                    : updateData.orderType === "buy" &&
+                      updateData.tokenA === CONFIG.NaturaAddress
+                    ? provider.utils.fromWei(updateData.amountA, "ether") +
+                      " NAT"
+                    : null
+                }
+                onChange={(e) => setAmount(e.target.value)}
+              />
+              <br />
+              <button onClick={() => edit()}>Update</button>
+            </Modal_form>
           </Modal_body>
         </Modal_inner>
       </Modal>

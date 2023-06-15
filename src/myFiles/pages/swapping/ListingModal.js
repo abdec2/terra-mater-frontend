@@ -388,10 +388,11 @@ const ListingModal = (props) => {
   };
   console.log(listingType);
   useFetchUserData(account);
+
   const calculateGettingPrice = () => {
     if (listingType === "sell") {
       if (selectedTokenOne === "Natura") {
-        const Burnfee = amount * 0.05;
+        const Burnfee = amount * 0.04;
         const amountToTransfer = amount - Burnfee;
         const am = amountToTransfer * price;
         const number = am;
@@ -409,17 +410,14 @@ const ListingModal = (props) => {
       if (selectedTokenOne === "Natura") {
         const PlateformFee = amount * 0.04;
         const amountToTransfer = amount - PlateformFee;
-        const am = amountToTransfer / price;
-        const number = am.toFixed(3);
-
-        setGettingTwo(number);
+        const am = amountToTransfer * price;
+        const number = am;
+        setGettingTwo(number.toFixed(3));
       } else {
         if (selectedTokenOne === "USDT") {
-          const Burnfee = amount * 0.05;
+          const Burnfee = amount * 0.04;
           const amountToTransfer = amount - Burnfee;
-          const am = amountToTransfer / price;
-          const number = am;
-
+          const number = amountToTransfer * price;
           setGettingTwo(number.toFixed(3));
         }
       }
@@ -433,14 +431,14 @@ const ListingModal = (props) => {
         setOfferingOne(amountToTransfer.toFixed(3));
       } else {
         if (selectedTokenOne === "USDT") {
-          const PlateformFee = amount * 0.05;
+          const PlateformFee = amount * 0.04;
           const amountToTransfer = amount - PlateformFee;
           setOfferingOne(amountToTransfer.toFixed(3));
         }
       }
     } else {
       if (selectedTokenOne === "Natura") {
-        const plateformFee = amount * 0.05;
+        const plateformFee = amount * 0.04;
         const amountToTransfer = amount - plateformFee;
         const am = amountToTransfer;
         setOfferingTwo(am.toFixed(3));
@@ -483,6 +481,19 @@ const ListingModal = (props) => {
                 </button>
               </div>
             </div>
+            <span>
+              Four percent will be deducted as fee
+              <span
+                style={{
+                  color: "green",
+
+                  fontSize: "30px",
+                }}
+              >
+                {" "}
+                &#x2713;
+              </span>
+            </span>
             {listingType === "sell" ? (
               <>
                 <Modal_form>
@@ -652,7 +663,8 @@ const ListingModal = (props) => {
                     </Modal_header_inner>
                   </Modal_heaDer>
                   <label>
-                    Enter the price at which you want your single USDT to be
+                    Enter the price at which you want your single{" "}
+                    {selectedTokenOne === "Natura" ? "USDT" : "Natura"} to be
                     sold at{" "}
                     {selectedTokenOne === "Natura"
                       ? "in Natura"

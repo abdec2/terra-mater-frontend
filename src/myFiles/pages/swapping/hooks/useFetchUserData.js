@@ -9,7 +9,7 @@ import axios from "axios";
 import Web3 from "web3";
 
 const useFetchUserData = (currentAcc, refetch, setRefetch) => {
-  const web3 = new Web3(process.env.REACT_APP_ALCHEMY_TEST_KEY);
+  const web3 = new Web3(process.env.REACT_APP_ALCHEMY_KEY);
   const [userListings, setUserListings] = useState([]);
   const [userData, setUserData] = useState([]);
 
