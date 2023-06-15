@@ -21,6 +21,7 @@ import Web3 from "web3";
 import Web3Modal from "web3modal";
 import { CiFilter } from "react-icons/ci";
 import { Button } from "bootstrap";
+import { CONFIG } from "./abi/Config";
 const Container_header = styled.div`
   display: flex;
   justify-content: start;
@@ -127,6 +128,15 @@ const Swapping = () => {
     setRefetch(true);
     console.log(web3);
     console.log(currentAcc);
+    let chainId = await web3.eth.getChainId();
+    console.log(chainId);
+    if (chainId != 137) {
+      Swal.fire({
+        title: "Please switch to Polygon Network",
+        icon: "warning",
+        background: "white",
+      });
+    }
   };
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <a
