@@ -25,49 +25,45 @@ const PriceHistory = ({ nft }) => {
 
     return (
         <Accordion defaultActiveKey="0">
-            <Card>
-                <Accordion.Toggle className='nft_attr text-start' style={{ cursor: "pointer" }} as={Card.Header} eventKey="0">
-                    <h5>Price History</h5>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="0">
-                    <Card.Body>
-                        <div className='price_history'>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <th className='text-center'>From</th>
-                                        <th className='text-center'>To</th>
-                                        <th className='text-center'>Price</th>
-                                        <th className='text-center'>Description</th>
-                                    </tr>
-                                    {
-                                        tx.length > 0 ? (
-                                            <>
-                                                {
-                                                    tx.map((item,i) => (
-                                                        <tr key={i}>
-                                                            <td className='text-center'>{`${item.attributes.from_address.slice(0,5)}...${item.attributes.from_address.slice(37,42)}`}</td>
-                                                            <td className='text-center'>{`${item.attributes.to_address.slice(0,5)}...${item.attributes.to_address.slice(37,42)}`}</td>
-                                                            <td className='text-center'>{item.attributes.price} USDT</td>
-                                                            <td className='text-center'>{item.attributes.desc}</td>
-                                                        </tr>
-                                                    ))
-                                                }
-                                            </>
-                                        ) : (
-                                            <tr>
-                                                <td colSpan={4}> No Items to display</td>
-                                            </tr>
-                                        )
-                                    }
-                                </tbody>
-                                
+            <Accordion.Item eventKey="0">
+                <Accordion.Header><h5>Price History</h5></Accordion.Header>
+                <Accordion.Body>
+                    <div className='price_history'>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th className='text-center'>From</th>
+                                    <th className='text-center'>To</th>
+                                    <th className='text-center'>Price</th>
+                                    <th className='text-center'>Description</th>
+                                </tr>
+                                {
+                                    tx.length > 0 ? (
+                                        <>
+                                            {
+                                                tx.map((item,i) => (
+                                                    <tr key={i}>
+                                                        <td className='text-center'>{`${item.attributes.from_address.slice(0,5)}...${item.attributes.from_address.slice(37,42)}`}</td>
+                                                        <td className='text-center'>{`${item.attributes.to_address.slice(0,5)}...${item.attributes.to_address.slice(37,42)}`}</td>
+                                                        <td className='text-center'>{item.attributes.price} USDT</td>
+                                                        <td className='text-center'>{item.attributes.desc}</td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </>
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={4}> No Items to display</td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                            
 
-                            </table>
-                        </div>
-                    </Card.Body>
-                </Accordion.Collapse>
-            </Card>
+                        </table>
+                    </div>
+                </Accordion.Body>
+            </Accordion.Item>
         </Accordion>
     )
 }
