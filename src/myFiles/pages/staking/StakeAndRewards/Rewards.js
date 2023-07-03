@@ -88,8 +88,20 @@ const Rewards = () => {
       subTitle2: "Stake Amount: 0.00 NAT",
     },
     {
-      id: 100,
-      name: "100 Years",
+      id: 24,
+      name: "2 Years",
+      subTitle: "Rewards Earned: 0.00 NAT",
+      subTitle2: "Stake Amount: 0.00 NAT",
+    },
+    {
+      id: 36,
+      name: "3 Years",
+      subTitle: "Rewards Earned: 0.00 NAT",
+      subTitle2: "Stake Amount: 0.00 NAT",
+    },
+    {
+      id: 48,
+      name: "4 Years",
       subTitle: "Rewards Earned: 0.00 NAT",
       subTitle2: "Stake Amount: 0.00 NAT",
     },

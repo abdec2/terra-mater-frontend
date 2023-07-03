@@ -9,8 +9,8 @@ import Web3Modal from "web3modal";
 
 const Container = styled.div`
   display: flex;
-  justify-content: start;
-  align-items: start;
+  justify-content: center;
+  align-items: center;
   padding: 10px;
   gap: 10px;
   flex-direction: column;
@@ -66,7 +66,7 @@ const Stake = () => {
   const [selected, setSelected] = useState(0);
   const [tenure, setTenure] = useState(0);
   const [amount, setAmount] = useState(0);
-  const tenures = [1, 3, 6, 9, 12, 100];
+  const tenures = [1, 3, 6, 9, 12, 2, 3, 4];
   return (
     <>
       <div>
@@ -101,7 +101,11 @@ const Stake = () => {
                     : tenure === 4
                     ? "12 Months"
                     : tenure === 5
-                    ? "100 Years"
+                    ? "2 Years"
+                    : tenure === 6
+                    ? "3 Years"
+                    : tenure === 7
+                    ? "4 Years"
                     : 0}
                 </span>
               </Heading>
@@ -109,17 +113,21 @@ const Stake = () => {
                 APY :{" "}
                 <span>
                   {tenure === 0
-                    ? "12%"
+                    ? "1%"
                     : tenure === 1
-                    ? "36%"
+                    ? "2%"
                     : tenure === 2
-                    ? "72%"
+                    ? "3%"
                     : tenure === 3
-                    ? "108%"
+                    ? "4%"
                     : tenure === 4
-                    ? "144%"
+                    ? "5%"
                     : tenure === 5
-                    ? "1200%"
+                    ? "6%"
+                    : tenure === 6
+                    ? "7%"
+                    : tenure === 7
+                    ? "8%"
                     : 0}
                 </span>
               </Heading>
@@ -159,7 +167,8 @@ const Stake = () => {
                           selected={tenure === index}
                           onClick={() => setTenure(index)}
                         >
-                          {item} {item === 100 ? "Years" : "Months"}
+                          {item} {index <= 4 ? "Months" : "Year"}
+                          {index > 4 && index <= 7 && "s"}
                         </Tenures>
                       </>
                     ))}
