@@ -1,5 +1,4 @@
 import Web3 from "web3";
-import Web3Modal from "web3modal";
 import { Form, NavDropdown } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 
@@ -17,6 +16,12 @@ import auth from "../../../core/auth";
 import { CONFIG, providerOptions } from "./../../../config/config";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, forwardRef } from "react";
+
+import { useWeb3Modal } from '@web3modal/react'
+import { useAccount } from "wagmi";
+import { useEthersProvider } from "../../../hooks/useEthersProvider";
+import { usePublicClient } from "wagmi";
+
 
 const NavLink = (props) => {
   let resolved = useResolvedPath(props.to);
@@ -46,8 +51,11 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 ));
 
 const Index = () => {
+  const { open, close } = useWeb3Modal()
+  const { address, isConnected } = useAccount()
   const [islogin, setIsLogin] = useState(false);
   const [account, setAccount] = useState("");
+  const provider = useEthersProvider()
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const web3Store = useSelector((state) => state.web3);
@@ -61,20 +69,6 @@ const Index = () => {
     navigate("/");
   };
 
-  // const addLoginState = async (account) => {
-  //     const web3Modal = new Web3Modal({
-  //         providerOptions // required
-  //     });
-
-  //     const provider = await web3Modal.connect();
-
-  //     const web3 = new Web3(provider);
-  //     const network = await web3.eth.getChainId()
-  //     if(network !== CONFIG.CHAIN_ID) {
-  //         switchNetwork(provider)
-  //     }
-  //     dispatch(actions.addWeb3({ account, provider, web3 }))
-  // }
 
   useEffect(() => {
     if (userData && userData.address) {
@@ -88,6 +82,10 @@ const Index = () => {
       setAccount(web3Store.account);
     }
   }, [web3Store.account, account]);
+
+  useEffect(() => {
+    connectWallet(dispatch, address, provider)
+  }, [address, isConnected])
 
   return (
     <Navbar variant="dark" expand="lg" bg="dark">
@@ -200,7 +198,7 @@ const Index = () => {
               <div className="px-4 py-2">
                 <Nav.Link
                   className="p-3 p-lg-0 fw-normal"
-                  onClick={() => connectWallet(dispatch)}
+                  onClick={() => open()}
                 >
                   Connect Wallet
                 </Nav.Link>

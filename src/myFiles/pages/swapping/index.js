@@ -16,9 +16,9 @@ import useFetchListings from "./hooks/useFetchAllListings";
 import { reconnectWallet } from "../../../components/menu/connectWallet";
 import TradeTable from "./listingTables/BuyTable";
 import LoadingScreen from "../stakingNFT/loadingScreen";
-import WalletConnectProvider from "@walletconnect/web3-provider";
+// import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3 from "web3";
-import Web3Modal from "web3modal";
+// import Web3Modal from "web3modal";
 import { CiFilter } from "react-icons/ci";
 import { Button } from "bootstrap";
 import { CONFIG } from "./abi/Config";
@@ -81,17 +81,17 @@ const Contained = styled.div`
   }
 `;
 
-const providerOptions = {
-  /* See Provider Options Section */
-  walletconnect: {
-    package: WalletConnectProvider, // required
-    options: {
-      rpc: {
-        137: process.env.REACT_APP_ALCHEMY_KEY,
-      },
-    },
-  },
-};
+// const providerOptions = {
+//   /* See Provider Options Section */
+//   walletconnect: {
+//     package: WalletConnectProvider, // required
+//     options: {
+//       rpc: {
+//         137: process.env.REACT_APP_ALCHEMY_KEY,
+//       },
+//     },
+//   },
+// };
 const theme = "GREY"; //LIGHT, GREY, RETRO
 const Swapping = () => {
   const dispatch = useDispatch();
@@ -113,31 +113,31 @@ const Swapping = () => {
   const { userListings } = useFetchUserData(currentAcc, refetch, setRefetch);
   const { Listings } = useFetchListings(refetch, setRefetch);
   const [filterType, setFilterType] = useState("all");
-  const connectWallet = async () => {
-    const web3Modal = new Web3Modal({
-      providerOptions, // required
-    });
-    const provider = await web3Modal.connect();
-    const web3 = new Web3(provider);
-    const accounts = await web3.eth.getAccounts();
-    console.log(accounts);
-    const currentAcc = accounts[0];
-    setCurrentAcc(currentAcc);
-    setProvider(web3);
-    setCondition("userListings");
-    setRefetch(true);
-    console.log(web3);
-    console.log(currentAcc);
-    let chainId = await web3.eth.getChainId();
-    console.log(chainId);
-    if (chainId != 137) {
-      Swal.fire({
-        title: "Please switch to Polygon Network",
-        icon: "warning",
-        background: "white",
-      });
-    }
-  };
+  // const connectWallet = async () => {
+  //   const web3Modal = new Web3Modal({
+  //     providerOptions, // required
+  //   });
+  //   const provider = await web3Modal.connect();
+  //   const web3 = new Web3(provider);
+  //   const accounts = await web3.eth.getAccounts();
+  //   console.log(accounts);
+  //   const currentAcc = accounts[0];
+  //   setCurrentAcc(currentAcc);
+  //   setProvider(web3);
+  //   setCondition("userListings");
+  //   setRefetch(true);
+  //   console.log(web3);
+  //   console.log(currentAcc);
+  //   let chainId = await web3.eth.getChainId();
+  //   console.log(chainId);
+  //   if (chainId != 137) {
+  //     Swal.fire({
+  //       title: "Please switch to Polygon Network",
+  //       icon: "warning",
+  //       background: "white",
+  //     });
+  //   }
+  // };
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <a
       href=""
@@ -296,7 +296,9 @@ const Swapping = () => {
                         style={{
                           cursor: "pointer",
                         }}
-                        onClick={() => connectWallet()}
+                        onClick={() => {
+                          // connectWallet()
+                        }}
                       >
                         Connect your wallet to create listings
                       </HighlightedHeading>

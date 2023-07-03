@@ -8,8 +8,8 @@ import Web3 from "web3";
 import NaturaAbi from "../abi/NaturaAbi.json";
 import USDTAbi from "../abi/USDTAbi.json";
 import SwapAbi from "../abi/SwapAbi.json";
-import Web3Modal from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
+// import Web3Modal from "web3modal";
+// import WalletConnectProvider from "@walletconnect/web3-provider";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import LoadingScreen from "../../stakingNFT/loadingScreen";
@@ -28,17 +28,17 @@ const Button = styled.button`
   }
 `;
 
-const providerOptions = {
-  /* See Provider Options Section */
-  walletconnect: {
-    package: WalletConnectProvider, // required
-    options: {
-      rpc: {
-        137: process.env.REACT_APP_ALCHEMY_KEY,
-      },
-    },
-  },
-};
+// const providerOptions = {
+//   /* See Provider Options Section */
+//   walletconnect: {
+//     package: WalletConnectProvider, // required
+//     options: {
+//       rpc: {
+//         137: process.env.REACT_APP_ALCHEMY_KEY,
+//       },
+//     },
+//   },
+// };
 
 const MySwal = withReactContent(Swal);
 
@@ -220,96 +220,96 @@ const TradeTable = (props) => {
   // Calling the main function    |
   // ----------------------------- >
   const handleTransaction = async (item, currency, value, reversedIndex) => {
-    if (currentAcc === null || currentAcc === "") {
-      const web3Modal = new Web3Modal({
-        providerOptions, // required
-      });
-      const provider = await web3Modal.connect();
-      const web3 = new Web3(provider);
-      const accounts = await web3.eth.getAccounts();
-      console.log(accounts);
-      const currentAcc = accounts[0];
-      setCurrentAcc(currentAcc);
-      setProvider(web3);
+    // if (currentAcc === null || currentAcc === "") {
+    //   const web3Modal = new Web3Modal({
+    //     providerOptions, // required
+    //   });
+    //   const provider = await web3Modal.connect();
+    //   const web3 = new Web3(provider);
+    //   const accounts = await web3.eth.getAccounts();
+    //   console.log(accounts);
+    //   const currentAcc = accounts[0];
+    //   setCurrentAcc(currentAcc);
+    //   setProvider(web3);
 
-      return;
-    }
-    console.log(currentAcc);
-    const network = await provider.eth.getChainId();
-    if (network.toString() !== CONFIG.Chain_Id) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Please connect to Polygon mumbai network",
-        timer: 2000,
-      });
-      return;
-    }
-    try {
-      setIsLoading(true);
-      if (value === "buy") {
-        if (currency === "Natura") {
-          const AMOUNT =
-            web3.utils.fromWei(item.amountA.toString(), "ether") * item.price;
-          console.log("AMOUNT", AMOUNT);
-          // const AMOUNT = web3.utils.toWei(JSON.stringify(Amount), "lovelace");
-          // console.log("AMOUNT", AMOUNT);
-          // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
-          // console.log("AMOUNT", AMOUNT);
-          await handleApproveUSDT(AMOUNT, currentAcc, provider);
-          await handleSwap(reversedIndex, currentAcc, provider);
-        } else if (currency === "USDT") {
-          console.log(item.price);
-          console.log(item.amountA);
-          const AMOUNT = JSON.stringify(
-            web3.utils.fromWei(item.price.toString(), "lovelace") * item.amountA
-          );
-          console.log(AMOUNT);
-          // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
-          await handleApproveNatura(AMOUNT, currentAcc, provider);
-          const tokenAddress = CONFIG.NaturaAddress;
-          const tokenAbi = NaturaAbi;
-          await handleSwap(reversedIndex, currentAcc, provider);
-        }
-      } else if (value === "sell") {
-        if (currency === "Natura") {
-          // console.log(item.amountA);
-          // console.log(item.price);
-          console.log(item.amountA);
-          console.log(item.price);
-          const AMOUNT = JSON.stringify(
-            web3.utils.fromWei(item.amountA.toString(), "lovelace") * item.price
-          );
+    //   return;
+    // }
+    // console.log(currentAcc);
+    // const network = await provider.eth.getChainId();
+    // if (network.toString() !== CONFIG.Chain_Id) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Oops...",
+    //     text: "Please connect to Polygon mumbai network",
+    //     timer: 2000,
+    //   });
+    //   return;
+    // }
+    // try {
+    //   setIsLoading(true);
+    //   if (value === "buy") {
+    //     if (currency === "Natura") {
+    //       const AMOUNT =
+    //         web3.utils.fromWei(item.amountA.toString(), "ether") * item.price;
+    //       console.log("AMOUNT", AMOUNT);
+    //       // const AMOUNT = web3.utils.toWei(JSON.stringify(Amount), "lovelace");
+    //       // console.log("AMOUNT", AMOUNT);
+    //       // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
+    //       // console.log("AMOUNT", AMOUNT);
+    //       await handleApproveUSDT(AMOUNT, currentAcc, provider);
+    //       await handleSwap(reversedIndex, currentAcc, provider);
+    //     } else if (currency === "USDT") {
+    //       console.log(item.price);
+    //       console.log(item.amountA);
+    //       const AMOUNT = JSON.stringify(
+    //         web3.utils.fromWei(item.price.toString(), "lovelace") * item.amountA
+    //       );
+    //       console.log(AMOUNT);
+    //       // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
+    //       await handleApproveNatura(AMOUNT, currentAcc, provider);
+    //       const tokenAddress = CONFIG.NaturaAddress;
+    //       const tokenAbi = NaturaAbi;
+    //       await handleSwap(reversedIndex, currentAcc, provider);
+    //     }
+    //   } else if (value === "sell") {
+    //     if (currency === "Natura") {
+    //       // console.log(item.amountA);
+    //       // console.log(item.price);
+    //       console.log(item.amountA);
+    //       console.log(item.price);
+    //       const AMOUNT = JSON.stringify(
+    //         web3.utils.fromWei(item.amountA.toString(), "lovelace") * item.price
+    //       );
 
-          // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
-          await handleApproveNatura(AMOUNT, currentAcc, provider);
-          const tokenAddress = CONFIG.NaturaAddress;
-          const tokenAbi = NaturaAbi;
-          await handleSwap(reversedIndex, currentAcc, provider);
-        } else if (currency === "USDT") {
-          const AMOUNT = JSON.stringify(
-            web3.utils.fromWei(item.amountA.toString(), "ether") * item.price
-          );
-          console.log(AMOUNT);
-          // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
-          await handleApproveUSDT(AMOUNT, currentAcc, provider);
-          const tokenAddress = CONFIG.USDTAddress;
-          const tokenAbi = USDTAbi;
-          await handleSwap(reversedIndex, currentAcc, provider);
-        }
-      }
-      setRefetch(true);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-        timer: 2000,
-      });
-    }
+    //       // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
+    //       await handleApproveNatura(AMOUNT, currentAcc, provider);
+    //       const tokenAddress = CONFIG.NaturaAddress;
+    //       const tokenAbi = NaturaAbi;
+    //       await handleSwap(reversedIndex, currentAcc, provider);
+    //     } else if (currency === "USDT") {
+    //       const AMOUNT = JSON.stringify(
+    //         web3.utils.fromWei(item.amountA.toString(), "ether") * item.price
+    //       );
+    //       console.log(AMOUNT);
+    //       // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
+    //       await handleApproveUSDT(AMOUNT, currentAcc, provider);
+    //       const tokenAddress = CONFIG.USDTAddress;
+    //       const tokenAbi = USDTAbi;
+    //       await handleSwap(reversedIndex, currentAcc, provider);
+    //     }
+    //   }
+    //   setRefetch(true);
+    //   setIsLoading(false);
+    // } catch (error) {
+    //   console.log(error);
+    //   setIsLoading(false);
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Oops...",
+    //     text: "Something went wrong!",
+    //     timer: 2000,
+    //   });
+    // }
   };
   const calculatePrice = (item) => {
     if (value === "buy") {

@@ -1,16 +1,16 @@
-import WalletConnectProvider from "@walletconnect/web3-provider";
+// import WalletConnectProvider from "@walletconnect/web3-provider";
 
-export const providerOptions = {
-    /* See Provider Options Section */
-    walletconnect: {
-      package: WalletConnectProvider, // required
-      options: {
-        rpc: {
-          137: process.env.REACT_APP_ALCHEMY_KEY
-        }
-      }
-    }
-};
+// export const providerOptions = {
+//     /* See Provider Options Section */
+//     walletconnect: {
+//       package: WalletConnectProvider, // required
+//       options: {
+//         rpc: {
+//           137: process.env.REACT_APP_ALCHEMY_KEY
+//         }
+//       }
+//     }
+// };
 
 export const CONFIG = {
   USDT_ADDRESS: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
