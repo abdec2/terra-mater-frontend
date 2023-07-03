@@ -155,6 +155,14 @@ const Index = () => {
                 Swapping
               </NavLink>
             </div>
+            <div className="px-4 py-2">
+              <NavLink
+                className="p-3 p-lg-0 nav-link fw-normal text-truncate"
+                to="/staking"
+              >
+                Staking
+              </NavLink>
+            </div>
             {/* <div className="px-4">
               <Dropdown>
                 <Dropdown.Toggle as={CustomToggle} id="my-wallet-dd">
