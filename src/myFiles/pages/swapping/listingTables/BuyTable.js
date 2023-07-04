@@ -398,21 +398,21 @@ const TradeTable = (props) => {
     <>
       <Table responsive className="text-center">
         <thead>
-          <tr>
-            <th className="text-center">Owner</th>
-            <th className="text-center">Price/Token</th>
-            <th className="text-center">Token</th>
+          <tr style={{background: 'black'}}>
+            <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Owner</th>
+            <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Price/Token</th>
+            <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Token</th>
             {value === "buy" ? (
-              <th className="text-center">On-Sale</th>
+              <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>On-Sale</th>
             ) : (
-              <th className="text-center">Purchasing</th>
+              <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Purchasing</th>
             )}
             {value === "buy" ? (
-              <th className="text-center">Purchasing</th>
+              <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Purchasing</th>
             ) : (
-              <th className="text-center">On-Sale</th>
+              <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>On-Sale</th>
             )}
-            <th className="text-center">Trade</th>
+            <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Trade</th>
           </tr>
         </thead>
         {value === "buy" ? (
@@ -426,31 +426,31 @@ const TradeTable = (props) => {
                       CONFIG.NaturaAddress.toLowerCase() &&
                     parseInt(item.status) !== 0 &&
                     parseInt(item.status) !== 2 ? (
-                      <tr key={index}>
-                        <td>
+                      <tr key={index} style={{background: 'black'}}>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           {item.owner.slice(0, 5) +
                             "...." +
                             item.owner.slice(37, 42)}
                         </td>
-                        <td>{`${web3.utils.fromWei(
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{`${web3.utils.fromWei(
                           item.price,
                           "mwei"
                         )} USDT`}</td>
                         {item.tokenA.toLowerCase() ===
                         CONFIG.NaturaAddress.toLowerCase() ? (
-                          <td>Natura</td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Natura</td>
                         ) : (
-                          <td>USDT</td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>USDT</td>
                         )}
-                        <td>{`${web3.utils.fromWei(
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{`${web3.utils.fromWei(
                           item.amountA,
                           "ether"
                         )} NAT`}</td>
-                        <td>{`${
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{`${
                           parseFloat(web3.utils.fromWei(item.price, "mwei")) *
                           parseFloat(web3.utils.fromWei(item.amountA, "ether"))
                         } USDT`}</td>
-                        <td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           <Button
                             onClick={() =>
                               handleTransaction(
@@ -482,26 +482,26 @@ const TradeTable = (props) => {
                       CONFIG.USDTAddress.toLowerCase() &&
                     parseInt(item.status) !== 0 &&
                     parseInt(item.status) !== 2 ? (
-                      <tr key={index}>
-                        <td>
+                      <tr key={index} style={{background: 'black'}}>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           {item.owner.slice(0, 5) +
                             "...." +
                             item.owner.slice(37, 42)}
                         </td>
-                        <td>{web3.utils.fromWei(item.price, "ether")} NAT</td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{web3.utils.fromWei(item.price, "ether")} NAT</td>
                         {item.tokenA === CONFIG.NaturaAddress ? (
-                          <td>Natura</td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Natura</td>
                         ) : (
-                          <td>USDT</td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>USDT</td>
                         )}
 
-                        <td>{web3.utils.fromWei(item.amountA, "mwei")} USDT</td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{web3.utils.fromWei(item.amountA, "mwei")} USDT</td>
 
-                        <td>{`${
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{`${
                           parseFloat(web3.utils.fromWei(item.price, "ether")) *
                           parseFloat(web3.utils.fromWei(item.amountA, "mwei"))
                         } NAT`}</td>
-                        <td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           <Button
                             onClick={() =>
                               handleTransaction(
@@ -535,23 +535,23 @@ const TradeTable = (props) => {
                       CONFIG.NaturaAddress.toLowerCase() &&
                     parseInt(item.status) !== 0 &&
                     parseInt(item.status) !== 2 ? (
-                      <tr key={index}>
-                        <td>
+                      <tr key={index} style={{background: 'black'}}>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           {item.owner.slice(0, 5) +
                             "...." +
                             item.owner.slice(37, 42)}
                         </td>
-                        <td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           {web3.utils.fromWei(item.price, "lovelace")} USDT
                         </td>
                         {item.tokenA.toLowerCase() ===
                         CONFIG.NaturaAddress.toLowerCase() ? (
-                          <td>USDT</td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>USDT</td>
                         ) : (
-                          <td>Natura</td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Natura</td>
                         )}
 
-                        <td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           {parseFloat(web3.utils.fromWei(item.price, "ether")) *
                             parseFloat(
                               web3.utils.fromWei(item.amountA, "mwei")
@@ -559,8 +559,8 @@ const TradeTable = (props) => {
                           USDT
                         </td>
 
-                        <td>{web3.utils.fromWei(item.amountA, "ether")} NAT</td>
-                        <td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{web3.utils.fromWei(item.amountA, "ether")} NAT</td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           <Button
                             onClick={() =>
                               handleTransaction(
@@ -592,34 +592,34 @@ const TradeTable = (props) => {
                       CONFIG.USDTAddress.toLowerCase() &&
                     parseInt(item.status) !== 0 &&
                     parseInt(item.status) !== 2 ? (
-                      <tr key={index}>
-                        <td>
+                      <tr key={index} style={{background: 'black'}}>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           {item.owner.slice(0, 5) +
                             "...." +
                             item.owner.slice(37, 42)}
                         </td>
-                        <td>{web3.utils.fromWei(item.price, "ether")} NAT</td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{web3.utils.fromWei(item.price, "ether")} NAT</td>
                         {item.tokenA.toLowerCase() ===
                         CONFIG.NaturaAddress.toLowerCase() ? (
-                          <td>USDT</td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>USDT</td>
                         ) : (
-                          <td>Natura</td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Natura</td>
                         )}
 
-                        <td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           {parseFloat(web3.utils.fromWei(item.price, "ether")) *
                             parseFloat(
                               web3.utils.fromWei(item.amountA, "mwei")
                             )}{" "}
                           NAT
                         </td>
-                        <td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           {/* checking if wrong */}
                           {web3.utils.fromWei(item.amountA, "mwei")} {" "}
                           USDT
                         </td>
 
-                        <td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           <Button
                             onClick={() =>
                               handleTransaction(

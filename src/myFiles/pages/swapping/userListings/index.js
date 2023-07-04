@@ -146,13 +146,13 @@ const UserTable = (props) => {
       ) : null}
       <Table responsive>
         <thead>
-          <tr>
-            <th>Owner</th>
-            <th>Price/Token</th>
-            <th>Token</th>
-            <th>Amount</th>
-            <th>Listing Type</th>
-            <th>Edit / Cancel</th>
+          <tr style={{background: 'black'}}>
+            <th style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Owner</th>
+            <th style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Price/Token</th>
+            <th style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Token</th>
+            <th style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Amount</th>
+            <th style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Listing Type</th>
+            <th style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Edit / Cancel</th>
           </tr>
         </thead>
         <>
@@ -163,6 +163,7 @@ const UserTable = (props) => {
                 style={{
                   textAlign: "center",
                   color: "#fff",
+                  background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)'
                 }}
               >
                 Loading...
@@ -177,42 +178,42 @@ const UserTable = (props) => {
                   parseInt(item.status) !== 2 ? (
                   <>
                     <tbody>
-                      <tr key={index}>
-                        <td>{item.owner}</td>
+                      <tr key={index} style={{background: 'black'}}>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{item.owner}</td>
 
                         {item.tokenA === CONFIG.NaturaAddress ? (
-                          <td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                             {web3.utils.fromWei(item.price, "lovelace")} USDT
                           </td>
                         ) : (
-                          <td>{web3.utils.fromWei(item.price, "ether")} NAT</td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{web3.utils.fromWei(item.price, "ether")} NAT</td>
                         )}
                         {item.orderType === "sell" ? (
                           <>
                             {item.tokenA === CONFIG.NaturaAddress ? (
-                              <td>Natura</td>
+                              <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Natura</td>
                             ) : (
-                              <td>USDT</td>
+                              <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>USDT</td>
                             )}
                           </>
                         ) : (
                           <>
                             {item.tokenA === CONFIG.NaturaAddress ? (
-                              <td>Natura</td>
+                              <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Natura</td>
                             ) : (
-                              <td>USDT</td>
+                              <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>USDT</td>
                             )}
                           </>
                         )}
                         {item.tokenA === CONFIG.NaturaAddress ? (
-                          <td>{web3.utils.fromWei(item.amountA, "ether")}</td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{web3.utils.fromWei(item.amountA, "ether")}</td>
                         ) : (
-                          <td>
+                          <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                             {web3.utils.fromWei(item.amountA, "lovelace")}{" "}
                           </td>
                         )}
-                        <td>{item.orderType}</td>
-                        <td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{item.orderType}</td>
+                        <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                           <Button
                             onClick={() => {
                               modalHandle(item, reversedIndex);

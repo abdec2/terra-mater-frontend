@@ -13,10 +13,12 @@ import RecordTable from "./listingTables/RecordTable";
 import UserTable from "./userListings";
 import useFetchUserData from "./hooks/useFetchUserData";
 import useFetchListings from "./hooks/useFetchAllListings";
-import { reconnectWallet } from "../../../components/menu/connectWallet";
+import { connectWallet } from "../../../components/menu/connectWallet";
 import TradeTable from "./listingTables/BuyTable";
 import LoadingScreen from "../stakingNFT/loadingScreen";
 // import WalletConnectProvider from "@walletconnect/web3-provider";
+import { useWeb3Modal } from '@web3modal/react'
+import { useAccount, useWalletClient } from "wagmi";
 import Web3 from "web3";
 // import Web3Modal from "web3modal";
 import { CiFilter } from "react-icons/ci";
@@ -95,6 +97,9 @@ const Contained = styled.div`
 const theme = "GREY"; //LIGHT, GREY, RETRO
 const Swapping = () => {
   const dispatch = useDispatch();
+  const { address, isConnected } = useAccount()
+  const { open, close } = useWeb3Modal()
+  const signer = useWalletClient()
   const [account, setAccount] = useState("");
   const [currency, setCurrency] = useState("USDT");
   const [isLoading, setIsLoading] = useState(false);
@@ -110,7 +115,7 @@ const Swapping = () => {
   const [currentAcc, setCurrentAcc] = useState(null);
   const [provider, setProvider] = useState(null);
 
-  const { userListings } = useFetchUserData(currentAcc, refetch, setRefetch);
+  const { userListings } = useFetchUserData(address, refetch, setRefetch);
   const { Listings } = useFetchListings(refetch, setRefetch);
   const [filterType, setFilterType] = useState("all");
   // const connectWallet = async () => {
@@ -167,9 +172,10 @@ const Swapping = () => {
     </a>
   ));
 
-  useFetchUserData(account);
+  // useFetchUserData(account);
+  useFetchUserData(address);
   const OpenModal = () => {
-    if (!currentAcc) {
+    if (!isConnected) {
       Swal.fire({
         title: "Please login to create listing",
         icon: "warning",
@@ -179,6 +185,14 @@ const Swapping = () => {
       setModal(true);
     }
   };
+  console.log(signer)
+  // useEffect(() => {
+  //   if(isConnected) {
+  //     setCondition("userListings");
+  //     setRefetch(true);
+  //   } 
+
+  // }, [address, isConnected])
 
   return (
     <>
@@ -188,11 +202,11 @@ const Swapping = () => {
         {modal ? (
           <ListingModal
             setModal={setModal}
-            account={account}
+            account={address}
             setRefetch={setRefetch}
             setIsLoading={setIsLoading}
-            web3={provider}
-            currentAcc={currentAcc}
+            web3={new Web3(signer.data)}
+            currentAcc={address}
           />
         ) : null}
         <section
@@ -290,19 +304,20 @@ const Swapping = () => {
                     &#124;
                   </span>
                   <div>
-                    {!currentAcc ? (
+                    {signer?.data === undefined ? (
                       <HighlightedHeading
                         className="text-center"
                         style={{
                           cursor: "pointer",
                         }}
                         onClick={() => {
-                          // connectWallet()
+                          open()
                         }}
                       >
                         Connect your wallet to create listings
                       </HighlightedHeading>
-                    ) : (
+                    ) : 
+                    (
                       <>
                         <Dropdown
                           style={{
@@ -331,7 +346,7 @@ const Swapping = () => {
                           </Dropdown.Menu>
                         </Dropdown>
                       </>
-                    )}
+                    )}  
                   </div>
                   {condition === "userListings" ||
                   (condition === "record" && condition !== "buy") ? (
@@ -354,11 +369,11 @@ const Swapping = () => {
                   <div className="mx-2 mx-md-5 mt-4">
                     <UserTable
                       currency={currency}
-                      currentAcc={currentAcc}
+                      currentAcc={address}
                       Listings={Listings}
                       setRefetch={setRefetch}
                       setIsLoading={setIsLoading}
-                      provider={provider}
+                      provider={signer.data}
                     />
                   </div>
                 </>

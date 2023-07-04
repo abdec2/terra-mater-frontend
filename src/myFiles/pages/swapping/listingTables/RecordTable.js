@@ -28,27 +28,27 @@ const RecordTable = (props) => {
     <>
       <Table responsive className="text-center">
         <thead>
-          <tr>
-            <th className="text-center">Owner</th>
-            <th className="text-center">Token</th>
-            <th className="text-center">Listing Type</th>
-            <th className="text-center">Price/Token</th>
-            <th className="text-center">Amount</th>
-            <th className="text-center">Status</th>
+          <tr style={{background: 'black'}}>
+            <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Owner</th>
+            <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Token</th>
+            <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Listing Type</th>
+            <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Price/Token</th>
+            <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Amount</th>
+            <th className="text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Status</th>
           </tr>
         </thead>
         <tbody>
           {filterType === "all" ? (
             [...Listings]?.reverse().map((item, index) => {
               return parseInt(item.status) !== 1 ? (
-                <tr key={index}>
-                  <td>
+                <tr key={index} style={{background: 'black'}}>
+                  <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                     {" "}
                     {item.owner.slice(0, 5) + "...." + item.owner.slice(37, 42)}
                   </td>
-                  <td>{item.tokenA === CONFIG.USDTAddress ? "USDT" : "NAT"}</td>
-                  <td>{item.orderType === "sell" ? "Selling" : "Buying"}</td>
-                  <td>
+                  <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{item.tokenA === CONFIG.USDTAddress ? "USDT" : "NAT"}</td>
+                  <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{item.orderType === "sell" ? "Selling" : "Buying"}</td>
+                  <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                     {item.tokenA === CONFIG.USDTAddress &&
                     item.orderType === "sell"
                       ? web3.utils.fromWei(item.price, "ether") + " NAT"
@@ -63,7 +63,7 @@ const RecordTable = (props) => {
                       ? web3.utils.fromWei(item.price, "lovelace") + " USDT"
                       : null}
                   </td>
-                  <td>
+                  <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                     {item.tokenA === CONFIG.USDTAddress &&
                     item.orderType === "sell"
                       ? web3.utils.fromWei(item.amountA, "lovelace") + " USDT"
@@ -82,6 +82,7 @@ const RecordTable = (props) => {
                     <td
                       style={{
                         color: "green",
+                        background: 'rgba(255,255,255,0.06)'
                       }}
                     >
                       {" "}
@@ -91,6 +92,7 @@ const RecordTable = (props) => {
                     <td
                       style={{
                         color: "red",
+                        background: 'rgba(255,255,255,0.06)'
                       }}
                     >
                       Cancelled
@@ -103,18 +105,18 @@ const RecordTable = (props) => {
             [...Listings]?.reverse().map((item, index) => {
               return parseInt(item.status) === 2 ? (
                 <>
-                  <tr key={index}>
-                    <td>
+                  <tr key={index} style={{background: 'black'}}>
+                    <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                       {" "}
                       {item.owner.slice(0, 5) +
                         "...." +
                         item.owner.slice(37, 42)}
                     </td>
-                    <td>
+                    <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                       {item.tokenA === CONFIG.USDTAddress ? "USDT" : "NAT"}
                     </td>
-                    <td>{item.orderType === "sell" ? "Selling" : "Buying"}</td>
-                    <td>
+                    <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{item.orderType === "sell" ? "Selling" : "Buying"}</td>
+                    <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                       {item.tokenA === CONFIG.USDTAddress &&
                       item.orderType === "sell"
                         ? web3.utils.fromWei(item.price, "ether") + " NAT"
@@ -129,7 +131,7 @@ const RecordTable = (props) => {
                         ? web3.utils.fromWei(item.price, "lovelace") + " USDT"
                         : null}
                     </td>
-                    <td>
+                    <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                       {item.tokenA === CONFIG.USDTAddress &&
                       item.orderType === "sell"
                         ? web3.utils.fromWei(item.amountA, "lovelace") + " USDT"
@@ -148,6 +150,7 @@ const RecordTable = (props) => {
                       <td
                         style={{
                           color: "green",
+                          background: 'rgba(255,255,255,0.06)'
                         }}
                       >
                         {" "}
@@ -157,6 +160,7 @@ const RecordTable = (props) => {
                       <td
                         style={{
                           color: "red",
+                          background: 'rgba(255,255,255,0.06)'
                         }}
                       >
                         Cancelled
@@ -171,20 +175,20 @@ const RecordTable = (props) => {
               {[...Listings]?.reverse().map((item, index) => {
                 return parseInt(item.status) === 0 ? (
                   <>
-                    <tr key={index}>
-                      <td>
+                    <tr key={index} style={{background: 'black'}}>
+                      <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                         {" "}
                         {item.owner.slice(0, 5) +
                           "...." +
                           item.owner.slice(37, 42)}
                       </td>
-                      <td>
+                      <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                         {item.tokenA === CONFIG.USDTAddress ? "USDT" : "NAT"}
                       </td>
-                      <td>
+                      <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                         {item.orderType === "sell" ? "Selling" : "Buying"}
                       </td>
-                      <td>
+                      <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                         {item.tokenA === CONFIG.USDTAddress &&
                         item.orderType === "sell"
                           ? web3.utils.fromWei(item.price, "ether") + " NAT"
@@ -199,7 +203,7 @@ const RecordTable = (props) => {
                           ? web3.utils.fromWei(item.price, "lovelace") + " USDT"
                           : null}
                       </td>
-                      <td>
+                      <td style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                         {item.tokenA === CONFIG.USDTAddress &&
                         item.orderType === "sell"
                           ? web3.utils.fromWei(item.amountA, "lovelace") +
@@ -219,6 +223,7 @@ const RecordTable = (props) => {
                         <td
                           style={{
                             color: "green",
+                            background: 'rgba(255,255,255,0.06)'
                           }}
                         >
                           {" "}
@@ -228,6 +233,7 @@ const RecordTable = (props) => {
                         <td
                           style={{
                             color: "red",
+                            background: 'rgba(255,255,255,0.06)'
                           }}
                         >
                           Cancelled
