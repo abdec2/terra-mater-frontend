@@ -161,7 +161,7 @@ const Dashboard = function () {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="text-end">
+                                <div className="text-end" style={{color: 'rgb(144,144,144)'}}>
                                     Gold Reserves
                                 </div>
                             </Card.Header>
@@ -181,7 +181,7 @@ const Dashboard = function () {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="text-end">
+                                <div className="text-end" style={{color: 'rgb(144,144,144)'}}>
                                     Bitcoin Reserves
                                 </div>
                             </Card.Header>
@@ -201,7 +201,7 @@ const Dashboard = function () {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="text-end">
+                                <div className="text-end" style={{color: 'rgb(144,144,144)'}}>
                                     Natura Token Price
                                 </div>
                             </Card.Header>
@@ -221,7 +221,7 @@ const Dashboard = function () {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="text-end">
+                                <div className="text-end" style={{color: 'rgb(144,144,144)'}}>
                                     Miscellaneous Reserve
                                 </div>
                             </Card.Header>
@@ -241,7 +241,7 @@ const Dashboard = function () {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="text-end">
+                                <div className="text-end" style={{color: 'rgb(144,144,144)'}}>
                                     Other Natura Released
                                 </div>
                             </Card.Header>
@@ -261,7 +261,7 @@ const Dashboard = function () {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="text-end">
+                                <div className="text-end" style={{color: 'rgb(144,144,144)'}}>
                                     Staking Rewards Claimed
                                 </div>
                             </Card.Header>
@@ -278,13 +278,13 @@ const Dashboard = function () {
                         <h3>NFT Collections</h3>
                         <Table responsive className="border-0 rounded " style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>
                             <thead>
-                                <tr className="border-bottom border-dark">
-                                    <th className="border-0 text-uppercase text-center">NFT Collection</th>
-                                    <th className="border-0 text-uppercase text-center">Total Value</th>
-                                    <th className="border-0 text-uppercase text-center">Total Supply</th>
-                                    <th className="border-0 text-uppercase text-center">Start Price</th>
-                                    <th className="border-0 text-uppercase text-center">Market Price</th>
-                                    <th className="border-0 text-uppercase text-center">Last Trade Price</th>
+                                <tr className="border-bottom border-dark" style={{background: 'black'}}>
+                                    <th className="border-0 text-uppercase text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>NFT Collection</th>
+                                    <th className="border-0 text-uppercase text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Total Value</th>
+                                    <th className="border-0 text-uppercase text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Total Supply</th>
+                                    <th className="border-0 text-uppercase text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Start Price</th>
+                                    <th className="border-0 text-uppercase text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Market Price</th>
+                                    <th className="border-0 text-uppercase text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>Last Trade Price</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -293,13 +293,13 @@ const Dashboard = function () {
                                         <>
                                             {
                                                 col.map((item, i) => (
-                                                    <tr key={i}>
-                                                        <td className="border-0 text-center">{item.attributes.name}</td>
-                                                        <td className="border-0 text-center">{item.totalValue}</td>
-                                                        <td className="border-0 text-center">{item.totalSupply}</td>
-                                                        <td className="border-0 text-center">USDT {item.floorPrice}</td>
-                                                        <td className="border-0 text-center">USDT {item.marketPrice}</td>
-                                                        <td className="border-0 text-center">USDT {item.ltp}</td>
+                                                    <tr key={i} style={{background: 'black'}}>
+                                                        <td className="border-0 text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{item.attributes.name}</td>
+                                                        <td className="border-0 text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{item.totalValue}</td>
+                                                        <td className="border-0 text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>{item.totalSupply}</td>
+                                                        <td className="border-0 text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>USDT {item.floorPrice}</td>
+                                                        <td className="border-0 text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>USDT {item.marketPrice}</td>
+                                                        <td className="border-0 text-center" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgb(144,144,144)' }}>USDT {item.ltp}</td>
                                                     </tr>
                                                 ))
                                             }

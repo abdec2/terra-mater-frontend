@@ -18,9 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, forwardRef } from "react";
 
 import { useWeb3Modal } from '@web3modal/react'
-import { useAccount } from "wagmi";
-import { useEthersProvider } from "../../../hooks/useEthersProvider";
-import { usePublicClient } from "wagmi";
+import { useAccount, useDisconnect, useWalletClient, useConnect } from "wagmi";
+
 
 
 const NavLink = (props) => {
@@ -52,10 +51,12 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 
 const Index = () => {
   const { open, close } = useWeb3Modal()
+  const { disconnect } = useDisconnect()
+  const { connect } = useConnect()
   const { address, isConnected } = useAccount()
   const [islogin, setIsLogin] = useState(false);
   const [account, setAccount] = useState("");
-  const provider = useEthersProvider()
+  const signer = useWalletClient()
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const web3Store = useSelector((state) => state.web3);
@@ -66,6 +67,7 @@ const Index = () => {
     auth.clearAppStorage();
     dispatch(actions.delWeb3());
     setIsLogin(false);
+    disconnect()
     navigate("/");
   };
 
@@ -84,7 +86,9 @@ const Index = () => {
   }, [web3Store.account, account]);
 
   useEffect(() => {
-    connectWallet(dispatch, address, provider)
+    if(isConnected && !userData) {
+      connectWallet(dispatch, address, signer)
+    }
   }, [address, isConnected])
 
   return (

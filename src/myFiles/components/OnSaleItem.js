@@ -14,7 +14,8 @@ import axios from 'axios';
 import api from '../../core/api';
 
 import DropDownComponent from './../pages/profile/dropdown'
-import { reconnectWallet } from '../../components/menu/connectWallet';
+import { connectWallet, reconnectWallet } from '../../components/menu/connectWallet';
+import { useWalletClient, useAccount } from 'wagmi'
 
 
 
@@ -29,6 +30,8 @@ const Outer = styled.div`
 
 //react functional component
 const OnSaleItem = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4', height, onImgLoad }) => {
+    const { address } = useAccount()
+    const signer = useWalletClient()
     const [nftdata, setNftData] = useState(null)
     const [fetch, setFetch] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -72,7 +75,8 @@ const OnSaleItem = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 c
     const releaseSale = async (itemId, nft) => {
         try {
             if(!web3Store.account) {
-                await reconnectWallet(dispatch)
+                // await reconnectWallet(dispatch)
+                await connectWallet(dispatch, address, signer, true)
             }
             const contract = new web3.eth.Contract(marketplaceAbi, CONFIG.MARKETPLACE_ADDRESS)
             const estimateGas = await contract.methods.releaseSale(itemId).estimateGas({from: web3Store.account})

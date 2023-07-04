@@ -12,8 +12,8 @@ import marketplaceAbi from './../../config/Marketplace.json'
 import auth from '../../core/auth';
 import axios from 'axios';
 import api from '../../core/api';
-import { reconnectWallet } from '../../components/menu/connectWallet';
-
+import { connectWallet, reconnectWallet } from '../../components/menu/connectWallet';
+import { useWalletClient, useAccount } from 'wagmi'
 
 
 const Outer = styled.div`
@@ -27,6 +27,8 @@ const Outer = styled.div`
 
 //react functional component
 const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 col-sm-6 col-xs-12 mb-4', height, onImgLoad }) => {
+    const {address} = useAccount()
+    const signer = useWalletClient()
     const [nftdata, setNftData] = useState(null)
     const [loading, setLoading] = useState(false)
     const [openCheckout, setOpenCheckout] = useState(false);
@@ -217,7 +219,8 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
 
     const makeTransaction = async () => {
         if (!web3Store.account) {
-            await reconnectWallet(dispatch)
+            // await reconnectWallet(dispatch)
+            await connectWallet(dispatch, address, signer, true)
         }
         await handleApprove()
         await handleListItem()
@@ -247,7 +250,8 @@ const WalletNFT = ({ setFetchNfts, nft, className = 'd-item col-lg-3 col-md-6 co
                             <p className="mb-3" style={{ fontSize: '14px' }}>{nftdata.name}</p>
                             <button className='btn-custom-card' onClick={async () => {
                                 if(!web3Store.account) {
-                                    await reconnectWallet(dispatch)
+                                    // await reconnectWallet(dispatch)
+                                    await connectWallet(dispatch, address, signer, true)
                                 }
                                 setOpenCheckout(true)
                             }}>List Now</button>

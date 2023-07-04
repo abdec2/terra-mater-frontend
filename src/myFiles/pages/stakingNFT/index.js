@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { StyledHeader } from "../../../components/Styles";
 import {
+  connectWallet,
   reconnectWallet
 } from "./../../../components/menu/connectWallet";
+import { useWalletClient, useAccount } from 'wagmi'
+import { useWeb3Modal } from '@web3modal/react'
+
 import Reveal from "react-awesome-reveal";
 import { keyframes } from "@emotion/react";
 import Footer from "./../../../components/components/footer";
@@ -53,6 +57,9 @@ const inline = keyframes`
 
 const StakingNft = () => {
   const dispatch = useDispatch();
+  const { address } = useAccount()
+  const {open:openModal, close} = useWeb3Modal()
+  const signer = useWalletClient()
   const [account, setAccount] = useState("");
   const [mCursor, setMcursor] = useState('');
   const web3Store = useSelector((state) => state.web3);
@@ -210,7 +217,13 @@ const StakingNft = () => {
             <>
               <button
                 className="walletBtn"
-                onClick={() => reconnectWallet(dispatch)}
+                onClick={() => {
+                  if(signer.data === undefined) {
+                    openModal()
+                  } else {
+                    connectWallet(dispatch, address, signer, true)
+                  }
+                }}
               >
                 Connect Wallet
               </button>

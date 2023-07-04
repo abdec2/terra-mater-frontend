@@ -14,7 +14,9 @@ import nftAbi from './../../config/NftAbi.json'
 import { useNavigate } from 'react-router-dom';
 
 import { useParams } from "react-router-dom";
-import { connectWallet, reconnectWallet } from "../menu/connectWallet";
+import { connectWallet } from "../menu/connectWallet";
+import { useWeb3Modal } from '@web3modal/react'
+import { useWalletClient, useAccount } from 'wagmi'
 
 //IMPORT DYNAMIC STYLED COMPONENT
 import { StyledHeader } from '../Styles';
@@ -36,6 +38,9 @@ const ItemDetailRedux = () => {
     const navigateTo = (link) => {
         navigate(link);
     }
+    const { open, close } = useWeb3Modal()
+    const signer = useWalletClient()
+    const { address, isConnected } = useAccount()
     const userInfo = auth.getUserInfo()
     const jwtToken = auth.getToken()
     const [openMenu0, setOpenMenu0] = React.useState(true);
@@ -61,10 +66,11 @@ const ItemDetailRedux = () => {
 
     const handleOpenCheckout = async () => {
         if(!userInfo) {
-            await connectWallet(dispatch)
+            open()
+            return
         }
         if (userInfo && !web3Store.account) {
-            await reconnectWallet(dispatch)
+            await connectWallet(dispatch, address, signer, true)
         }
         setOpenCheckout(true)
     }
@@ -102,7 +108,7 @@ const ItemDetailRedux = () => {
     const handleApprove = async () => {
         try {
             if (!web3Store.account) {
-                await reconnectWallet(dispatch)
+                await connectWallet(dispatch, address, signer, true)
             }
             setLoading(true)
 
@@ -162,7 +168,7 @@ const ItemDetailRedux = () => {
     const handleTransaction = async () => {
         try {
             if (!web3Store.account) {
-                await reconnectWallet(dispatch)
+                await connectWallet(dispatch, address, signer, true)
             }
             if (nft.nft_status.Status.toLowerCase() === "mint") {
                 await handleMint()
