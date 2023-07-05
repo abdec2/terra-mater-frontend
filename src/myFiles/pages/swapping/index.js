@@ -373,7 +373,7 @@ const Swapping = () => {
                       Listings={Listings}
                       setRefetch={setRefetch}
                       setIsLoading={setIsLoading}
-                      provider={signer.data}
+                      provider={new Web3(signer.data)}
                     />
                   </div>
                 </>

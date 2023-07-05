@@ -14,6 +14,9 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import LoadingScreen from "../../stakingNFT/loadingScreen";
 
+import { useAccount, useWalletClient } from "wagmi";
+import { useWeb3Modal } from "@web3modal/react";
+
 const Button = styled.button`
   background: #ff343f;
   color: #fff;
@@ -46,6 +49,9 @@ const TradeTable = (props) => {
   const { currency, Listings, value, setRefetch, setIsLoading } = props;
   console.log(Listings);
 
+  const { address, isConnected } = useAccount()
+  const signer = useWalletClient()
+  const { open, close } = useWeb3Modal()
   const [currentAcc, setCurrentAcc] = useState(null);
   const [provider, setProvider] = useState(null);
   // const web3Store = useSelector((state) => state.web3);
@@ -234,82 +240,92 @@ const TradeTable = (props) => {
 
     //   return;
     // }
-    // console.log(currentAcc);
-    // const network = await provider.eth.getChainId();
-    // if (network.toString() !== CONFIG.Chain_Id) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Oops...",
-    //     text: "Please connect to Polygon mumbai network",
-    //     timer: 2000,
-    //   });
-    //   return;
-    // }
-    // try {
-    //   setIsLoading(true);
-    //   if (value === "buy") {
-    //     if (currency === "Natura") {
-    //       const AMOUNT =
-    //         web3.utils.fromWei(item.amountA.toString(), "ether") * item.price;
-    //       console.log("AMOUNT", AMOUNT);
-    //       // const AMOUNT = web3.utils.toWei(JSON.stringify(Amount), "lovelace");
-    //       // console.log("AMOUNT", AMOUNT);
-    //       // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
-    //       // console.log("AMOUNT", AMOUNT);
-    //       await handleApproveUSDT(AMOUNT, currentAcc, provider);
-    //       await handleSwap(reversedIndex, currentAcc, provider);
-    //     } else if (currency === "USDT") {
-    //       console.log(item.price);
-    //       console.log(item.amountA);
-    //       const AMOUNT = JSON.stringify(
-    //         web3.utils.fromWei(item.price.toString(), "lovelace") * item.amountA
-    //       );
-    //       console.log(AMOUNT);
-    //       // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
-    //       await handleApproveNatura(AMOUNT, currentAcc, provider);
-    //       const tokenAddress = CONFIG.NaturaAddress;
-    //       const tokenAbi = NaturaAbi;
-    //       await handleSwap(reversedIndex, currentAcc, provider);
-    //     }
-    //   } else if (value === "sell") {
-    //     if (currency === "Natura") {
-    //       // console.log(item.amountA);
-    //       // console.log(item.price);
-    //       console.log(item.amountA);
-    //       console.log(item.price);
-    //       const AMOUNT = JSON.stringify(
-    //         web3.utils.fromWei(item.amountA.toString(), "lovelace") * item.price
-    //       );
 
-    //       // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
-    //       await handleApproveNatura(AMOUNT, currentAcc, provider);
-    //       const tokenAddress = CONFIG.NaturaAddress;
-    //       const tokenAbi = NaturaAbi;
-    //       await handleSwap(reversedIndex, currentAcc, provider);
-    //     } else if (currency === "USDT") {
-    //       const AMOUNT = JSON.stringify(
-    //         web3.utils.fromWei(item.amountA.toString(), "ether") * item.price
-    //       );
-    //       console.log(AMOUNT);
-    //       // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
-    //       await handleApproveUSDT(AMOUNT, currentAcc, provider);
-    //       const tokenAddress = CONFIG.USDTAddress;
-    //       const tokenAbi = USDTAbi;
-    //       await handleSwap(reversedIndex, currentAcc, provider);
-    //     }
-    //   }
-    //   setRefetch(true);
-    //   setIsLoading(false);
-    // } catch (error) {
-    //   console.log(error);
-    //   setIsLoading(false);
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Oops...",
-    //     text: "Something went wrong!",
-    //     timer: 2000,
-    //   });
-    // }
+    if (signer.data === undefined) {
+      await open()
+      return 
+    }
+    const provider = signer.data
+    const web3 = new Web3(provider)
+    setCurrentAcc(address)
+    setProvider(web3)
+
+    console.log(address);
+    const network = await web3.eth.getChainId();
+    if (network.toString() !== CONFIG.Chain_Id) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please connect to Polygon mumbai network",
+        timer: 2000,
+      });
+      return;
+    }
+    try {
+      setIsLoading(true);
+      if (value === "buy") {
+        if (currency === "Natura") {
+          const AMOUNT =
+            web3.utils.fromWei(item.amountA.toString(), "ether") * item.price;
+          console.log("AMOUNT", AMOUNT);
+          // const AMOUNT = web3.utils.toWei(JSON.stringify(Amount), "lovelace");
+          // console.log("AMOUNT", AMOUNT);
+          // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
+          // console.log("AMOUNT", AMOUNT);
+          await handleApproveUSDT(AMOUNT, address, web3);
+          await handleSwap(reversedIndex, address, web3);
+        } else if (currency === "USDT") {
+          console.log(item.price);
+          console.log(item.amountA);
+          const AMOUNT = JSON.stringify(
+            web3.utils.fromWei(item.price.toString(), "lovelace") * item.amountA
+          );
+          console.log(AMOUNT);
+          // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
+          await handleApproveNatura(AMOUNT, address, web3);
+          const tokenAddress = CONFIG.NaturaAddress;
+          const tokenAbi = NaturaAbi;
+          await handleSwap(reversedIndex, address, web3);
+        }
+      } else if (value === "sell") {
+        if (currency === "Natura") {
+          // console.log(item.amountA);
+          // console.log(item.price);
+          console.log(item.amountA);
+          console.log(item.price);
+          const AMOUNT = JSON.stringify(
+            web3.utils.fromWei(item.amountA.toString(), "lovelace") * item.price
+          );
+
+          // const finalAmount = web3.utils.toWei(AMOUNT, "ether");
+          await handleApproveNatura(AMOUNT, address, web3);
+          const tokenAddress = CONFIG.NaturaAddress;
+          const tokenAbi = NaturaAbi;
+          await handleSwap(reversedIndex, address, web3);
+        } else if (currency === "USDT") {
+          const AMOUNT = JSON.stringify(
+            web3.utils.fromWei(item.amountA.toString(), "ether") * item.price
+          );
+          console.log(AMOUNT);
+          // const finalAmount = web3.utils.toWei(AMOUNT, "lovelace");
+          await handleApproveUSDT(AMOUNT, address, web3);
+          const tokenAddress = CONFIG.USDTAddress;
+          const tokenAbi = USDTAbi;
+          await handleSwap(reversedIndex, address, web3);
+        }
+      }
+      setRefetch(true);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        timer: 2000,
+      });
+    }
   };
   const calculatePrice = (item) => {
     if (value === "buy") {
@@ -461,7 +477,7 @@ const TradeTable = (props) => {
                               )
                             }
                           >
-                            {currentAcc === "" || currentAcc === null
+                            {!isConnected
                               ? "Connect Wallet"
                               : "Trade"}
                           </Button>
