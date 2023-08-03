@@ -83,6 +83,12 @@ const Dashboard = function () {
     stakingRewards: null,
     totalSupply: null,
     burnedToken: null,
+    claimedRewards: null,
+    launchedNatura: null,
+    teamNatura: null,
+    IncentiveNat: null,
+    RAndD: null,
+    reservedNat: null,
   });
 
   const [col, setCol] = useState([]);
@@ -152,12 +158,7 @@ const Dashboard = function () {
   };
 
   const circulatingNatura =
-    JSON.parse(data?.stakingRewards) +
-    2666666 +
-    JSON.parse(data?.totalSupply) * 0.05 +
-    JSON.parse(data.totalSupply) * 0.05 +
-    JSON.parse(data.totalSupply) * 0.02 +
-    JSON.parse(data.totalSupply) * 0.15;
+    JSON.parse(data?.totalSupply) - JSON.parse(data.burnedToken);
 
   // Calculate the value
   calculatedValue = calculateValue();
@@ -209,6 +210,30 @@ const Dashboard = function () {
       .balanceOf("0x000000000000000000000000000000000000dead")
       .call()
       .then((result) => result);
+    const claimedReward = await tokenContract.methods
+      .balanceOf("0xcC190f4bB739402181d73aC0991148a308CD118b")
+      .call()
+      .then((result) => result);
+    const launched = await tokenContract.methods
+      .balanceOf("0x95AA5d6aC1c3D36d3e5d5eEE3Fc0DD1417418a62")
+      .call()
+      .then((result) => result);
+    const team = await tokenContract.methods
+      .balanceOf("0xD1Bcd394e5c0217124b1d8253c954723E50C435b")
+      .call()
+      .then((result) => result);
+    const Incentive = await tokenContract.methods
+      .balanceOf("0x4c4DA75B9525BbC338583Ce7CF11E387A31Bd256")
+      .call()
+      .then((result) => result);
+    const RandD = await tokenContract.methods
+      .balanceOf("0x511FB8A90E2797939623BA65bFfc1Af2fE0E6b86")
+      .call()
+      .then((result) => result);
+    const Reserve = await tokenContract.methods
+      .balanceOf("0xC9d97D6C6Fe6dFF9748Ca983F5aeDe4A47CA4b63")
+      .call()
+      .then((result) => result);
 
     setData({
       goldReserve,
@@ -219,6 +244,12 @@ const Dashboard = function () {
       stakingRewards: web3.utils.fromWei(stakingRewards, "ether"),
       totalSupply: web3.utils.fromWei(totalSupply, "ether"),
       burnedToken: web3.utils.fromWei(burnAmount, "ether"),
+      claimedRewards: web3.utils.fromWei(claimedReward, "ether"),
+      launchedNatura: web3.utils.fromWei(launched, "ether"),
+      teamNatura: web3.utils.fromWei(team, "ether"),
+      IncentiveNat: web3.utils.fromWei(Incentive, "ether"),
+      RAndD: web3.utils.fromWei(RandD, "ether"),
+      reservedNat: web3.utils.fromWei(Reserve, "ether"),
     });
   };
 
@@ -481,14 +512,16 @@ const Dashboard = function () {
                   </div>
                 </div>
                 <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
-                  P.NFT
+                  P.NFT Rewards Claimed
                 </div>
               </Card.Header>
               <Card.Body>
                 <Card.Title className="text-end fs-5">
                   NAT{" "}
-                  {data.stakingRewards
-                    ? parseFloat(data.stakingRewards).toFixed(4)
+                  {data.claimedRewards
+                    ? data.claimedRewards === 0
+                      ? parseFloat(data.claimedRewards)
+                      : parseFloat(data.claimedRewards).toFixed(2)
                     : 0}
                 </Card.Title>
               </Card.Body>
@@ -529,11 +562,21 @@ const Dashboard = function () {
                   </div>
                 </div>
                 <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
-                  Launched Natura
+                  <a
+                    href="https://polygonscan.com/address/0x95AA5d6aC1c3D36d3e5d5eEE3Fc0DD1417418a62"
+                    target="blank"
+                  >
+                    Launched Natura
+                  </a>
                 </div>
               </Card.Header>
               <Card.Body>
-                <Card.Title className="text-end fs-5">NAT 2,666,666</Card.Title>
+                <Card.Title className="text-end fs-5">
+                  NAT{" "}
+                  {data.launchedNatura
+                    ? parseFloat(data.launchedNatura).toFixed(2)
+                    : "0"}
+                </Card.Title>
               </Card.Body>
             </Card>
           </div>
@@ -571,13 +614,18 @@ const Dashboard = function () {
                   </div>
                 </div>
                 <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
-                  Team Natura released
+                  <a
+                    href="https://polygonscan.com/address/0xD1Bcd394e5c0217124b1d8253c954723E50C435b"
+                    target="blank"
+                  >
+                    Team Natura released
+                  </a>
                 </div>
               </Card.Header>
               <Card.Body>
                 <Card.Title className="text-end fs-5">
                   NAT{" "}
-                  {data.totalSupply ? JSON.parse(data.totalSupply) * 0.05 : 0}
+                  {data.teamNatura ? JSON.parse(data.teamNatura).toFixed(2) : 0}
                 </Card.Title>
               </Card.Body>
             </Card>
@@ -616,13 +664,20 @@ const Dashboard = function () {
                   </div>
                 </div>
                 <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
-                  Incentive program Natura
+                  <a
+                    href="https://polygonscan.com/address/0x4c4DA75B9525BbC338583Ce7CF11E387A31Bd256"
+                    target="blank"
+                  >
+                    Incentive program Natura
+                  </a>
                 </div>
               </Card.Header>
               <Card.Body>
                 <Card.Title className="text-end fs-5">
                   NAT{" "}
-                  {data.totalSupply ? JSON.parse(data.totalSupply) * 0.05 : 0}
+                  {data.IncentiveNat
+                    ? JSON.parse(data.IncentiveNat).toFixed(2)
+                    : 0}
                 </Card.Title>
               </Card.Body>
             </Card>
@@ -662,13 +717,17 @@ const Dashboard = function () {
                   </div>
                 </div>
                 <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
-                  R&D Natura released
+                  <a
+                    href="https://polygonscan.com/address/0x511FB8A90E2797939623BA65bFfc1Af2fE0E6b86"
+                    target="blank"
+                  >
+                    R&D Natura released
+                  </a>
                 </div>
               </Card.Header>
               <Card.Body>
                 <Card.Title className="text-end fs-5">
-                  NAT{" "}
-                  {data.totalSupply ? JSON.parse(data.totalSupply) * 0.02 : 0}
+                  NAT {data.RAndD ? JSON.parse(data.RAndD).toFixed(2) : 0}
                 </Card.Title>
               </Card.Body>
             </Card>
@@ -708,13 +767,20 @@ const Dashboard = function () {
                   </div>
                 </div>
                 <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
-                  Reserve Natura released
+                  <a
+                    href="https://polygonscan.com/address/0xC9d97D6C6Fe6dFF9748Ca983F5aeDe4A47CA4b63"
+                    target="blank"
+                  >
+                    Reserve Natura released
+                  </a>
                 </div>
               </Card.Header>
               <Card.Body>
                 <Card.Title className="text-end fs-5">
                   NAT{" "}
-                  {data.totalSupply ? JSON.parse(data.totalSupply) * 0.15 : 0}
+                  {data.reservedNat
+                    ? JSON.parse(data.reservedNat).toFixed(2)
+                    : 0}
                 </Card.Title>
               </Card.Body>
             </Card>
@@ -753,7 +819,12 @@ const Dashboard = function () {
                   </div>
                 </div>
                 <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
-                  Burned Natura
+                  <a
+                    href="https://polygonscan.com/address/0x000000000000000000000000000000000000dead"
+                    target="blank"
+                  >
+                    Burned Natura
+                  </a>
                 </div>
               </Card.Header>
               <Card.Body>
@@ -792,7 +863,12 @@ const Dashboard = function () {
                   </div>
                 </div>
                 <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
-                  Bitcoin Reserves
+                  <a
+                    href="https://www.blockchain.com/explorer/addresses/btc/bc1qnvsza35758ujszkl8rw6czz2ppu0x852r5teze"
+                    target="blank"
+                  >
+                    Bitcoin Reserves
+                  </a>
                 </div>
               </Card.Header>
               <Card.Body>
@@ -1107,6 +1183,17 @@ const Dashboard = function () {
               </tbody>
             </Table>
           </div>
+          <a
+            style={{
+              marginTop: "50px",
+              textAlign: "center",
+              fontSize: "20px",
+            }}
+            href="https://harmonious-paradise.gitbook.io/harmonious-paradise-project/natural-economy/natura-token/contracts-and-addresses"
+            target="blank"
+          >
+            Find More Details here.
+          </a>
         </div>
       </section>
 
