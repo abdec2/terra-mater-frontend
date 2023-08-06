@@ -158,7 +158,14 @@ const Dashboard = function () {
   };
 
   const circulatingNatura =
-    JSON.parse(data?.totalSupply) - JSON.parse(data.burnedToken);
+    JSON.parse(data?.stakingRewards) +
+    JSON.parse(data?.launchedNatura) +
+    JSON.parse(data?.teamNatura) +
+    JSON.parse(data?.IncentiveNat) +
+    JSON.parse(data?.RAndD) +
+    JSON.parse(data?.reservedNat) +
+    2666666 -
+    JSON.parse(data.burnedToken);
 
   // Calculate the value
   calculatedValue = calculateValue();
@@ -518,10 +525,10 @@ const Dashboard = function () {
               <Card.Body>
                 <Card.Title className="text-end fs-5">
                   NAT{" "}
-                  {data.claimedRewards
-                    ? data.claimedRewards === 0
-                      ? parseFloat(data.claimedRewards)
-                      : parseFloat(data.claimedRewards).toFixed(2)
+                  {data.stakingRewards
+                    ? data.stakingRewards === 0
+                      ? parseFloat(data.stakingRewards)
+                      : parseFloat(data.stakingRewards).toFixed(2)
                     : 0}
                 </Card.Title>
               </Card.Body>
@@ -573,9 +580,10 @@ const Dashboard = function () {
               <Card.Body>
                 <Card.Title className="text-end fs-5">
                   NAT{" "}
-                  {data.launchedNatura
+                  {/* {data.launchedNatura
                     ? parseFloat(data.launchedNatura).toFixed(2)
-                    : "0"}
+                    : "0"} */}
+                  2,666,666
                 </Card.Title>
               </Card.Body>
             </Card>
