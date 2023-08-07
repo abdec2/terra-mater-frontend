@@ -159,7 +159,6 @@ const Dashboard = function () {
 
   const circulatingNatura =
     JSON.parse(data?.stakingRewards) +
-    JSON.parse(data?.launchedNatura) +
     JSON.parse(data?.teamNatura) +
     JSON.parse(data?.IncentiveNat) +
     JSON.parse(data?.RAndD) +
@@ -518,8 +517,13 @@ const Dashboard = function () {
                     </svg>
                   </div>
                 </div>
-                <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
-                  P.NFT Rewards Claimed
+                <div className="text-end" style={{ color: "#0d6efd" }}>
+                  <a
+                    href="https://polygonscan.com/address/0xcC190f4bB739402181d73aC0991148a308CD118b"
+                    target="blank"
+                  >
+                    P.NFT Rewards Claimed
+                  </a>
                 </div>
               </Card.Header>
               <Card.Body>
@@ -568,7 +572,7 @@ const Dashboard = function () {
                     />
                   </div>
                 </div>
-                <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
+                <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
                     href="https://polygonscan.com/address/0x95AA5d6aC1c3D36d3e5d5eEE3Fc0DD1417418a62"
                     target="blank"
@@ -621,7 +625,7 @@ const Dashboard = function () {
                     />
                   </div>
                 </div>
-                <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
+                <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
                     href="https://polygonscan.com/address/0xD1Bcd394e5c0217124b1d8253c954723E50C435b"
                     target="blank"
@@ -671,7 +675,7 @@ const Dashboard = function () {
                     />
                   </div>
                 </div>
-                <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
+                <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
                     href="https://polygonscan.com/address/0x4c4DA75B9525BbC338583Ce7CF11E387A31Bd256"
                     target="blank"
@@ -724,7 +728,7 @@ const Dashboard = function () {
                     />
                   </div>
                 </div>
-                <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
+                <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
                     href="https://polygonscan.com/address/0x511FB8A90E2797939623BA65bFfc1Af2fE0E6b86"
                     target="blank"
@@ -774,7 +778,7 @@ const Dashboard = function () {
                     />
                   </div>
                 </div>
-                <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
+                <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
                     href="https://polygonscan.com/address/0xC9d97D6C6Fe6dFF9748Ca983F5aeDe4A47CA4b63"
                     target="blank"
@@ -826,7 +830,7 @@ const Dashboard = function () {
                     />
                   </div>
                 </div>
-                <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
+                <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
                     href="https://polygonscan.com/address/0x000000000000000000000000000000000000dead"
                     target="blank"
@@ -870,7 +874,7 @@ const Dashboard = function () {
                     </svg>
                   </div>
                 </div>
-                <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
+                <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
                     href="https://www.blockchain.com/explorer/addresses/btc/bc1qnvsza35758ujszkl8rw6czz2ppu0x852r5teze"
                     target="blank"
