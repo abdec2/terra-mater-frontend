@@ -17,13 +17,14 @@ import { connectWallet } from "../../../components/menu/connectWallet";
 import TradeTable from "./listingTables/BuyTable";
 import LoadingScreen from "../stakingNFT/loadingScreen";
 // import WalletConnectProvider from "@walletconnect/web3-provider";
-import { useWeb3Modal } from '@web3modal/react'
+import { useWeb3Modal } from "@web3modal/react";
 import { useAccount, useWalletClient } from "wagmi";
 import Web3 from "web3";
 // import Web3Modal from "web3modal";
 import { CiFilter } from "react-icons/ci";
 import { Button } from "bootstrap";
 import { CONFIG } from "./abi/Config";
+import { useLocation, useParams } from "react-router-dom";
 const Container_header = styled.div`
   display: flex;
   justify-content: start;
@@ -95,23 +96,27 @@ const Contained = styled.div`
 //   },
 // };
 const theme = "GREY"; //LIGHT, GREY, RETRO
-const Swapping = () => {
+const Swapping = (props) => {
   const dispatch = useDispatch();
-  const { address, isConnected } = useAccount()
-  const { open, close } = useWeb3Modal()
-  const signer = useWalletClient()
+  const params = useParams();
+  const location = useLocation();
+  const { address, isConnected } = useAccount();
+  const { open, close } = useWeb3Modal();
+  const signer = useWalletClient();
   const [account, setAccount] = useState("");
   const [currency, setCurrency] = useState("USDT");
   const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState("buy");
   const [modal, setModal] = useState(false);
   const [refetch, setRefetch] = useState(true);
-  const [condition, setCondition] = useState("buy");
+  const [condition, setCondition] = useState(location.state ? "record" : "buy");
   const web3Store = useSelector((state) => state.web3);
   const web3 = web3Store.web3;
   const selectCurrency = (props) => {
     setCurrency(props);
   };
+
+  console.log("params", params, location);
   const [currentAcc, setCurrentAcc] = useState(null);
   const [provider, setProvider] = useState(null);
 
@@ -185,12 +190,12 @@ const Swapping = () => {
       setModal(true);
     }
   };
-  console.log(signer)
+  console.log(signer);
   // useEffect(() => {
   //   if(isConnected) {
   //     setCondition("userListings");
   //     setRefetch(true);
-  //   } 
+  //   }
 
   // }, [address, isConnected])
 
@@ -311,13 +316,12 @@ const Swapping = () => {
                           cursor: "pointer",
                         }}
                         onClick={() => {
-                          open()
+                          open();
                         }}
                       >
                         Connect your wallet to create listings
                       </HighlightedHeading>
-                    ) : 
-                    (
+                    ) : (
                       <>
                         <Dropdown
                           style={{
@@ -346,7 +350,7 @@ const Swapping = () => {
                           </Dropdown.Menu>
                         </Dropdown>
                       </>
-                    )}  
+                    )}
                   </div>
                   {condition === "userListings" ||
                   (condition === "record" && condition !== "buy") ? (

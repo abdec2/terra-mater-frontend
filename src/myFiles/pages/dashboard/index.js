@@ -32,6 +32,7 @@ import { GiProfit } from "react-icons/gi";
 import { GiArchiveResearch } from "react-icons/gi";
 import { BsLifePreserver } from "react-icons/bs";
 import { GiBurningEmbers } from "react-icons/gi";
+import { useNavigate } from "react-router-dom";
 
 //IMPORT DYNAMIC STYLED COMPONENT
 import { StyledHeader } from "../../../components/Styles";
@@ -74,6 +75,7 @@ const CustomToggle = forwardRef(({ children, onClick }, ref) => (
 
 const Dashboard = function () {
   const { userId } = useParams();
+  const navigate = useNavigate();
   const [data, setData] = useState({
     goldReserve: null,
     btcReserve: null,
@@ -158,13 +160,13 @@ const Dashboard = function () {
   };
 
   const circulatingNatura =
-    JSON.parse(data?.stakingRewards) +
-    JSON.parse(data?.teamNatura) +
-    JSON.parse(data?.IncentiveNat) +
-    JSON.parse(data?.RAndD) +
-    JSON.parse(data?.reservedNat) +
-    2666666 -
-    JSON.parse(data.burnedToken);
+    JSON.parse(data?.stakingRewards) + // P.NFT Rewards Claimed
+    JSON.parse(data?.teamNatura) + // Team NATURA
+    JSON.parse(data?.IncentiveNat) + // Incentive NATURA
+    JSON.parse(data?.RAndD) + // R&D NATURA
+    JSON.parse(data?.reservedNat) + // Reserved NATURA
+    2666666 - // Launched natura
+    JSON.parse(data.burnedToken); // Burned NATURA
 
   // Calculate the value
   calculatedValue = calculateValue();
@@ -433,8 +435,20 @@ const Dashboard = function () {
                     />
                   </div>
                 </div>
-                <div className="text-end" style={{ color: "rgb(144,144,144)" }}>
-                  Latest Swap transaction
+                <div className="text-end" style={{ color: "#0d6efd" }}>
+                  <span
+                    onClick={() =>
+                      navigate("/swapping", {
+                        replace: true,
+                        state: { data: "record" },
+                      })
+                    }
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    Latest Swap transaction
+                  </span>
                 </div>
               </Card.Header>
               <Card.Body>
@@ -522,7 +536,7 @@ const Dashboard = function () {
                     href="https://polygonscan.com/address/0xcC190f4bB739402181d73aC0991148a308CD118b"
                     target="blank"
                   >
-                    P.NFT Rewards Claimed
+                    P.o.NFT Rewards Claimed
                   </a>
                 </div>
               </Card.Header>
