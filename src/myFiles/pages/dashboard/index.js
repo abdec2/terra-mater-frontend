@@ -226,22 +226,29 @@ const Dashboard = function () {
       .balanceOf("0x95AA5d6aC1c3D36d3e5d5eEE3Fc0DD1417418a62")
       .call()
       .then((result) => result);
-    const team = await tokenContract.methods
-      .balanceOf("0xD1Bcd394e5c0217124b1d8253c954723E50C435b")
-      .call()
-      .then((result) => result);
-    const Incentive = await tokenContract.methods
-      .balanceOf("0x4c4DA75B9525BbC338583Ce7CF11E387A31Bd256")
-      .call()
-      .then((result) => result);
-    const RandD = await tokenContract.methods
-      .balanceOf("0x511FB8A90E2797939623BA65bFfc1Af2fE0E6b86")
-      .call()
-      .then((result) => result);
-    const Reserve = await tokenContract.methods
-      .balanceOf("0xC9d97D6C6Fe6dFF9748Ca983F5aeDe4A47CA4b63")
-      .call()
-      .then((result) => result);
+
+    const naturaBalances = await axios.get(`${api.baseUrl}/api/natura-balances`);
+    console.log(naturaBalances)
+    const team = naturaBalances?.data?.data.length > 0 ? naturaBalances?.data?.data[0].attributes.team_natura_released : 0;
+    const Incentive = naturaBalances?.data?.data.length > 0 ? naturaBalances?.data?.data[0].attributes.incentive_program_released : 0;
+    const RandD = naturaBalances?.data?.data.length > 0 ? naturaBalances?.data?.data[0].attributes.rnd_release : 0;
+    const Reserve = naturaBalances?.data?.data.length > 0 ? naturaBalances?.data?.data[0].attributes.reserve_natura_released : 0;
+    // const team = await tokenContract.methods
+    //   .balanceOf("0xD1Bcd394e5c0217124b1d8253c954723E50C435b")
+    //   .call()
+    //   .then((result) => result);
+    // const Incentive = await tokenContract.methods
+    //   .balanceOf("0x4c4DA75B9525BbC338583Ce7CF11E387A31Bd256")
+    //   .call()
+    //   .then((result) => result);
+    // const RandD = await tokenContract.methods
+    //   .balanceOf("0x511FB8A90E2797939623BA65bFfc1Af2fE0E6b86")
+    //   .call()
+    //   .then((result) => result);
+    // const Reserve = await tokenContract.methods
+    //   .balanceOf("0xC9d97D6C6Fe6dFF9748Ca983F5aeDe4A47CA4b63")
+    //   .call()
+    //   .then((result) => result);
 
     setData({
       goldReserve,
@@ -254,10 +261,10 @@ const Dashboard = function () {
       burnedToken: web3.utils.fromWei(burnAmount, "ether"),
       claimedRewards: web3.utils.fromWei(claimedReward, "ether"),
       launchedNatura: web3.utils.fromWei(launched, "ether"),
-      teamNatura: web3.utils.fromWei(team, "ether"),
-      IncentiveNat: web3.utils.fromWei(Incentive, "ether"),
-      RAndD: web3.utils.fromWei(RandD, "ether"),
-      reservedNat: web3.utils.fromWei(Reserve, "ether"),
+      teamNatura: team,
+      IncentiveNat: Incentive,
+      RAndD: RandD,
+      reservedNat: Reserve,
     });
   };
 
