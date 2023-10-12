@@ -540,7 +540,7 @@ const Dashboard = function () {
                 </div>
                 <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
-                    href="https://polygonscan.com/address/0xcC190f4bB739402181d73aC0991148a308CD118b"
+                    href="https://polygonscan.com/address/0x8d3BeC747548872B5613ce1243DD7Cd15DB80A53"
                     target="blank"
                   >
                     P.o.NFT Rewards Claimed
@@ -595,7 +595,7 @@ const Dashboard = function () {
                 </div>
                 <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
-                    href="https://polygonscan.com/address/0x95AA5d6aC1c3D36d3e5d5eEE3Fc0DD1417418a62"
+                    href="https://polygonscan.com/address/0xDcF384b1fe7862C6Cb8bF5994C09c5C549D2CDc5"
                     target="blank"
                   >
                     Launched Natura
@@ -648,7 +648,7 @@ const Dashboard = function () {
                 </div>
                 <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
-                    href="https://polygonscan.com/address/0xD1Bcd394e5c0217124b1d8253c954723E50C435b"
+                    href="https://polygonscan.com/address/0xe932bB5c9DBB9fca5C85587D1023dd051b643197"
                     target="blank"
                   >
                     Team Natura released
@@ -698,7 +698,7 @@ const Dashboard = function () {
                 </div>
                 <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
-                    href="https://polygonscan.com/address/0x4c4DA75B9525BbC338583Ce7CF11E387A31Bd256"
+                    href="https://polygonscan.com/address/0x94ebFC8a825D1d6A885a747cd18205B8Eb45C7F6"
                     target="blank"
                   >
                     Incentive program Natura
@@ -751,7 +751,7 @@ const Dashboard = function () {
                 </div>
                 <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
-                    href="https://polygonscan.com/address/0x511FB8A90E2797939623BA65bFfc1Af2fE0E6b86"
+                    href="https://polygonscan.com/address/0x01B9e0aCD505b8Bf9604B1c47C092D73e6883672"
                     target="blank"
                   >
                     R&D Natura released
@@ -801,7 +801,7 @@ const Dashboard = function () {
                 </div>
                 <div className="text-end" style={{ color: "#0d6efd" }}>
                   <a
-                    href="https://polygonscan.com/address/0xC9d97D6C6Fe6dFF9748Ca983F5aeDe4A47CA4b63"
+                    href="https://polygonscan.com/address/0xD5c2cF7a02F1D79e1e58620862D2EB8b30aECB71"
                     target="blank"
                   >
                     Reserve Natura released
