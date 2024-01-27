@@ -226,13 +226,14 @@ const Profile = function () {
             <div className="mt-3">
               <Form onSubmit={handleSubmit}>
                 <Form.Group>
-                  <Form.File
+                  <Form.Control id="uploadFile" label="Upload image" accept=".jpg, .jpeg, .gif, .png" type="file" onChange={(e) => setFileInput(e.target.files)} />
+                  {/* <Form.File
                     id="uploadFile"
                     label="Upload image"
                     required
                     accept=".jpg, .jpeg, .gif, .png"
                     onChange={(e) => setFileInput(e.target.files)}
-                  />
+                  /> */}
                 </Form.Group>
                 <button className="btn-main lead" type="submit">
                   Upload
